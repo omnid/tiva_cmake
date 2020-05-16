@@ -1,0 +1,104 @@
+#+TITLE: CMake Cross-compile for Tiva Microcontrollers
+* Introduction
+This project lets you use ~cmake~ to build and flash programs for TI Tiva microcontrollers using either ~gcc~ or ~TI~ toolchains.
+It is mainly tested in a Linux host environment targeting a ~EK-TM4C123GXL~ LaunchPad (a development board for a ~TM4C123GH6PM~ microcontroller) using CMake's ~Makefile~ generator. 
+The project also provides startup code and linker scripts for the ~TM4C123GH6PM~ microcontroller (and maybe others in the future, contributions welcome),
+which can optionally be used.  The project can be used as a template for your TIVA project or installed globally.
+
+* Quick Start 
+1. Install [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] (if you do not want to install Code Composer Studio see [[*Prerequisites][Prerequisites]])
+2. Plug your ~EK-TM4C123GXL~ into a USB port
+2. Clone this repository:
+   - ~git clone https://github.com/m-elwin/tiva-cmake my_project_directory~
+3. Create the build directory and compile the example code:
+   #+BEGIN_SRC bash
+   cd my_project_directory
+   mkdir build
+   cd build
+   cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/ti-cgt-arm-toolchain.cmake ../src
+   make
+   make led_example.tiflash
+   #+END_SRC
+4. You should see the LED on the ~EK-TM4C123GXL~ cycle between red, white, and blue
+5. Modify and build upon the example code in ~src/~
+** Use GCC instead of TI CGT
+1. To use ~gcc~ instead of ~ti-cgt~ use ~-DCMAKE_TOOLCHAIN_FILE=../cmake/arm-none-eabi-toochain.cmake~
+2. You must install ~arm-none-eabi-gcc~ to use ~gcc~ (see [[*GNU GCC Toolchain][GNU GCC Toolchain]]).
+
+* Installation
+You need a compiler toolchain and a flashing utility: see [[*Prerequisites][Prerequisites]] for details.
+
+You can install ~tiva-cmake~ and use it as a dependency in your project. 
+** All Platforms
+#+BEGIN_SRC
+git clone git@github.com:m-elwin/tiva-cmake
+mkdir tiva-cmake/build
+cd tiva-cmake/build
+cmake ..
+make 
+sudo make install
+#+END_SRC
+- By default, this method installs into the ~/usr/local~ prefix
+  - Change the install prefix using ~-DCMAKE_INSTALL_PREFIX=/your/prefix/path~ when invoking ~cmake~
+- CMake Files are placed in ~$prefix/share/cmake/tiva-cmake~ 
+- Several driverlib versions are installed to ~$prefix/lib/libdriverlib*~
+** Arch Linux
+There is a PKGBUILD for Arch Linux users:
+#+BEGIN_SRC bash
+git clone https://github.com/m-elwin/tiva-cmake
+cd tiva-cmake
+makepkg -si
+#+END_SRC
+
+* Usage
+** New Project (only if you installed ~tiva-cmake~ otherwise, see [[*Quick Start][Quick Start]])
+Create a template ~cmake~ file as follows:
+- ~cmake -E tiva-template > CMakeLists.txt~.
+- Edit ~CMakeLists.txt~ to meet your project's needs.
+- Create a build directory and invoke ~cmake~, specifying the desired toolchain:
+  - For gcc: ~-DCMAKE_TOOLCHAIN_FILE=arm-none-eabi-gcc-toolchain.cmake~
+  - For TI cgt: ~-DCMAKE_TOOLCHAIN_FILE=ti-cgt-arm-toolchain.cmake~
+** Flashing the Firmware
+Every executable target you create (via ~add_executable(target_name ...)~ in ~cmake~ adds methods for flashing the firmware using the LaunchPad's In-Circuit Debugger.
+1. ~make target_name.write~ Flash the program onto the microcontroller using one of the methods below, which are listed in order of preference
+   1. ~make target_name.openocd~ Flash the program using ~openocd~ 
+   2. ~make target_name.lmflash~ Flash the program using ~LM4FLASHPROGRAMMER~
+   3. ~make target_name.lm4tools~ Flash the program using ~lm4tools~
+* Debugging with GDB
+- You need ~arm-none-eabi-gdb~ or ~gdb-multiarch~ (see [[*Debugging Tools][Install GDB]])
+- For best results build your code with ~CMAKE_BUILD_TYPE=Debug~ (see [[*Build Types][Build Types]])
+- ~make target_name.attach~ will attach to an already running debug session with gdb
+  - Make sure you have previously flashed ~target_name~ to the microcontroller
+- ~make target_name.gdb~ will flash the firmware using openocd and load the program into the debugger
+
+
+* CMake Settings
+** Compiler Selection
+- Compilers installed to standard system directories take precedence over those installed with Code Composer Studio
+- Later versions of compilers take precedence over older versions
+- You can override compiler locations using ~-DCMAKE_C_COMPILER=/path/to/compiler~ and ~CMAKE_CXX_COMPILER=/path/to/compiler~
+** Build Types
+- CMake defaults to ~CMAKE_BUILD_TYPE=""~ which does not set any compiler flags (other than those necessary for cross compiling)
+  - This mode is useful if you want complete control over flags
+- The template file defaults your build type to ~Debug~
+  
+** TivaWare Driverlib
+TI has released TivaWare ~driverlib~ under a BSD license and I redistribute that library with this project. 
+By default, this project compiles ~driverlib~ from source, using the release type as specified by ~-DCMAKE_RELEASE_TYPE~.
+
+Thus, when you compile with ~-DCMAKE_BUILD_TYPE=Debug~, you link to a debug version of ~driverlib~ that enables you to
+step throught the driverlib code.  When you compile with ~-DCMAKE_BUILD_TYPE=Release~ you link with an optimized version of ~driverlib~.
+
+There are several options to override this default behavior:
+1. Use ~-DDRIVERLIB_PATH=/path/to/library/driverlib.lib~ to point to a specific compiled version of the library
+2. Use ~-DDRIVERLIB_PATH=ccstudio~ to use the pre-compiled version of ~driverlib~ that comes with Code Composer Studio
+   (note that Code Composer Studio does provide debugging versions of ~driverlib~)
+3. Use ~-DRIVERLIB_BUILD_TYPE=~ to select a build type for ~driverlib~ that differs from the project build type
+   
+
+* Prerequisites
+** TI Tools (Without Code Composer Studio)
+** GNU GCC Toolchain
+** Third-Party Flash Tools
+** Debugging Tools
+
