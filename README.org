@@ -15,15 +15,14 @@ which can optionally be used.  The project can be used as a template for your TI
    cd my_project_directory
    mkdir build
    cd build
-   cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/ti-cgt-arm-toolchain.cmake ../src
+   # Use one of the two lines below to choose either the ti-cgt compiler or gcc 
+   # cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/ti-cgt-arm-toolchain.cmake ../src
+   cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/arm-none-eabi-gcc-toolchain.cmake ../src
    make
    make led_example.tiflash
    #+END_SRC
 4. You should see the LED on the ~EK-TM4C123GXL~ cycle between red, white, and blue
 5. Modify and build upon the example code in ~src/~
-** Use GCC instead of TI CGT
-1. To use ~gcc~ instead of ~ti-cgt~ use ~-DCMAKE_TOOLCHAIN_FILE=../cmake/arm-none-eabi-toochain.cmake~
-2. You must install ~arm-none-eabi-gcc~ to use ~gcc~ (see [[*GNU GCC Toolchain][GNU GCC Toolchain]]).
 
 * Installation
 You need a compiler toolchain and a flashing utility: see [[*Prerequisites][Prerequisites]] for details.
@@ -50,10 +49,9 @@ cd tiva-cmake
 makepkg -si
 #+END_SRC
 
-* Usage
+* Usage 
 ** New Project (only if you installed ~tiva-cmake~ otherwise, see [[*Quick Start][Quick Start]])
-Create a template ~cmake~ file as follows:
-- ~cmake -E tiva-template > CMakeLists.txt~.
+- Use ~cmake -E tiva-template~ to create the [[*Template Files][Template Files]]
 - Edit ~CMakeLists.txt~ to meet your project's needs.
 - Create a build directory and invoke ~cmake~, specifying the desired toolchain:
   - For gcc: ~-DCMAKE_TOOLCHAIN_FILE=arm-none-eabi-gcc-toolchain.cmake~
@@ -71,7 +69,20 @@ Every executable target you create (via ~add_executable(target_name ...)~ in ~cm
   - Make sure you have previously flashed ~target_name~ to the microcontroller
 - ~make target_name.gdb~ will flash the firmware using openocd and load the program into the debugger
 
-
+* Template Files
+The template files are generated using =cmake -E tiva-template= (if installed) or ~cmake -E path/to/tiva-cmake/tiva-template~
+The files assume you are using a ~TM4C123GH6PM~ microcontroller (the one on the ~EK-TM4C123GXL~ LaunchPad) and need to be modified
+to use a different microcontroller.  
+1. ~CMakeLists.txt~: A basic ~CMakeLists.txt~ file for the project
+2. ~startup_tm4c123gh6pm.c~: Startup code tailored to the ~TM4C123GH6PM~ microcontroller which also enables you
+   to implement interrupts in your own code by overriding the =weak= symbol for that interrupt
+   - In other words, implement ~void InterruptName()~ in your code: the list of names follows the datasheet.
+3. ~tm4c123gh6pm-gcc.ld~: GCC linker script for the ~TM4C123GH6PM~ microcontroller
+   - You likely need to modify this file if you use a different microcontroller
+3. ~tm4c123gh6pm-ti-cgt.cmd~: TI cgt script for the ~TM4C123GH6PM~ microcontroller
+   - You only need to modify this file if you use a different microcontroller
+In the future I hope to have template files for different microcontroller models (contributions welcome).
+ 
 * CMake Settings
 ** Compiler Selection
 - Compilers installed to standard system directories take precedence over those installed with Code Composer Studio
@@ -80,7 +91,7 @@ Every executable target you create (via ~add_executable(target_name ...)~ in ~cm
 ** Build Types
 - CMake defaults to ~CMAKE_BUILD_TYPE=""~ which does not set any compiler flags (other than those necessary for cross compiling)
   - This mode is useful if you want complete control over flags
-- The template file defaults your build type to ~Debug~
+- For convenience, The template ~CMakeLists.txt~ file defaults the build type to ~Debug~. 
   
 ** TivaWare Driverlib
 TI has released TivaWare ~driverlib~ under a BSD license and I redistribute that library with this project. 
@@ -94,11 +105,29 @@ There are several options to override this default behavior:
 2. Use ~-DDRIVERLIB_PATH=ccstudio~ to use the pre-compiled version of ~driverlib~ that comes with Code Composer Studio
    (note that Code Composer Studio does provide debugging versions of ~driverlib~)
 3. Use ~-DRIVERLIB_BUILD_TYPE=~ to select a build type for ~driverlib~ that differs from the project build type
-   
+
+* Changing the Microcontroller
+The code has only been tested with the ~EK-TM4C123GXL~ LaunchPad; therefore some options are specific to the ~TM4C123GH6PM~ microcontroller.
+However, the code should be easily adaptable to related microcontrollers.
+1. When specifying the toolchain file, you can specify a different microcontroller model using ~-D~
+
+Some options are
+ and is tuned to use the 
+- The package provides and uses default startup code and linker scripts
+- This code is microcontroller model and even proj
 
 * Prerequisites
-** TI Tools (Without Code Composer Studio)
+Installing [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.
+It is even possible to install =gcc= through Code Composer Studio. However, Code Composer Studio is a large
+program and you may not wish to install it; there are several alternatives.
+
+
 ** GNU GCC Toolchain
+
+** TI Tools (Without Code Composer Studio)
+You can install TI's compiler and flash tool indepedently of Code Composer Studio (sign up required)
+1. [[http://www.ti.com/tool/ARM-CGT][ARM-CGT (TI's arm compiler)]]
+2. [[http://www.ti.com/tool/LMFLASHPROGRAMMER][LMFLASHPROGRAMMER (for flashing the microcontroller)]]
 ** Third-Party Flash Tools
 ** Debugging Tools
 
