@@ -150,20 +150,41 @@ The startup code is different than the code provided by TI and is designed to ma
    - You can override ~DefaultInterrupt~ by declaring it in your own code. It is handy for debugging to do something
      in this handler to indicate that it has been triggered since, for example, the default FaultISR calls ~DefaultInterrupt~
    - Note that ~Reserved~ interrupts are set to Null (0).
+
 * Prerequisites
 Installing [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.
-It is even possible to install =gcc= through Code Composer Studio. However, Code Composer Studio is a large
-program and you may not wish to install it; there are several alternatives.
-
+However, Code Composer Studio is a large program and it may be desirable to obtain your tools elsewhere.
 
 ** GNU GCC Toolchain
+To use ~gcc~ you need the ~arm-none-eabi~ toolchain with the ~newlib~ C library and optionally (for debugging)
+either ~multiarch gdb~ or ~arm-none-eabi-gdb~. Code composer studio comes bundled with ~gcc~, but it is usally an older version.
+*** Ubuntu
+The necessary files can be installed from ~apt~ (including ~gdb~).
+~sudo apt install  gcc-arm-none-eabi libnewlib-arm-none-eabi gdb-multiarch~
+*** Arch Linux
+The necessary files can be installed via ~pacman~ (including ~gdb~).
+~sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib arm-none-eabi-gdb~
+
+*** Other
+If the toolchain is unavailable in your package manager it can be downloaded directly from arm: [[https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads][Arm None Eabi Toolchain]]
+- On Linux, move the tarball you downloaded either to ~/opt~ or to ~/home/$(whoami)~ and upack it with ~tar xf~.
+- They provide installers for Windows and macOS.
 
 ** TI Tools (Without Code Composer Studio)
-You can install TI's compiler and flash tool indepedently of Code Composer Studio (sign up required)
+You can install TI's compiler and flash tool indepedently of Code Composer Studio 
 1. [[http://www.ti.com/tool/ARM-CGT][ARM-CGT (TI's arm compiler)]]
-2. [[http://www.ti.com/tool/LMFLASHPROGRAMMER][LMFLASHPROGRAMMER (for flashing the microcontroller)]]
+   On Linux, install either to ~/opt~ or ~/home/$(whoami)~, keeping the default subdirectory name ~ti-cgt-arm_...etc...~.
+2. [[http://www.ti.com/tool/UNIFLASH][UNIFLASH]]
+   Install to either ~/opt~ or ~/home/$whoami~
+
 ** Third-Party Flash Tools
-** Debugging Tools
+You can install ~openocd~
+** Ubuntu
+~sudo apt install openocd~
+** Archlinux
+~pacman -S openocd~
+** Other
+Download from http://openocd.org/ and install to the standard location or ~/home/$(whoami)/openocd~
 
 * TODO
 1. Parse the targetdb files that come with code composer studio to automatically generate startup code and linker scripts
