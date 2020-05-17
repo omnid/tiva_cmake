@@ -54,7 +54,7 @@ sudo make install
 - By default, this method installs into the ~/usr/local~ prefix
   - Change the install prefix using ~-DCMAKE_INSTALL_PREFIX=/your/prefix/path~ when invoking ~cmake~
 - CMake Files are placed in ~$prefix/share/cmake/tiva-cmake~ 
-- Several driverlib versions are installed to ~$prefix/lib/libdriverlib*~
+- Release and debug driverlib versions are installed to ~$prefix/lib/libdriverlib*~
 
 * Usage 
 ** New Project (Using ~tiva-cmake~ as a template)
