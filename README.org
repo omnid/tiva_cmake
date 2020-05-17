@@ -1,22 +1,25 @@
 #+TITLE: CMake Cross-compile for Tiva Microcontrollers
 * Introduction
 This project lets you use ~cmake~ to build and flash programs for TI Tiva microcontrollers using either ~gcc~ or ~TI~ toolchains.
-It is mainly tested in a Linux host environment targeting a ~EK-TM4C123GXL~ LaunchPad (a development board for a ~TM4C123GH6PM~ microcontroller) using CMake's ~Makefile~ generator. 
-The project also provides startup code and linker scripts for the ~TM4C123GH6PM~ microcontroller (and maybe others in the future, contributions welcome),
-which can optionally be used.  The project can be used as a template for your TIVA project or installed globally.
+You can use ~tiva-cmake~ as a [[*Template Mode (No Installation)][template]] or you can [[*Installation][install]] it.
 
-* Quick Start (gcc)
-1. Install [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] (See [[*Prerequisites][Prerequisites]] if you do not want to install Code Composer Studio).
-2. Clone this repository:
+When using ~tiva-cmake~ you must manually install the [[*Development Tools][Development Tools]], whereas the dependencies are automatically installed
+for Linux users during [[*Installation][installation]]. This project works without requiring [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]];
+however, installing it is one way to obtain the necessary development tools.
+
+* Template Mode (No Installation)
+Make sure you have the necessary [[*Dependencies]] installed. 
+
+1. Clone this repository:
    - ~git clone https://github.com/m-elwin/tiva-cmake my_project_directory~
-3. Create the build directory and compile the example code:
+2. Create the build directory and compile the example code:
    #+BEGIN_SRC bash
    cd my_project_directory
    mkdir build
    cd build
    
    # Use one of the next two "cmake" lines to use either the ti-cgt compiler or gcc.
-   # Add -DTIVA_MCU=TM4Cxxxx to specify a different model: it defaults to the TM4C123GH6PM
+   # Add -DTIVA_MCU=TM4Cxxxx to specify the microcontroller: it defaults to the TM4C123GH6PM
    # cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/ti-cgt-arm-toolchain.cmake ../src
    cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/arm-none-eabi-gcc-toolchain.cmake ../src
    
@@ -28,37 +31,53 @@ which can optionally be used.  The project can be used as a template for your TI
    #+END_SRC
 
 When successful, you should see LED on the ~EK-TM4C123GXL~ cycle between red, white, and blue.
-To use the package without installing, modify and add to the code in ~src/~.
+Continue by modifying and adding code in ~src/~. See [[*Startup Code][Startup Code]] for information
+about how to implement interrupt service routines.
 
 * Installation
-These instructions explain how to install ~tiva-cmake~. Once installed, it becomes a dependency of your projects,
-meaning that others will need to independently obtain ~tiva-cmake~ to build your code. However, once installed you can use 
-~tiva-cmake~ more easily and can use it for multiple projects without much setup.
+** Ubuntu/Debian
+1. Download and install the latest ~.deb~ package, which will also bring in the dependencies
+   #+BEGIN_SRC bash
+   curl -o tiva-cmake.deb [[https://github.url.comingsoon]]
+   sudo apt install ./tiva-cmake
+   #+END_SRC 
+2. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[*Dependencies][Dependencies]] 
 
-** Arch Linux Installation
-There is a PKGBUILD for Arch Linux users:
-#+BEGIN_SRC bash
-git clone https://github.com/m-elwin/tiva-cmake
-cd tiva-cmake
-makepkg -si
-#+END_SRC
-** All Platforms Installation
-#+BEGIN_SRC
-git clone git@github.com:m-elwin/tiva-cmake
-mkdir tiva-cmake/build
-cd tiva-cmake/build
-cmake ..
-make 
-sudo make install
-#+END_SRC
-- By default, this method installs into the ~/usr/local~ prefix
-  - Change the install prefix using ~-DCMAKE_INSTALL_PREFIX=/your/prefix/path~ when invoking ~cmake~
-- CMake Files are placed in ~$prefix/share/cmake/tiva-cmake~ 
-- Release and debug driverlib versions are installed to ~$prefix/lib/libdriverlib*~
+** Arch Linux
+1. Download and install the latest ~package~, which will also bring in the dependencies
+   #+BEGIN_SRC bash
+   curl -o tiva-cmake.deb [[https://github.url.comingsoon]]
+   sudo pacman -U tiva-cmake
+   #+END_SRC 
+2. Optional: install the ~arm-none-eabi-gdb~ to use a debugger. 
+3. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[*Dependencies][Dependencies]]
+
+** Windows
+1. Install [[*Dependencies][Dependencies]] 
+2. Download the latest [[windows_installer][windows installer]]
+
+** macOS
+1. Install [[*Dependencies][Dependencies]]
+2. Download the latest mac installer [[windows_installer][windows installer]]
+
+** All Platforms 
+1. Install [[*Dependencies][Dependencies]] 
+2. #+BEGIN_SRC bash
+   git clone git@github.com:m-elwin/tiva-cmake
+   mkdir tiva-cmake/build
+   cd tiva-cmake/build
+   cmake ..
+   make 
+   sudo make install
+   #+END_SRC
+   - By default, this method installs into the ~/usr/local~ prefix
+   - Change the install prefix using ~-DCMAKE_INSTALL_PREFIX=/your/prefix/path~ when invoking ~cmake~
+   - CMake Files are placed in ~$prefix/share/cmake/tiva-cmake~ 
+   - Release and debug driverlib versions are installed to ~$prefix/lib/libdriverlib*~
 
 * Usage 
 ** New Project (Using ~tiva-cmake~ as a template)
-   - See [[*Quick Start][Quick Start]]; you are essentially making a copy of ~tiva-cmake~ and combining it with your own code.
+   - See [[*Template Mode (No Installation)][Template Mode]]: make a copy of ~tiva-cmake~ and add your code.
 ** New Project (Using an installed copy ~tiva-cmake~)
 - Use ~cmake -E tiva-template > CMakeLists.txt~ to create your project's ~CMakeLists.txt~.
 - Edit ~CMakeLists.txt~ to add your source code and specify your libraries and executables.
@@ -66,7 +85,7 @@ sudo make install
   - For gcc: ~-DCMAKE_TOOLCHAIN_FILE=arm-none-eabi-gcc-toolchain.cmake~
   - For TI cgt: ~-DCMAKE_TOOLCHAIN_FILE=ti-cgt-arm-toolchain.cmake~
   - You can also specify the MCU using ~-DTIVA_MCU=~. Supported values are
-    - ~TM4C124GH6PM~
+    - ~TM4C124GH6PM~ (This is the default)
     - Others are coming soon (feel free to create an issue or pull request)!
 ** Flashing the Firmware
 Every executable target you create (via ~add_executable(target_name ...)~ in ~cmake~ adds methods for flashing the firmware using the LaunchPad's In-Circuit Debugger.
@@ -74,22 +93,22 @@ Every executable target you create (via ~add_executable(target_name ...)~ in ~cm
    1. ~make target_name.ocd~ Flash the program using ~openocd~ 
    2. ~make target_name.uni~ Flash the program using ~UniFlash~ 
    3. ~make target_name.lm4~ Flash the program using ~lm4tools~
-* Debugging with GDB
-- You need ~arm-none-eabi-gdb~ or ~gdb-multiarch~ (see [[*Debugging Tools][Install GDB]])
+** Debugging with GDB
+- You need ~arm-none-eabi-gdb~ or ~gdb-multiarch~ and ~openocd~ (see [[*Development Tools][Development Tools]]).
 - For best results build your code with ~CMAKE_BUILD_TYPE=Debug~ (see [[*Build Types][Build Types]])
 - ~make target_name.attach~ will attach to an already running debug session with gdb
-  - Make sure you have previously flashed ~target_name~ to the microcontroller
 - ~make target_name.gdb~ will flash the firmware using openocd and load the program into the debugger
 
 * CMake Settings
 Most ~cmake~ settings can be modifed using the ~cmake-gui~ (where the toolchain can also be selected). 
 
 ** Changing the Microcontroller
-- Passing ~-DTIVA_MCU=<model>~ when invoking ~cmake~ with the toolchain file will change the targeted microcontroller from the default (~TM4C123GH6PM~).
-- This parameter must be passed when invoking ~cmake~ for the first time with the toolchain file, since it affects the behavior of the toolchain file.
+- Passing ~-DTIVA_MCU=<model>~ when invoking ~cmake~ will change the targeted microcontroller from the default (~TM4C123GH6PM~).
 
 ** Compiler Selection
-- Compilers installed to standard system directories take precedence over those installed with Code Composer Studio
+- There are two separate toolchains files: ~ti-cgt-arm-toolchain.cmake~ for TI's compiler and ~arm-none-eabi-gcc-toolchain.cmake~ which are used
+  to switch between ~ti-cgt~ and ~gcc~. This section covers the behavior when you have multiple ~ti-cgt~ or ~arm-none-eabi-gcc~ versions installed.
+- Compilers installed to standard system directories take precedence over those bundled with Code Composer Studio
 - Later versions of compilers take precedence over older versions
 - You can specify a specific compiler using ~-DCMAKE_C_COMPILER=/path/to/compiler~ and ~CMAKE_CXX_COMPILER=/path/to/compiler~ when invoking ~cmake~.
 
@@ -97,12 +116,12 @@ Most ~cmake~ settings can be modifed using the ~cmake-gui~ (where the toolchain 
 - CMake defaults to ~CMAKE_BUILD_TYPE=""~ which does not set any compiler flags (other than those necessary for cross compiling)
   - This mode is useful if you want complete control over flags
 - For convenience, The template ~CMakeLists.txt~ file defaults the build type to ~Debug~.
-  - Debug-level optimizations ~-Og~ are turned on for ~gcc~, as the manual recommends this debug level.  
+  - Debug-level optimizations ~-Og~ are turned on for ~gcc~, as the [[https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html][gcc manual]] recommends this debug level.  
   - The blank (~""~) build type does not specify an optimization level.
   
 ** TivaWare Driverlib
-TI has released TivaWare ~driverlib~ under a BSD license and it is redistributed with this project under the ~driverlib~ folder.
-By default, ~tiva-cmake~ uses its bundled version of ~driverlib~.
+TI has released TivaWare ~driverlib~ under a BSD license and this project redistributes it under that license in the ~driverlib~ directory.
+By default, ~tiva-cmake~ uses it's own bundled version of ~driverlib~.
 
 When you compile with ~-DCMAKE_BUILD_TYPE=Debug~, you link to a debug version of ~driverlib~ that enables you to
 step throught the ~driverlib~ code.  When you compile with ~-DCMAKE_BUILD_TYPE=Release~ you link with an optimized version of ~driverlib~.
@@ -111,18 +130,21 @@ Some options to override this default behavior:
 1. Use ~-DDRIVERLIB_LIBRARIES=/path/to/library/driverlib.lib~ to point to a specific compiled version of the library
 2. Use ~-DRIVERLIB_BUILD_TYPE=~ to select a build type for ~driverlib~ that differs from the project build type
 
-* Microcontroller Selection
+* Microcontroller Support
 The code has only been tested with the ~EK-TM4C123GXL~ LaunchPad. Therefore some options are specific to the ~TM4C123GH6PM~ microcontroller.
 
 ** Required Changes
-To support another MCU a few additions are needed
+To support another microcontrollers a few additions are needed
 - Compiler options are set in ~/cmake/<mcu>-<compiler>-options.cmake~, where ~<compiler>~ is ~gcc~ or ~ti-cgt~ and ~<mcu>~ is the ~mcu~ model.
+  - Compiler options for most Tiva microcontroller models should be similar. Good defaults can be obtained from Code Composer studio
+    either by viewing the compile options in a project or reading the provided [[*Automatic Generation of Startup Code][targetDB files]].
 - Startup code is stored in ~/startup/<mcu>-<compiler>-startup.c~
-- Linker scripts for ~gcc~ are stored in ~/startup/<mcu>-gcc.lds~
-- Linker scripts for ~ti-cgt~ are stored in ~/startup/<mcu>-ti-cgt.cmd~.
+  - The interrupt vector table (see [[*Startup Code][Startup Code]]) likely requires adjustment.
+- Linker scripts for ~gcc~ are stored in ~/startup/<mcu>-gcc.lds~ (~gcc~) and ~/startup/<mcu>-ti-cgt.cmd~ (~ti-cgt~)
+  - Memory locations likely differ between microcontroller models.
 
-The compiler options are read and set via the toolchain file.
-The startup code and linker scripts incorpoarted via ~target_link_libraries(<my_target> ${STARTUP_LIBRARIES})~
+- The startup code and linker scripts incorpoarted via ~target_link_libraries(<my_target> ${STARTUP_LIBRARIES})~. You can
+  omit this line to use your own startup code or linker scripts in your own projects.
 
 ** Automatic Generation of Startup Code
 - Future work will use TI's targetDB files, which provide information about MCU's including peripheral layout and compiler flags to automatically generate
@@ -166,9 +188,9 @@ The necessary files can be installed via ~pacman~ (including ~gdb~).
 ~sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib arm-none-eabi-gdb~
 
 *** Other
-If the toolchain is unavailable in your package manager it can be downloaded directly from arm: [[https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads][Arm None Eabi Toolchain]]
+If the toolchain is unavailable in your package manager it can be [[https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads][downloaded directly from arm]]
 - On Linux, move the tarball you downloaded either to ~/opt~ or to ~/home/$(whoami)~ and upack it with ~tar xf~.
-- They provide installers for Windows and macOS.
+- Installers are also provided for Windows and macOS.
 
 ** TI Tools (Without Code Composer Studio)
 You can install TI's compiler and flash tool indepedently of Code Composer Studio 
@@ -176,9 +198,9 @@ You can install TI's compiler and flash tool indepedently of Code Composer Studi
    On Linux, install either to ~/opt~ or ~/home/$(whoami)~, keeping the default subdirectory name ~ti-cgt-arm_...etc...~.
 2. [[http://www.ti.com/tool/UNIFLASH][UNIFLASH]]
    Install to either ~/opt~ or ~/home/$whoami~
-
+   - ~openocd~ is better supported than the independently installed uniflash tool.
 ** Third-Party Flash Tools
-You can install ~openocd~
+You can install ~openocd~ or ~lm4tools~.  Instructions are provided for ~openocd~ since it has been more reliable than ~lm4tools~ in my experience.
 ** Ubuntu
 ~sudo apt install openocd~
 ** Archlinux
@@ -191,12 +213,4 @@ I have not tested all possible combinations of installation/locations, but the b
 If you think you have the proper tools installed to a permissible location, or think this package should allow installation to a different location, please file an issue.
 
 
-* TODO
-1. Parse the targetdb files that come with code composer studio to automatically generate startup code and linker scripts
 
-
-* Paths to CCS:
-/opt/ti/ccs*
-/opt/ccs*
-/home/user/ti/ccsXXX
-/home/user/ccs*
