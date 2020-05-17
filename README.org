@@ -186,6 +186,11 @@ You can install ~openocd~
 ** Other
 Download from http://openocd.org/ and install to the standard location or ~/home/$(whoami)/openocd~
 
+* Note
+I have not tested all possible combinations of installation/locations, but the behavior described in this document constitutes a loose specification.
+If you think you have the proper tools installed to a permissible location, or think this package should allow installation to a different location, please file an issue.
+
+
 * TODO
 1. Parse the targetdb files that come with code composer studio to automatically generate startup code and linker scripts
 
