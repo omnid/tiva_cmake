@@ -4,9 +4,10 @@ FindTiCgtArm
 ----------------------
 
 Finds the TI cgt compiler for arm microprocessors.
-It will first search in `/home/$(whoami)/ti/ti-cgt-arm*` `/home/$(whoami)/ti-cgt-arm*` `/opt/ti/ti-cgt-arm*` `/opt/ti-cgt-arm*`.
-Then it will search within Code Composer Studio.
-Finally it will look on your system path.
+Search in the following order:
+1. Locally installed versions `/home/$(whoami)/ti/ti-cgt-arm*` and `/home/$(whoami)/ti-cgt-arm*`
+2. Globally installed versions: `/opt/ti/ti-cgt-arm*` `/opt/ti-cgt-arm*`, and the system path
+3. Code Composer Studio (if installed). 
 
 Result Variables
 ^^^^^^^^^^^^^^^^
@@ -56,14 +57,23 @@ list(REVERSE TiCgtArm_HINTS3)
 file(GLOB TiCgtArm_HINTS4 /opt/ti-cgt-arm*)
 list(REVERSE TiCgtArm_HINTS4)
 
-file(GLOB TiCgtArm_HINTS5 ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/ti-cgt-arm*)
-list(REVERSE TiCgtArm_HINTS5)
+file(GLOB TiCgtArm_HINT_CCS ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/ti-cgt-arm*)
+list(REVERSE TiCgtArm_HINT_CCS)
           
 find_program(TiCgtArm_EXECUTABLE
-        NAMES armcl
-        HINTS ${TiCgtArm_HINTS1} ${TiCgtArm_HINTS2} ${TiCgtArm_HINTS3} ${TiCgtArm_HINTS4} ${TiCgtArm_HINTS5}
+        NAMES armacl
+        HINTS ${TiCgtArm_HINTS1} ${TiCgtArm_HINTS2} ${TiCgtArm_HINTS3} ${TiCgtArm_HINTS4} 
         PATH_SUFFIXES bin
         )
+
+ if( "${TiCgtArm_EXECUTABLE}" STREQUAL "TiCgtArm_EXECUTABLE-NOTFOUND")
+   find_program(TiCgtArm_EXECUTABLE
+         NAMES armcl
+         HINTS ${TiCgtArm_HINT_CCS}
+         PATH_SUFFIXES bin
+         NO_DEFAULT_PATH
+         )
+endif()
 
 # compute paths to the C standard library
 get_filename_component(TiCgtArm_BIN_DIR ${TiCgtArm_EXECUTABLE} DIRECTORY)
@@ -73,9 +83,11 @@ set(TiCgtArm_C_INCLUDE_DIRS ${TiCgtArm_ROOT_DIR}/include)
 set(TiCgtArm_C_LIBRARY_DIRS ${TiCgtArm_ROOT_DIR}/lib ABSOLUTE)
 set(TiCgtArm_C_SOURCE_DIRS ${TiCgtArm_C_LIBRARY_DIRS}/src)
 
-# compute the version
-get_filename_component(TiCgtArm_VERSION_DIR ${TiCgtArm_ROOT_DIR} NAME)
-string(REGEX REPLACE "ti-cgt-arm." "" TiCgtArm_VERSION ${TiCgtArm_VERSION_DIR})
+# compute the version, if have found the package
+if(NOT "${TiCgtArm_EXECUTABLE}" STREQUAL "TiCgtArm_EXECUTABLE-NOTFOUND")
+  get_filename_component(TiCgtArm_VERSION_DIR ${TiCgtArm_ROOT_DIR} NAME)
+  string(REGEX REPLACE "ti-cgt-arm." "" TiCgtArm_VERSION ${TiCgtArm_VERSION_DIR})
+endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(TiCgtArm
@@ -84,3 +96,4 @@ find_package_handle_standard_args(TiCgtArm
         TiCgtArm_EXECUTABLE
         VERSION_VAR TiCgtArm_VERSION
         )
+        
