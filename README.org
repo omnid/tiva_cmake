@@ -174,7 +174,7 @@ The startup code is different than the code provided by TI and is designed to ma
      in this handler to indicate that it has been triggered since, for example, the default FaultISR calls ~DefaultInterrupt~
    - Note that ~Reserved~ interrupts are set to Null (0).
 
-* Prerequisites
+* Dependencies
 Installing [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.
 However, Code Composer Studio is a large program and it may be desirable to obtain your tools elsewhere.
 

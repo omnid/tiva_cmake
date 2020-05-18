@@ -30,6 +30,8 @@ The following cache variables may also be set:
   The root directory of Code Composer Studio. 
 
 #]========================================================================]
+# A guide for writing find modules: https://cmake.org/cmake/help/v3.17/manual/cmake-developer.7.html
+
 # Gather directory names to search
 file(GLOB CodeComposerStudio_ROOTS
   $ENV{HOME}/ti/ccs* $ENV{HOME}/ccs* /opt/ccs* /opt/ti/ccs*)
