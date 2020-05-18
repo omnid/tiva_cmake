@@ -62,7 +62,8 @@ list(REVERSE TiCgtArm_HINT_CCS)
           
 find_program(TiCgtArm_EXECUTABLE
         NAMES armacl
-        HINTS ${TiCgtArm_HINTS1} ${TiCgtArm_HINTS2} ${TiCgtArm_HINTS3} ${TiCgtArm_HINTS4} 
+        HINTS ${TiCgtArm_HINTS1} ${TiCgtArm_HINTS2} ${TiCgtArm_HINTS3} ${TiCgtArm_HINTS4}
+        DOC "armcl, the ti-cgt compiler executable."
         PATH_SUFFIXES bin
         )
 
@@ -71,6 +72,7 @@ find_program(TiCgtArm_EXECUTABLE
          NAMES armcl
          HINTS ${TiCgtArm_HINT_CCS}
          PATH_SUFFIXES bin
+         DOC "armcl, the ti-cgt compiler executable."
          NO_DEFAULT_PATH
          )
 endif()
