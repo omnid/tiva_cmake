@@ -6,7 +6,7 @@ FindCodeComposerStudio
 Finds Code Composer Studio.  Looks in the default installation directories,
 as determined the Code Composer Studio installer.
 
-On Linux it looks for `/home/ti/ccsXXXX`, `/home/ccsXXXX`, `/opt/ti/ccsXXXX`, `/opt/ccsXXXX`.
+On Linux it looks for `/home/$(whoami)/ti/ccsXXXX`, `/home/$(whoami)/ccsXXXX`, `/opt/ti/ccsXXXX`, `/opt/ccsXXXX`.
 
 Result Variables
 ^^^^^^^^^^^^^^^^
