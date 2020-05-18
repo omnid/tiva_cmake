@@ -18,22 +18,18 @@ Make sure you have the necessary [[*Dependencies]] installed.
    cd my_project_directory
    mkdir build
    cd build
-   
-   # Use one of the next two "cmake" lines to use either the ti-cgt compiler or gcc.
-   # Add -DTIVA_MCU=TM4Cxxxx to specify the microcontroller: it defaults to the TM4C123GH6PM
-   # cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/ti-cgt-arm-toolchain.cmake ../src
-   cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/arm-none-eabi-gcc-toolchain.cmake ../src
-   
+   cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/tiva-cmake-toolchain.cmake ../src
    make
-   
-   # Write the binary to the microcontroller 
-   # (assuming you have an EK-TM4C123GXL LaunchPad plugged in and turned on!)
    make led_example.write 
    #+END_SRC
 
 When successful, you should see LED on the ~EK-TM4C123GXL~ cycle between red, white, and blue.
 Continue by modifying and adding code in ~src/~. See [[*Startup Code][Startup Code]] for information
 about how to implement interrupt service routines.
+
+The above assumes that you have an ~EK-TM4C123GXL~ LaunchPad plugged into a USB port.
+If you would like to change the microcontroller model add ~-DTIVA_MODEL=TM4Cxxxxx~ to the ~cmake~ line.
+See [[*CMake Settings][CMake Settings]] for details and other options.   
 
 * Installation
 ** Ubuntu/Debian
@@ -80,14 +76,13 @@ about how to implement interrupt service routines.
 ** New Project (Using ~tiva-cmake~ as a template)
    - See [[*Template Mode (No Installation)][Template Mode]]: make a copy of ~tiva-cmake~ and add your code.
 ** New Project (Using an installed copy ~tiva-cmake~)
-- Use ~cmake -E tiva-template > CMakeLists.txt~ to create your project's ~CMakeLists.txt~.
+- Use ~cmake -P tiva-template > CMakeLists.txt~ to create your project's ~CMakeLists.txt~
 - Edit ~CMakeLists.txt~ to add your source code and specify your libraries and executables.
-- Create a ~build~ directory and invoke ~cmake~ from it, specifying the desired toolchain:
-  - For gcc: ~-DCMAKE_TOOLCHAIN_FILE=arm-none-eabi-gcc-toolchain.cmake~
-  - For TI cgt: ~-DCMAKE_TOOLCHAIN_FILE=ti-cgt-arm-toolchain.cmake~
-  - You can also specify the MCU using ~-DTIVA_MCU=~. Supported values are
-    - ~TM4C124GH6PM~ (This is the default)
-    - Others are coming soon (feel free to create an issue or pull request)!
+- Use ~cmake~ as usual, except specify ~-DCMAKE_TOOLCHAIN_FILE=tiva-cmake-toolchain.cmake~ when
+  configuring the project for the first time.
+- See [[*CMake Settings][CMake Settings]] for other options
+
+  
 ** Flashing the Firmware
 Every executable target you create (via ~add_executable(target_name ...)~ in ~cmake~ adds methods for flashing the firmware using the LaunchPad's In-Circuit Debugger.
 1. ~make target_name.write~ Flash the program onto the microcontroller using one of the methods below, which are listed in order of preference
@@ -101,17 +96,50 @@ Every executable target you create (via ~add_executable(target_name ...)~ in ~cm
 - ~make target_name.gdb~ will flash the firmware using openocd and load the program into the debugger
 
 * CMake Settings
-Most ~cmake~ settings can be modifed using the ~cmake-gui~ (where the toolchain can also be selected). 
+Most ~cmake~ settings can be modifed using the ~cmake-gui~ (where the toolchain can also be selected when first configuring the project). 
 
+* Selecting the toolchain
+- The default toolchain file is ~tiva-toolchain.cmake~ 
+  - It selects ~gcc~ if it is installed, otherwise it uses ~ti-cgt~
+- The toolchain file for ~gcc~ is ~tiva-gcc-toolchain.cmake~ 
+- The toolchain file for ~ti-cgt~ is ~tiva-ti-toolchain.cmake~
+
+*** Compiler Selection
+Here are some rules for how the compiler is selected when there are multiple versions involved.
+1. The toolchain file selects the compiler family, as outlined above
+2. Find compilers installed in your home directory: if found select the latest version
+3. Find compilers installed to system directories such as ~/opt~ or ~/usr/bin~: if found select the latest version
+4. Find compilers installed by Code Composer Studio: if found select the latest version
+
+You can specify a specific compiler using ~-DCMAKE_C_COMPILER=/path/to/compiler~ and ~CMAKE_CXX_COMPILER=/path/to/compiler~ when invoking ~cmake~.
+If the compiler you specify is compatible with ~gcc~ you should use ~tiva-gcc-toolchain.cmake~ and if it is compatible with ~ti-cgt~ use
+~tiva-ti-toolchain.cmake~.
 ** Changing the Microcontroller
-- Passing ~-DTIVA_MCU=<model>~ when invoking ~cmake~ will change the targeted microcontroller from the default (~TM4C123GH6PM~).
+- Passing ~-DTIVA_MODEL=<model>~ when invoking ~cmake~ will change the targeted microcontroller from the default (~TM4C123GH6PM~).
 
-** Compiler Selection
-- There are two separate toolchains files: ~ti-cgt-arm-toolchain.cmake~ for TI's compiler and ~arm-none-eabi-gcc-toolchain.cmake~ which are used
-  to switch between ~ti-cgt~ and ~gcc~. This section covers the behavior when you have multiple ~ti-cgt~ or ~arm-none-eabi-gcc~ versions installed.
-- Compilers installed to standard system directories take precedence over those bundled with Code Composer Studio
-- Later versions of compilers take precedence over older versions
-- You can specify a specific compiler using ~-DCMAKE_C_COMPILER=/path/to/compiler~ and ~CMAKE_CXX_COMPILER=/path/to/compiler~ when invoking ~cmake~.
+** Microcontroller Support
+The code has only been tested with the ~EK-TM4C123GXL~ LaunchPad. Therefore some options are specific to the ~TM4C123GH6PM~ microcontroller
+and must be modified for other microcontrollers (issues/pull requests welcome)
+
+*** Required Changes
+To support another microcontrollers a few additions are needed
+- Compiler options are set in ~/cmake/<model>-<compiler>-options.cmake~, where ~<compiler>~ is ~gcc~ or ~ti-cgt~ and ~<model>~ is the microcontroller model.
+  - Compiler options for most Tiva microcontroller models should be similar. Good defaults can be obtained from Code Composer studio
+    either by viewing the compile options in a project or reading the provided [[*Automatic Generation of Startup Code][targetDB files]].
+- Startup code is stored in ~/startup/<model>-<compiler>-startup.c~
+  - The interrupt vector table (see [[*Startup Code][Startup Code]]) likely requires adjustment.
+- Linker scripts for ~gcc~ are stored in ~/startup/<model>-gcc.lds~ (~gcc~) and ~/startup/<mcu>-ti-cgt.cmd~ (~ti-cgt~)
+  - Memory locations likely differ between microcontroller models.
+
+- The startup code and linker scripts incorpoarted via ~target_link_libraries(<my_target> ${STARTUP_LIBRARIES})~. You can
+  omit this line to use your own startup code or linker scripts in your own projects.
+
+*** Automatic Generation of Startup Code
+- Future work will use TI's targetDB files, which provide information about MCU's including peripheral layout and compiler flags to automatically generate
+  startup files. The generated startup files will then be included in this repository, to avoid a hard dependency on Code Composer Studio
+- The targetDB ffiles and are distributed with Code Composer Studio and located in the ~ccs/ccs_base/common/targetdb~ directory.
+  - ~targetdb/devices~ contains the ~<model>.xml~ files, which seem to be the main file for each chip.
+
 
 ** Build Types
 - CMake defaults to ~CMAKE_BUILD_TYPE=""~ which does not set any compiler flags (other than those necessary for cross compiling)
@@ -130,28 +158,6 @@ step throught the ~driverlib~ code.  When you compile with ~-DCMAKE_BUILD_TYPE=R
 Some options to override this default behavior:
 1. Use ~-DDRIVERLIB_LIBRARIES=/path/to/library/driverlib.lib~ to point to a specific compiled version of the library
 2. Use ~-DRIVERLIB_BUILD_TYPE=~ to select a build type for ~driverlib~ that differs from the project build type
-
-* Microcontroller Support
-The code has only been tested with the ~EK-TM4C123GXL~ LaunchPad. Therefore some options are specific to the ~TM4C123GH6PM~ microcontroller.
-
-** Required Changes
-To support another microcontrollers a few additions are needed
-- Compiler options are set in ~/cmake/<mcu>-<compiler>-options.cmake~, where ~<compiler>~ is ~gcc~ or ~ti-cgt~ and ~<mcu>~ is the ~mcu~ model.
-  - Compiler options for most Tiva microcontroller models should be similar. Good defaults can be obtained from Code Composer studio
-    either by viewing the compile options in a project or reading the provided [[*Automatic Generation of Startup Code][targetDB files]].
-- Startup code is stored in ~/startup/<mcu>-<compiler>-startup.c~
-  - The interrupt vector table (see [[*Startup Code][Startup Code]]) likely requires adjustment.
-- Linker scripts for ~gcc~ are stored in ~/startup/<mcu>-gcc.lds~ (~gcc~) and ~/startup/<mcu>-ti-cgt.cmd~ (~ti-cgt~)
-  - Memory locations likely differ between microcontroller models.
-
-- The startup code and linker scripts incorpoarted via ~target_link_libraries(<my_target> ${STARTUP_LIBRARIES})~. You can
-  omit this line to use your own startup code or linker scripts in your own projects.
-
-** Automatic Generation of Startup Code
-- Future work will use TI's targetDB files, which provide information about MCU's including peripheral layout and compiler flags to automatically generate
-  startup files. The generated startup files will then be included in this repository, to avoid a hard dependency on Code Composer Studio
-- The targetDB ffiles and are distributed with Code Composer Studio and located in the ~ccs/ccs_base/common/targetdb~ directory.
-  - ~targetdb/devices~ contains the ~<mcu>.xml~ files, which seem to be the main file for each chip.
 
 * Startup Code
 The startup code is set to be linked automatically by the example ~CMakeLists.txt~.  If you have installed ~tiva-cmake~ you need not directly
