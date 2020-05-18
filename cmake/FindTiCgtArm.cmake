@@ -16,6 +16,7 @@ This will define the following variables:
 
 ``TiCgtArm_FOUND``
   True if the system has ti-cgt-arm installed
+
 ``TiCgtArm_VERSION``
   The version of ti-cgt-arm that was found.
 
@@ -34,7 +35,8 @@ Cache Variables
 The following cache variables may also be set:
 
 ``TiCgtArm_EXECUTABLE``
-  The compiler executable
+  The C compiler executable, which is used to identify the compiler binary directory.
+
 
 #]========================================================================]
 # A guide for writing find modules: https://cmake.org/cmake/help/v3.17/manual/cmake-developer.7.html
@@ -51,9 +53,6 @@ list(REVERSE TiCgtArm_HINTS2)
 file(GLOB TiCgtArm_HINTS3 /opt/ti/ti-cgt-arm*)
 list(REVERSE TiCgtArm_HINTS3)
 
-file(GLOB TiCgtArm_HINTS3 /opt/ti/ti-cgt-arm*)
-list(REVERSE TiCgtArm_HINTS3)
-
 file(GLOB TiCgtArm_HINTS4 /opt/ti-cgt-arm*)
 list(REVERSE TiCgtArm_HINTS4)
 
@@ -63,7 +62,7 @@ list(REVERSE TiCgtArm_HINT_CCS)
 find_program(TiCgtArm_EXECUTABLE
         NAMES armacl
         HINTS ${TiCgtArm_HINTS1} ${TiCgtArm_HINTS2} ${TiCgtArm_HINTS3} ${TiCgtArm_HINTS4}
-        DOC "armcl, the ti-cgt compiler executable."
+        DOC "armcl (the ti-cgt compiler frontend): it's location tells the toolchain where to find ti-cgt "
         PATH_SUFFIXES bin
         )
 
@@ -72,7 +71,7 @@ find_program(TiCgtArm_EXECUTABLE
          NAMES armcl
          HINTS ${TiCgtArm_HINT_CCS}
          PATH_SUFFIXES bin
-         DOC "armcl, the ti-cgt compiler executable."
+         DOC "armcl (the ti-cgt compiler frontend): it's location tells the toolchain where to find ti-cgt "
          NO_DEFAULT_PATH
          )
 endif()
