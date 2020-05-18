@@ -1,9 +1,10 @@
 #+TITLE: CMake Cross-compile for Tiva Microcontrollers
 * Introduction
-This project lets you use ~cmake~ to build and flash programs for TI Tiva microcontrollers using either ~gcc~ or ~TI~ toolchains.
-You can use ~tiva-cmake~ as a [[*Template Mode (No Installation)][template]] or you can [[*Installation][install]] it.
+This project lets you use ~cmake~ to compile programs for TI Tiva microcontrollers using either ~gcc~ or ~TI~ toolchains and
+write them to flash memory using the in-circuit debugger on TI's LaunchPad development boards.
+You can use ~tiva-cmake~ as a [[*Template Mode (No Installation)][template]] or you can [[*Installation][install]] it and use it as a dependency for your project.
 
-When using ~tiva-cmake~ you must manually install the [[*Development Tools][Development Tools]], whereas the dependencies are automatically installed
+When using ~tiva-cmake~ as a template you must manually install the [[*Development Tools][Development Tools]], whereas the dependencies are automatically installed
 for Linux users during [[*Installation][installation]]. This project works without requiring [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]];
 however, installing it is one way to obtain the necessary development tools.
 
