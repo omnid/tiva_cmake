@@ -53,15 +53,15 @@ list(REVERSE ArmNoneEabiGCC_HINTS4)
 file(GLOB ArmNoneEabiGCC_HINT_CCS ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/gcc-arm-none-eabi* ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/arm-none-eabi-gcc*)
 list(REVERSE ArmNoneEabiGCC_HINT_CCS)
           
-find_program(ArmNoneEabiGCC_EXECUTABLE
+find_program(ArmNoneEabiGCC_C_COMPILER
         NAMES arm-none-eabi-gcc
         HINTS ${ArmNoneEabiGCC_HINTS1} ${ArmNoneEabiGCC_HINTS2} ${ArmNoneEabiGCC_HINTS3} ${ArmNoneEabiGCC_HINTS4} 
         DOC "arm-none-eabi-gcc: it's location tells the toolchain where to find all the GNU compiler tools"
         PATH_SUFFIXES bin
         )
 
- if( "${ArmNoneEabiGCC_EXECUTABLE}" STREQUAL "ArmNoneEabiGCC_EXECUTABLE-NOTFOUND")
-   find_program(ArmNoneEabiGCC_EXECUTABLE
+ if( "${ArmNoneEabiGCC_C_COMPILER}" STREQUAL "ArmNoneEabiGCC_C_COMPILER-NOTFOUND")
+   find_program(ArmNoneEabiGCC_C_COMPILER
          NAMES arm-none-eabi-gcc
          HINTS ${ArmNoneEabiGCC_HINT_CCS}
          PATH_SUFFIXES bin
@@ -71,16 +71,18 @@ find_program(ArmNoneEabiGCC_EXECUTABLE
 endif()
 
 # compute paths to the C standard library
-get_filename_component(ArmNoneEabiGCC_BIN_DIR ${ArmNoneEabiGCC_EXECUTABLE} DIRECTORY)
+get_filename_component(ArmNoneEabiGCC_BIN_DIR ${ArmNoneEabiGCC_C_COMPILER} DIRECTORY)
 get_filename_component(ArmNoneEabiGCC_ROOT_DIR ${ArmNoneEabiGCC_BIN_DIR}/.. ABSOLUTE)
 
 # compute the version, if have found the package
-if(NOT "${ArmNoneEabiGCC_EXECUTABLE}" STREQUAL "ArmNoneEabiGCC_EXECUTABLE-NOTFOUND")
+if(NOT "${ArmNoneEabiGCC_C_COMPILER}" STREQUAL "ArmNoneEabiGCC_EXECUTABLE-NOTFOUND")
   get_filename_component(ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_ROOT_DIR} NAME)
   string(REGEX REPLACE "arm-none-eabi-gcc." "" ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_VERSION})
   string(REGEX REPLACE "gcc-arm-none-eabi." "" ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_VERSION})
 endif()
 
+string(REPLACE "gcc" "g++" ArmNoneEabiGCC_CXX_COMPILER "${ArmNoneEabiGCC_C_COMPILER}")
+set(ArmNoneEabiGCC_CXX_COMPILER ${ArmNoneEabiGCC_CXX_COMPILER} CACHE FILEPATH "C++ Compiler")
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(ArmNoneEabiGCC
         FOUND_VAR ArmNoneEabiGCC_FOUND
