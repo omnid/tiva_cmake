@@ -56,7 +56,7 @@ list(REVERSE ArmNoneEabiGCC_HINT_CCS)
 find_program(ArmNoneEabiGCC_C_COMPILER
         NAMES arm-none-eabi-gcc
         HINTS ${ArmNoneEabiGCC_HINTS1} ${ArmNoneEabiGCC_HINTS2} ${ArmNoneEabiGCC_HINTS3} ${ArmNoneEabiGCC_HINTS4} 
-        DOC "arm-none-eabi-gcc: it's location tells the toolchain where to find all the GNU compiler tools"
+        DOC "The GNU C compiler for arm with the none-eabi (i.e., no operating system)"
         PATH_SUFFIXES bin
         )
 
@@ -81,8 +81,12 @@ if(NOT "${ArmNoneEabiGCC_C_COMPILER}" STREQUAL "ArmNoneEabiGCC_EXECUTABLE-NOTFOU
   string(REGEX REPLACE "gcc-arm-none-eabi." "" ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_VERSION})
 endif()
 
-string(REPLACE "gcc" "g++" ArmNoneEabiGCC_CXX_COMPILER "${ArmNoneEabiGCC_C_COMPILER}")
-set(ArmNoneEabiGCC_CXX_COMPILER ${ArmNoneEabiGCC_CXX_COMPILER} CACHE FILEPATH "C++ Compiler")
+find_program(ArmNoneEabiGCC_CXX_COMPILER
+  NAMES arm-none-eabi-g++
+  HINTS ${ArmNoneEabiGCC_BIN_DIR}
+  DOC "The GNU C++ compiler for arm with the none-eabi (i.e., no operating system)"
+  )
+  
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(ArmNoneEabiGCC
         FOUND_VAR ArmNoneEabiGCC_FOUND
