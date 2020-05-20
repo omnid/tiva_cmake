@@ -20,15 +20,18 @@ This will define the following variables:
   True if the system has ti-cgt-arm installed
 ``ArmNoneEabiGCC_VERSION``
   The version of ti-cgt-arm that was found.
-
+``ArmNoneEabiGCC_ROOT_DIR``
+  The rooot directory of the arm-none-eabi-gcc compiler
 Cache Variables
 ^^^^^^^^^^^^^^^
 
 The following cache variables may also be set:
 
-``ArmNoneEabiGCC_EXECUTABLE``
-  The C compiler executable, which is used to identify the compiler binary directory
+``ArmNoneEabiGCC_C_COMPILER``
+  The arm-none-eabi-gcc C compiler executable
 
+``ArmNoneEabiGCC_CXX_COMPILER``
+  The arm-none-eabi-g++ C++ compiler executable
 #]========================================================================]
 # A guide for writing find modules: https://cmake.org/cmake/help/v3.17/manual/cmake-developer.7.html
 find_package(CodeComposerStudio)
@@ -82,7 +85,8 @@ include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(ArmNoneEabiGCC
         FOUND_VAR ArmNoneEabiGCC_FOUND
         REQUIRED_VARS
-        ArmNoneEabiGCC_EXECUTABLE
+        ArmNoneEabiGCC_C_COMPILER
+        ArmNoneEabiGCC_CXX_COMPILER
         VERSION_VAR ArmNoneEabiGCC_VERSION
         )
         

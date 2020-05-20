@@ -28,7 +28,7 @@ Continue by modifying and adding code in ~src/~. See [[*Startup Code][Startup Co
 about how to implement interrupt service routines.
 
 The above assumes that you have an ~EK-TM4C123GXL~ LaunchPad plugged into a USB port.
-If you would like to change the microcontroller model add ~-DTIVA_MODEL=TM4Cxxxxx~ to the ~cmake~ line.
+If you would like to change the microcontroller model add ~-DCMAKE_SYSTEM_PROCESSOR=TM4Cxxxxx~ to the ~cmake~ line.
 See [[*CMake Settings][CMake Settings]] for details and other options.   
 
 * Installation
@@ -114,8 +114,10 @@ Here are some rules for how the compiler is selected when there are multiple ver
 You can specify a specific compiler using ~-DCMAKE_C_COMPILER=/path/to/compiler~ and ~CMAKE_CXX_COMPILER=/path/to/compiler~ when invoking ~cmake~.
 If the compiler you specify is compatible with ~gcc~ you should use ~tiva-gcc-toolchain.cmake~ and if it is compatible with ~ti-cgt~ use
 ~tiva-ti-toolchain.cmake~.
+
+
 ** Changing the Microcontroller
-- Passing ~-DTIVA_MODEL=<model>~ when invoking ~cmake~ will change the targeted microcontroller from the default (~TM4C123GH6PM~).
+- Passing ~-DCMAKE_SYSTEM_PROCESSOR=<model>~ when invoking ~cmake~ will change the targeted microcontroller from the default (~TM4C123GH6PM~).
 
 ** Microcontroller Support
 The code has only been tested with the ~EK-TM4C123GXL~ LaunchPad. Therefore some options are specific to the ~TM4C123GH6PM~ microcontroller
@@ -123,13 +125,14 @@ and must be modified for other microcontrollers (issues/pull requests welcome)
 
 *** Required Changes
 To support another microcontrollers a few additions are needed
-- Compiler options are set in ~/cmake/<model>-<compiler>-options.cmake~, where ~<compiler>~ is ~gcc~ or ~ti-cgt~ and ~<model>~ is the microcontroller model.
-  - Compiler options for most Tiva microcontroller models should be similar. Good defaults can be obtained from Code Composer studio
+- Compiler options that are dependent on microcontroller model are set in ~/cmake/Platform/arm-none-eabi-<compiler>-<model>.cmake~, 
+  where ~<compiler>~ is ~gcc~ or ~ti-cgt~ and ~<model>~ is the microcontroller model. These files are automatically loaded by CMake.
+  - Good defaults for compiler options can be obtained from Code Composer studio
     either by viewing the compile options in a project or reading the provided [[*Automatic Generation of Startup Code][targetDB files]].
 - Startup code is stored in ~/startup/<model>-<compiler>-startup.c~
   - The interrupt vector table (see [[*Startup Code][Startup Code]]) likely requires adjustment.
 - Linker scripts for ~gcc~ are stored in ~/startup/<model>-gcc.lds~ (~gcc~) and ~/startup/<mcu>-ti-cgt.cmd~ (~ti-cgt~)
-  - Memory locations likely differ between microcontroller models.
+  - Memory locations likely differ between microcontroller models and so the linker scripts should be adjusted.
 
 - The startup code and linker scripts incorpoarted via ~target_link_libraries(<my_target> ${STARTUP_LIBRARIES})~. You can
   omit this line to use your own startup code or linker scripts in your own projects.
