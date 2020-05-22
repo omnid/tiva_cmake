@@ -1,18 +1,21 @@
+# Setup compile flags for a TM4C123GH6PM
+# It is likely that other tiva microcontroller use similar flags, but it is currently the clearest approach to
+# write out all the flags for each individual processor
 # Build a list of flags used for C and C++
 # Note: the space in the string after each option is important since this forms the string of options and
 # each option should be separated by a space. 
 string(CONCAT
   CMAKE_FLAGS
-  "-mthumb "                          # use thumb mode code
-  "-mcpu=cortex-m4 "                  # The CPU used by the microcontroller
-  "-march=armv7e-m "                  # The architecture to optimize for
-  "-mfloat-abi=hard "                 # use hardware floating point since the microcontroller has an FPU
-  "-mfpu=fpv4-sp-d16 "                # the version of the floating point unit to use
-  "-ffunction-sections "              # seperate function sections
-  "-fdata-sections "                  # separate data sections
-  "-DPART_${CMAKE_SYSTEM_PROCESSOR} " # The processor model for the exact part
-  "-gdwarf-3 "                        # Used for debugging symbol format
-  "-gstrict-dwarf "                   # Used for debugging symbol format
+  "-mthumb "             # use thumb mode code
+  "-mcpu=cortex-m4 "     # The CPU used by the microcontroller
+  "-march=armv7e-m "     # The architecture to optimize for
+  "-mfloat-abi=hard "    # use hardware floating point since the microcontroller has an FPU
+  "-mfpu=fpv4-sp-d16 "   # the version of the floating point unit to use
+  "-ffunction-sections " # seperate function sections
+  "-fdata-sections "     # separate data sections
+  "-DPART_TM4C123GH6PM " # The processor model for the exact part
+  "-gdwarf-3 "           # Used for debugging symbol format
+  "-gstrict-dwarf "      # Used for debugging symbol format
   )
 
 # Implicitly, since compiler ID is GNU-C the C and CXX flags for gcc has been set.
