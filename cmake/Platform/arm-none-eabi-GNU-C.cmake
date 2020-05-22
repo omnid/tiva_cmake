@@ -21,18 +21,18 @@ string(CONCAT
   "-gstrict-dwarf "
   )
 
-string(CONCAT
-  CMAKE_C_FLAGS_DEBUG_INIT
-  "-g " # debugging symbols
-  "-Og " # some optimizations that don't effect debugging
-  )
+#string(CONCAT
+#  CMAKE_C_FLAGS_DEBUG_INIT
+#  "-g " # debugging symbols
+#  "-Og " # some optimizations that don't effect debugging
+#  )
 
 
-string(CONCAT
-  CMAKE_C_FLAGS_RELEASE_INIT
-  "-O3 " # full optimizations
-  "-DNDEBUG "
-  )
+#string(CONCAT
+#  CMAKE_C_FLAGS_RELEASE_INIT
+#  "-O3 " # full optimizations
+#  "-DNDEBUG "
+#  )
 string(CONCAT # concatenate the options for the linker
   CMAKE_EXE_LINKER_FLAGS_INIT # Initial linker flags for all configuration
   "--specs=nosys.specs " # no systemcalls 
