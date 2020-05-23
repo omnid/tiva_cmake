@@ -2,7 +2,6 @@
 # The test is not automated since it depends on what programs are installed on the system
 cmake_minimum_required(VERSION 3.8)
 project(CodeComposerStudioTest)
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../cmake")
 find_package(CodeComposerStudio)
 find_package(TiCgtArm)
 find_package(ArmNoneEabiGCC)

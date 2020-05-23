@@ -13,7 +13,7 @@ string(CONCAT
   "-mfpu=fpv4-sp-d16 "       # the version of the floating point unit to use
   "-ffunction-sections "     # seperate function sections
   "-fdata-sections "         # separate data sections
-  "-gdwarf- "               # Used for debugging symbol format
+  "-gdwarf-3 "               # Used for debugging symbol format
   "-gstrict-dwarf "          # Used for debugging symbol format
   )
 

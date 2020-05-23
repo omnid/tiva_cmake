@@ -1,4 +1,4 @@
 # This file runs before almost anything when CMake generates the build system
-# Setup module paths so that the cmake files that come with this module can be foudn by toolchain files
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../cmake")
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} CACHE INTERNAL "The module path")
+# We set the module path here so that the module path applies to the toolchain files, which are loaded very early
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../cmake" CACHE INTERNAL "Location to search for CMake files with include or find_package")
+message(STATUS "Toolchain ${CMAKE_TOOLCHAIN_FILE}")
