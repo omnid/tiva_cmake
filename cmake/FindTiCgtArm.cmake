@@ -20,14 +20,17 @@ This will define the following variables:
 ``TiCgtArm_VERSION``
   The version of ti-cgt-arm that was found.
 
-``TiCgtArm_C_LIBRARY_DIRS``
+``TiCgtArm_LIBRARY_DIRS``
   Location of the C standard library
 
-``TiCgtArm_C_INCLUDE_DIRS``
+``TiCgtArm_INCLUDE_DIRS``
   Include directories for the C standard library
 
-``TiCgtArm_C_SOURCE_DIRS``
+``TiCgtArm_SOURCE_DIRS``
   Directory with source code for the C standard library
+
+``TiCgtArm_ROOT_DIR``
+  The root directory of the ti-cgt arm compiler
 
 Cache Variables
 ^^^^^^^^^^^^^^^
@@ -35,7 +38,7 @@ Cache Variables
 The following cache variables may also be set:
 
 ``TiCgtArm_EXECUTABLE``
-  The C compiler executable, which is used to identify the compiler binary directory.
+  The C and C++ compiler executable.
 
 
 #]========================================================================]
@@ -80,9 +83,9 @@ endif()
 get_filename_component(TiCgtArm_BIN_DIR ${TiCgtArm_EXECUTABLE} DIRECTORY)
 get_filename_component(TiCgtArm_ROOT_DIR ${TiCgtArm_BIN_DIR}/.. ABSOLUTE)
 
-set(TiCgtArm_C_INCLUDE_DIRS ${TiCgtArm_ROOT_DIR}/include)
-set(TiCgtArm_C_LIBRARY_DIRS ${TiCgtArm_ROOT_DIR}/lib ABSOLUTE)
-set(TiCgtArm_C_SOURCE_DIRS ${TiCgtArm_C_LIBRARY_DIRS}/src)
+set(TiCgtArm_INCLUDE_DIRS ${TiCgtArm_ROOT_DIR}/include)
+set(TiCgtArm_LIBRARY_DIRS ${TiCgtArm_ROOT_DIR}/lib)
+set(TiCgtArm_SOURCE_DIRS ${TiCgtArm_C_LIBRARY_DIRS}/src)
 
 # compute the version, if have found the package
 if(NOT "${TiCgtArm_EXECUTABLE}" STREQUAL "TiCgtArm_EXECUTABLE-NOTFOUND")
