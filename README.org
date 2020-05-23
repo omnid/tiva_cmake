@@ -2,36 +2,41 @@
 * Introduction
 A CMake toolchain focused on Texas Instruments (TI) Tiva-C microcontrollers (although likely modifiable to other arm processors).  
 It enables the use of ~arm-none-eabi-gcc~ or TI's Code Generation Tools (~ti-cgt~) and also provides an easy way to write your
-code to flash memory using the in-circuit debugger (ICD) on TI's LaunchPad development boards.
+code to flash memory using the in-circuit debugger (ICD) on TI's LaunchPad development boards. 
+It also comes bundled with ~TivaWare~ ~driverlib~.
 
-Use ~tiva-cmake~ as a [[*Template Mode (No Installation)][template]] or [[*Installation][install]] it and use it as a dependency.
+Use ~tiva-cmake~ as a [[*Template Mode (No Installation)][template]] or [[*Installation][install]] it (either to your home directory or system-wide) and use it as a dependency. 
 
-When using ~tiva-cmake~ as a template you must manually install the [[*Development Tools][Development Tools]], whereas the dependencies are automatically installed
-for Linux users during [[*Installation][installation]]. This project works without requiring [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]];
-however, installing it is one way to obtain the necessary development tools. It also includes a version of TivaWare's driverlib.
+When using ~tiva-cmake~ as a template you must manually install the [[*Development Tools][Development Tools]]. 
+Some installation methods automatically install the required tools. 
+You do not need [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] to use ~tiva-cmake~; however, installing it is one method to obtain all of the necessary tools. 
 
 * Template Mode (No Installation)
-Make sure you have the necessary [[*Dependencies][Dependencies]] installed. 
+Make sure you have the necessary [[*Development Tools][Development Tools]] installed. 
+The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port.
 
 1. Clone this repository:
    - ~git clone https://github.com/m-elwin/tiva-cmake my_project_directory~
-2. Create the build directory and compile the example code:
+2. Create the build directory, compile, and flash:
    #+BEGIN_SRC bash
    cd my_project_directory
    mkdir build
    cd build
-   cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/tiva-cmake-toolchain.cmake ../src
+   cmake ..
    make
    make led_example.write 
    #+END_SRC
 
 When successful, you should see LED on the ~EK-TM4C123GXL~ cycle between red, white, and blue.
-Continue by modifying and adding code in ~src/~. See [[*Startup Code][Startup Code]] for information
-about how to implement interrupt service routines.
 
-The above assumes that you have an ~EK-TM4C123GXL~ LaunchPad plugged into a USB port.
-If you would like to change the microcontroller model add ~-DCMAKE_SYSTEM_PROCESSOR=TM4Cxxxxx~ to the ~cmake~ line.
-See [[*CMake Settings][CMake Settings]] for details and other options.   
+The project resides in ~src/~, which is the sole location you should need to edit.
+- ~src/PreLoad.cmake~ sets the default toolchain: you can modify this file or override using
+    ~-DCMAKE_TOOLCHAIN_FILE=arm-none-eabi-gcc-toolchain.cmake~ for ~gcc~
+    ~-DCMAKE_TOOLCHAIN_FILE=ti-cgt-arm-toolchain.cmake~ for ~ti-cgt~
+- See [[*Startup Code][Startup Code]] for information about how to implement interrupt service routines.
+- To change the microcontroller model add ~-DCMAKE_SYSTEM_PROCESSOR=TM4Cxxxxx~ or set it in ~src/PreLoad.cmake~
+- See [[*CMake Settings][CMake Settings]] for details and other options.   
+
 
 * Installation
 ** Ubuntu/Debian
@@ -185,7 +190,7 @@ The startup code is different than the code provided by TI and is designed to ma
      in this handler to indicate that it has been triggered since, for example, the default FaultISR calls ~DefaultInterrupt~
    - Note that ~Reserved~ interrupts are set to Null (0).
 
-* Dependencies
+* Development Tools
 Installing [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.
 However, Code Composer Studio is a large program and it may be desirable to obtain your tools elsewhere.
 

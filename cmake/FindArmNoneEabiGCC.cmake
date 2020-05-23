@@ -21,7 +21,8 @@ This will define the following variables:
 ``ArmNoneEabiGCC_VERSION``
   The version of ti-cgt-arm that was found.
 ``ArmNoneEabiGCC_ROOT_DIR``
-  The rooot directory of the arm-none-eabi-gcc compiler
+  The root directory of the arm-none-eabi-gcc compiler
+
 Cache Variables
 ^^^^^^^^^^^^^^^
 
