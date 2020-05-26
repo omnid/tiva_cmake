@@ -1,19 +1,17 @@
 #+TITLE: CMake Cross-compile for Tiva Microcontrollers
 * Introduction
 A CMake toolchain focused on Texas Instruments (TI) Tiva-C microcontrollers (although likely modifiable to other arm processors).  
-It enables the use of ~arm-none-eabi-gcc~ or TI's Code Generation Tools (~ti-cgt~) and also provides an easy way to write your
+It enables the use of ~arm-none-eabi-gcc~ or TI's Code Generation Tools (~ti-cgt~) and provides a method to write your
 code to flash memory using the in-circuit debugger (ICD) on TI's LaunchPad development boards. 
-It also comes bundled with ~TivaWare~ ~driverlib~.
+For convenience, it also comes bundled with ~TivaWare~ ~driverlib~.
 
-Use ~tiva-cmake~ as a [[*Template Mode (No Installation)][template]] or [[*Installation][install]] it (either to your home directory or system-wide) and use it as a dependency. 
+You can use ~tiva-cmake~ as a [[*Template Mode (No Installation)][template]] or [[*Installation][install]] it (either to your home directory or system-wide) and use it as a dependency. 
 
-When using ~tiva-cmake~ as a template you must manually install the [[*Development Tools][Development Tools]]. 
-Some installation methods automatically install the required tools. 
-You do not need [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] to use ~tiva-cmake~; however, installing it is one method to obtain all of the necessary tools. 
+When using ~tiva-cmake~ as a [[*Template Mode (No Installation)][template]] you must manually install the [[*Development Tools][Development Tools]] ([[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] is sufficient but not necessary).
+Some [[*Installation][installation]] methods automatically install the required development tools.
 
 * Template Mode (No Installation)
-Make sure you have the necessary [[*Development Tools][Development Tools]] installed. 
-The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port.
+The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[*Development Tools][Development Tools]] installed.
 
 1. Clone this repository:
    - ~git clone https://github.com/m-elwin/tiva-cmake my_project_directory~
@@ -29,7 +27,7 @@ The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port.
 
 When successful, you should see LED on the ~EK-TM4C123GXL~ cycle between red, white, and blue.
 
-The project resides in ~src/~, which is the sole location you should need to edit.
+The project source code resides in ~src/~, which is the sole location you should need to edit.
 - ~src/PreLoad.cmake~ sets the default toolchain: you can modify this file or override using
     ~-DCMAKE_TOOLCHAIN_FILE=arm-none-eabi-gcc-toolchain.cmake~ for ~gcc~
     ~-DCMAKE_TOOLCHAIN_FILE=ti-cgt-arm-toolchain.cmake~ for ~ti-cgt~
@@ -105,7 +103,7 @@ Every executable target you create (via ~add_executable(target_name ...)~ in ~cm
 * CMake Settings
 Most ~cmake~ settings can be modifed using the ~cmake-gui~ (where the toolchain can also be selected when first configuring the project). 
 
-* Selecting the toolchain
+** Selecting the toolchain
 - The default toolchain file is ~tiva-toolchain.cmake~ 
   - It selects ~gcc~ if it is installed, otherwise it uses ~ti-cgt~
 - The toolchain file for ~gcc~ is ~tiva-gcc-toolchain.cmake~ 
@@ -129,7 +127,7 @@ If the compiler you specify is compatible with ~gcc~ you should use ~tiva-gcc-to
 ** Microcontroller Support
 The code has only been tested with the ~EK-TM4C123GXL~ LaunchPad. Therefore some options are specific to the ~TM4C123GH6PM~ microcontroller
 and must be modified for other microcontrollers (issues/pull requests welcome)
-
+- The ~TM4C123_REVISION~ and ~TM4C129_REVISION~ are used to set the silicon revision when using TivaWare. See ~tivaware/TivaWareConfig.cmake~ for details.
 *** Required Changes
 To support another microcontrollers a few additions are needed
 - Compiler options that are dependent on microcontroller model are set in ~/cmake/Platform/arm-none-eabi-<compiler>-<model>.cmake~, 
@@ -143,7 +141,6 @@ To support another microcontrollers a few additions are needed
 
 - The startup code and linker scripts incorpoarted via ~target_link_libraries(<my_target> ${STARTUP_LIBRARIES})~. You can
   omit this line to use your own startup code or linker scripts in your own projects.
-
 *** Automatic Generation of Startup Code
 - Future work will use TI's targetDB files, which provide information about MCU's including peripheral layout and compiler flags to automatically generate
   startup files. The generated startup files will then be included in this repository, to avoid a hard dependency on Code Composer Studio

@@ -1,6 +1,6 @@
 # CMake Build for tivaware driverlib
 cmake_minimum_required(VERSION 3.9)
-project(driverlib)
+project(TivaWare)
 include(GNUInstallDirs)
 
 # Usually it is bad practice to glob, but here the files we need are designed
@@ -16,7 +16,7 @@ target_include_directories(driverlib PUBLIC
 
 # All install directories are in share since the files are not for the host platform
 install(TARGETS driverlib
-  EXPORT DriverLibTargets
+  EXPORT TivaWareTargets 
   LIBRARY DESTINATION ${CMAKE_INSTALL_DATADIR}/tivaware/${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_DATADIR}/tivaware/${CMAKE_INSTALL_LIBDIR}
   )
@@ -24,10 +24,13 @@ install(TARGETS driverlib
 install(DIRECTORY inc
   DESTINATION ${CMAKE_INSTALL_DATADIR}/tivaware)
 
-install(EXPORT DriverLibTargets
-  FILE DriverLibTargets.cmake
+# The TivaWareConfig.cmake file imports these targets and makes some generation-time adjustments
+# for projects that import this library
+install(EXPORT TivaWareTargets
+  FILE TivaWareTargets.cmake
   NAMESPACE TivaWare::
   DESTINATION ${CMAKE_INSTALL_DATADIR}/tivaware
   )
-  
-export(EXPORT DriverLibTargets NAMESPACE TivaWare:: FILE driverlib.cmake)
+
+# This export file can be included from other projects without installing this project
+export(EXPORT TivaWareTargets NAMESPACE TivaWare:: FILE TivaWare.cmake)
