@@ -17,8 +17,8 @@ target_include_directories(driverlib PUBLIC
 # All install directories are in share since the files are not for the host platform
 install(TARGETS driverlib
   EXPORT TivaWareTargets 
-  LIBRARY DESTINATION ${CMAKE_INSTALL_DATADIR}/tivaware/${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_DATADIR}/tivaware/${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_DATADIR}/tivaware/${CMAKE_BUILD_TYPE}/${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_DATADIR}/tivaware/${CMAKE_BUILD_TYPE}/${CMAKE_INSTALL_LIBDIR}
   )
 
 install(DIRECTORY inc
