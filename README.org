@@ -127,18 +127,18 @@ If the compiler you specify is compatible with ~gcc~ you should use ~tiva-gcc-to
 The code has only been tested with the ~EK-TM4C123GXL~ LaunchPad. Therefore some options are specific to the ~TM4C123GH6PM~ microcontroller
 and must be modified for other microcontrollers (issues/pull requests welcome)
 - The ~TM4C123_REVISION~ and ~TM4C129_REVISION~ are used to set the silicon revision when using TivaWare. See ~tivaware/TivaWareConfig.cmake~ for details.
+
 *** Required Changes
 To support another microcontrollers a few additions are needed
-- Compiler options that are dependent on microcontroller model are set in ~/cmake/Platform/arm-none-eabi-<compiler>-<model>.cmake~, 
-  where ~<compiler>~ is ~gcc~ or ~ti-cgt~ and ~<model>~ is the microcontroller model. These files are automatically loaded by CMake.
+- Compiler options that are dependent on microcontroller model are set in ~/cmake/Platform/Generic-<compilerID>-<model>.cmake~, 
+  where ~<compilerID>~ is ~GCC~ or ~TI~ and ~<model>~ is the microcontroller model. These files are automatically loaded by CMake.
   - Good defaults for compiler options can be obtained from Code Composer studio
     either by viewing the compile options in a project or reading the provided [[*Automatic Generation of Startup Library][targetDB files]].
-- Startup code is stored in ~/startup/<model>-<compiler>-startup.c~
+- Startup code is stored in ~lib/<model>-<compilerID>.c~
   - The interrupt vector table (see [[*Startup Library][Startup Library]]) likely requires adjustment.
-- Linker scripts for ~gcc~ are stored in ~/startup/<model>-gcc.lds~ (~gcc~) and ~/startup/<mcu>-ti-cgt.cmd~ (~ti-cgt~)
+- Linker scripts for ~gcc~ are stored in ~lib/<model>-GCC.lds~  and ~/lib/<model>-TI.cmd~ 
   - Memory locations likely differ between microcontroller models and so the linker scripts should be adjusted.
-
-- The startup code and linker scripts incorpoarted via ~target_link_libraries(<my_target> ${STARTUP_LIBRARIES})~. You can
+- The startup code and linker scripts incorporated via ~target_link_libraries(<my_target> ${STARTUP_LIBRARIES})~. You can
   omit this line to use your own startup code or linker scripts in your own projects.
 *** Automatic Generation of Startup Library
 - Future work will use TI's targetDB files, which provide information about MCU's including peripheral layout and compiler flags to automatically generate
@@ -154,7 +154,7 @@ To support another microcontrollers a few additions are needed
   - Debug-level optimizations ~-Og~ are turned on for ~gcc~, as the [[https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html][gcc manual]] recommends this debug level.  
   - The blank (~""~) build type does not specify an optimization level.
   
-** TivaWare Driverlib
+* TivaWare Driverlib
 TI has released TivaWare ~driverlib~ under a BSD license and this project redistributes it under that license in the ~driverlib~ directory.
 By default, ~tiva-cmake~ uses it's own bundled version of ~driverlib~.
 
@@ -172,18 +172,21 @@ and is stored in ~lib/<model>~.
 
 The startup code is different than the code provided by TI and is designed to make development easier. 
 1. To define an interrupt in your code, simply declare a function with the name of that interrupt, no need to modify the startup library
-   - The naming scheme can be derived from the Exception and Interrupt tables in the TI Datasheet
-     - Remove all terms in parentheses
-     - Replace the greek letter $\mu$ with a ~u~
-     - Replace all non-alpha-numeric characters with an underscore
-     - Prepend ISR_
+   - The naming scheme can be derived from the Exception and Interrupt tables in the TI Datasheet (Table 2-8 and Table 2-9)
+     - Name is derived from ~Exception Type~ for exceptions and ~Description~ for regular interrupts
+     - "16/32-Bit" is removed
+     - "32/64-Bit" becomes W (for wide)
+     - Flash Memory Control and EEPROM Control becomes FlashAndEEPROM
+     - Remove all terms in parenthesis
+     - Remove all non-alpha-numeric characters
+     - Replace greek letter $\mu$ with a u
+     - Append ISR
    - For example 
-     - "Non-Maskable Interrupt (NMI)" becomes ~ISR_Non_Maskable_Interrupt~
-     - "16/32-Bit Timer 0A" becomes ~ISR_16_32_Bit_Timer_0A~
-     - It ain't pretty, and may violate your style guide, but the transformations always result in valid C identifiers.
-2. By default, all ISRs call ~ISR_Default~, a function that does nothing. By providing your own definition for ~ISR_Default~ you
+     - "Non-Maskable Interrupt (NMI)" becomes ~NonMaskableInterruptISR~
+     - "16/32-Bit Timer 0A" becomes ~Timer0AISR~
+2. By default, all ISRs (except ~Reset~) call ~DefaultISR~, a function that does nothing. By providing your own definition for ~ISR_Default~ you
    can modify that this default behavior.  Even if you don't enable interrupts, fault ISRs can still be triggered.
-   - ~Reserved~ interrupts are set to ~NULL~ (0).
+   - ~Reserved~ interrupts are set to 0.
 
 It may be beneficial to modify the startup code directly in your project, in which case simply omit ~TivaCMake::startup~ from the target link libraries.
 You can make basic changes to the stack and heap sizes using options for the compiler, but such changes may also require editing the linker scripts.
