@@ -31,7 +31,7 @@ The project source code resides in ~src/~, which is the sole location you should
 - ~src/PreLoad.cmake~ sets the default toolchain: you can modify this file or override using
     ~-DCMAKE_TOOLCHAIN_FILE=arm-none-eabi-gcc-toolchain.cmake~ for ~gcc~
     ~-DCMAKE_TOOLCHAIN_FILE=ti-cgt-arm-toolchain.cmake~ for ~ti-cgt~
-- See [[*Startup Code][Startup Code]] for information about how to implement interrupt service routines.
+- See [[*Startup Library][Startup Library]] for information about how to implement interrupt service routines.
 - To change the microcontroller model add ~-DCMAKE_SYSTEM_PROCESSOR=TM4Cxxxxx~ or set it in ~src/PreLoad.cmake~
 - See [[*CMake Settings][CMake Settings]] for details and other options.   
 
@@ -77,9 +77,9 @@ The project source code resides in ~src/~, which is the sole location you should
    - CMake Files are placed in ~$prefix/share/cmake/tiva-cmake~ 
    - Release and debug driverlib versions are installed to ~$prefix/lib/libdriverlib*~
 
+
+
 * Usage 
-** New Project (Using ~tiva-cmake~ as a template)
-   - See [[*Template Mode (No Installation)][Template Mode]]: make a copy of ~tiva-cmake~ and add your code.
 ** New Project (Using an installed copy ~tiva-cmake~)
 - Use ~cmake -P tiva-template > CMakeLists.txt~ to create your project's ~CMakeLists.txt~
 - Edit ~CMakeLists.txt~ to add your source code and specify your libraries and executables.
@@ -87,7 +87,6 @@ The project source code resides in ~src/~, which is the sole location you should
   configuring the project for the first time.
 - See [[*CMake Settings][CMake Settings]] for other options
 
-  
 ** Flashing the Firmware
 Every executable target you create (via ~add_executable(target_name ...)~ in ~cmake~ adds methods for flashing the firmware using the LaunchPad's In-Circuit Debugger.
 1. ~make target_name.write~ Flash the program onto the microcontroller using one of the methods below, which are listed in order of preference
@@ -133,15 +132,15 @@ To support another microcontrollers a few additions are needed
 - Compiler options that are dependent on microcontroller model are set in ~/cmake/Platform/arm-none-eabi-<compiler>-<model>.cmake~, 
   where ~<compiler>~ is ~gcc~ or ~ti-cgt~ and ~<model>~ is the microcontroller model. These files are automatically loaded by CMake.
   - Good defaults for compiler options can be obtained from Code Composer studio
-    either by viewing the compile options in a project or reading the provided [[*Automatic Generation of Startup Code][targetDB files]].
+    either by viewing the compile options in a project or reading the provided [[*Automatic Generation of Startup Library][targetDB files]].
 - Startup code is stored in ~/startup/<model>-<compiler>-startup.c~
-  - The interrupt vector table (see [[*Startup Code][Startup Code]]) likely requires adjustment.
+  - The interrupt vector table (see [[*Startup Library][Startup Library]]) likely requires adjustment.
 - Linker scripts for ~gcc~ are stored in ~/startup/<model>-gcc.lds~ (~gcc~) and ~/startup/<mcu>-ti-cgt.cmd~ (~ti-cgt~)
   - Memory locations likely differ between microcontroller models and so the linker scripts should be adjusted.
 
 - The startup code and linker scripts incorpoarted via ~target_link_libraries(<my_target> ${STARTUP_LIBRARIES})~. You can
   omit this line to use your own startup code or linker scripts in your own projects.
-*** Automatic Generation of Startup Code
+*** Automatic Generation of Startup Library
 - Future work will use TI's targetDB files, which provide information about MCU's including peripheral layout and compiler flags to automatically generate
   startup files. The generated startup files will then be included in this repository, to avoid a hard dependency on Code Composer Studio
 - The targetDB ffiles and are distributed with Code Composer Studio and located in the ~ccs/ccs_base/common/targetdb~ directory.
@@ -166,14 +165,14 @@ Some options to override this default behavior:
 1. Use ~-DDRIVERLIB_LIBRARIES=/path/to/library/driverlib.lib~ to point to a specific compiled version of the library
 2. Use ~-DRIVERLIB_BUILD_TYPE=~ to select a build type for ~driverlib~ that differs from the project build type
 
-* Startup Code
-The startup code is set to be linked automatically by the example ~CMakeLists.txt~.  If you have installed ~tiva-cmake~ you need not directly
-include these files in your source code.  However, it may be beneficial to include or even modify them; they are located in ~tiva-cmake/startup~
-and installed to ~$prefix/usr/share/tiva-cmake/startup~.
+* Startup Library
+The startup library contains code that runs before ~main()~ to initialize the microcontroller,
+the linker scripts, and the interrupt vector table.  This code differs between microcontroller models
+and is stored in ~lib/<model>~.  
 
 The startup code is different than the code provided by TI and is designed to make development easier. 
-1. To define an interrupt, simply declare a function with the name of that interrupt 
-   - The naming scheme can be derived from the Exception and Interrupt tables in the datasheet
+1. To define an interrupt in your code, simply declare a function with the name of that interrupt, no need to modify the startup library
+   - The naming scheme can be derived from the Exception and Interrupt tables in the TI Datasheet
      - Remove all terms in parentheses
      - Replace the greek letter $\mu$ with a ~u~
      - Replace all non-alpha-numeric characters with an underscore
@@ -182,10 +181,12 @@ The startup code is different than the code provided by TI and is designed to ma
      - "Non-Maskable Interrupt (NMI)" becomes ~ISR_Non_Maskable_Interrupt~
      - "16/32-Bit Timer 0A" becomes ~ISR_16_32_Bit_Timer_0A~
      - It ain't pretty, and may violate your style guide, but the transformations always result in valid C identifiers.
-2. By default, all interrupts are mapped to a function called ~DefaultInterrupt~ that does nothing
-   - You can override ~DefaultInterrupt~ by declaring it in your own code. It is handy for debugging to do something
-     in this handler to indicate that it has been triggered since, for example, the default FaultISR calls ~DefaultInterrupt~
-   - Note that ~Reserved~ interrupts are set to Null (0).
+2. By default, all ISRs call ~ISR_Default~, a function that does nothing. By providing your own definition for ~ISR_Default~ you
+   can modify that this default behavior.  Even if you don't enable interrupts, fault ISRs can still be triggered.
+   - ~Reserved~ interrupts are set to ~NULL~ (0).
+
+It may be beneficial to modify the startup code directly in your project, in which case simply omit ~TivaCMake::startup~ from the target link libraries.
+You can make basic changes to the stack and heap sizes using options for the compiler, but such changes may also require editing the linker scripts.
 
 * Development Tools
 Installing [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.

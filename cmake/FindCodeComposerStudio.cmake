@@ -29,6 +29,8 @@ The following cache variables may also be set:
 ``CodeComposerStudio_ROOT_DIR``
   The root directory of Code Composer Studio. 
 
+``CodeComposerStudio_UniFlash_EXECUTABLE``
+  The executable that runs the UniFlash tool, used for flashing microcontrollers
 #]========================================================================]
 # A guide for writing find modules: https://cmake.org/cmake/help/v3.17/manual/cmake-developer.7.html
 if(NOT CodeComposerStudio_FOUND)

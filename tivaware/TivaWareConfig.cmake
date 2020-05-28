@@ -23,6 +23,8 @@ else()
     message(WARNING "TivaWare does not support ${CMAKE_SYSTEM_PROCESSOR}, use at your own risk!")
 endif()
 
+target_compile_definitions(driverlib INTERFACE $<$<COMPILER_ID:TI>:ccs>)
+
 #[[======================== Works Cited ======================================================
 [1] "TivaWare Peripheral Driver Library: User's Guide", Literature Number SPMU298E
      https://www.ti.com/lit/pdf/spmu298 (Accessed on 05/20/2020)
