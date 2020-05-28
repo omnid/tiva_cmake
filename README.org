@@ -190,6 +190,7 @@ The startup code is different than the code provided by TI and is designed to ma
 
 It may be beneficial to modify the startup code directly in your project, in which case simply omit ~TivaCMake::startup~ from the target link libraries.
 You can make basic changes to the stack and heap sizes using options for the compiler, but such changes may also require editing the linker scripts.
+See compiler documentation for details.
 
 * Development Tools
 Installing [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.

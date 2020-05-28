@@ -2,178 +2,372 @@
 extern void c_int00(void);
 
 /// @brief This ISR is called on processor reset. It calls the c initialization routine
-static void ResetISR(void)
+///        Define your own function of the same name to override the behavior
+__attribute__((weak)) void ResetISR(void)
 {
     // Go to the TI C initialization routine which sets up the C runtime
-    // and enables floating point. The code then calls main
+    // and enables floating point. That code then calls main
     __asm("    .global _c_int00\n"
           "    b.w     _c_int00");
 }
 
 /// @brief by default this is called from each ISR
 ///        define your own version to override 
-__attribute__((weak)) void ISR_Default() {}
-
-/// Define the ISRs as weak symbols so that they can be overriddent
-__attribute__((weak)) void NmiISR(void)
+__attribute__((weak)) void DefaultISR(void)
 {
-    error(FILE_LINE, "NMI");
+    // do nothing
 }
 
-/// @brief fault isr. These are errors that the processor can detect (such as divide by zero)
-/// See section 2.6.1 of the datasheet for more information about this fault.
-/// By default, loop forever so state is preserved and can be captured by the debugger.
-/// This is weak so it can be overridden by user code
-__attribute__((weak))
-void FaultISR(void)
-{
-    error(FILE_LINE, "FAULT");
-}
+/// @brief ISR for Interrupt Vector 2, The NMI handler.
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void NonMaskableInterruptISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Can0ISR(void)
-{
-    error(FILE_LINE, "CANISR");
-}
+/// @brief ISR for Interrupt Vector 3,    The hard fault handler
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void HardFaultISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-// uart interrupts are triggered on error conditions, however,
-// this feature must be explicitly enabled.
-__attribute__((weak))
-void Uart0ISR(void)
-{
-    error(FILE_LINE, "UART0_ISR");
-}
+/// @brief ISR for Interrupt Vector 4, The MPU fault handler
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void MemoryManagementISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Uart1ISR(void)
-{
-    error(FILE_LINE, "UART1_ISR");
-}
+/// @brief ISR for Interrupt Vector 5, The bus fault handler
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void BusFaultISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Uart2ISR(void)
-{
-    error(FILE_LINE, "UART2_ISR");
-}
+/// @brief ISR for Interrupt Vector 6, The usage fault handler
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void UsageFaultISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Uart3ISR(void)
-{
-    error(FILE_LINE, "UART3_ISR");
-}
+/// @brief ISR for Interrupt Vector 11, SVCall handler
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void SVCallISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Uart4ISR(void)
-{
-    error(FILE_LINE, "UART4_ISR");
-}
+/// @brief ISR for Interrupt Vector 12, Debug monitor handler
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void DebugMonitorISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Uart5ISR(void)
-{
-    error(FILE_LINE, "UART5_ISR");
-}
+/// @brief ISR for Interrupt Vector 14, The PendSV handler
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void PendSVISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Uart6ISR(void)
-{
-    error(FILE_LINE, "UART6_ISR");
-}
+/// @brief ISR for Interrupt Vector 15, The SysTick handler
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void SysTickISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Uart7ISR(void)
-{
-    error(FILE_LINE, "UART7_ISR");
-}
+/// @brief ISR for Interrupt Vector 16, GPIO Port A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void GPIOPortAISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Timer0AISR(void)
-{
-    error(FILE_LINE, "TIMER0A_ISR");
-}
+/// @brief ISR for Interrupt Vector 17, GPIO Port B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void GPIOPortBISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Timer0BISR(void)
-{
-    error(FILE_LINE, "TIMER0B_ISR");
-}
+/// @brief ISR for Interrupt Vector 18, GPIO Port C
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void GPIOPortCISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Timer1AISR(void)
-{
-    error(FILE_LINE, "TIMER1A_ISR");
-}
+/// @brief ISR for Interrupt Vector 19, GPIO Port D
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void GPIOPortDISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Timer1BISR(void)
-{
-    error(FILE_LINE, "TIMER1B_ISR");
-}
+/// @brief ISR for Interrupt Vector 20, GPIO Port E
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void GPIOPortEISR(void) __attribute__((weak, alias ("DefaultISR")));
 
+/// @brief ISR for Interrupt Vector 21, UART0 Rx and Tx
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Uart0ISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Timer2AISR(void)
-{
-    error(FILE_LINE, "TIMER2A_ISR");
-}
+/// @brief ISR for Interrupt Vector 22, UART1 Rx and Tx
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void UART1ISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Timer2BISR(void)
-{
-    error(FILE_LINE, "TIMER2B_ISR");
-}
+/// @brief ISR for Interrupt Vector 23, SSI0 Rx and Tx
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void SSI0ISR(void) __attribute__((weak, alias ("DefaultISR")));
 
+/// @brief ISR for Interrupt Vector 24, I2C0 Master and Slave
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void I2C0ISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Timer3AISR(void)
-{
-    error(FILE_LINE, "TIMER3A_ISR");
-}
+/// @brief ISR for Interrupt Vector 25, PWM Fault
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void PWM0FaultISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Timer3BISR(void)
-{
-    error(FILE_LINE, "TIMER3B_ISR");
-}
+/// @brief ISR for Interrupt Vector 26, PWM Generator 0
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void PWM0Generator0ISR(void) __attribute__((weak, alias ("DefaultISR")));
 
+/// @brief ISR for Interrupt Vector 27, PWM Generator 1
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void PWM0Generator1ISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Timer4AISR(void)
-{
-    error(FILE_LINE, "TIMER4A_ISR");
-}
+/// @brief ISR for Interrupt Vector 28, PWM Generator 2
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void PWM0Generator2ISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Timer4BISR(void)
-{
-    error(FILE_LINE, "TIMER4B_ISR");
-}
+/// @brief ISR for Interrupt Vector 29, Quadrature Encoder 0
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void QEI0ISR(void) __attribute__((weak, alias ("DefaultISR")));
 
+/// @brief ISR for Interrupt Vector 30, ADC Sequence 0
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void ADC0Sequence0ISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Timer5AISR(void)
-{
-    error(FILE_LINE, "TIMER5A_ISR");
-}
+/// @brief ISR for Interrupt Vector 31, ADC Sequence 1
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void ADC0Sequence1ISR(void) __attribute__((weak, alias ("DefaultISR")));
 
-__attribute__((weak))
-void Timer5BISR(void)
-{
-    error(FILE_LINE, "TIMER5B_ISR");
-}
-/// @brief default isr handler
-__attribute__((weak))
-void IntDefaultHandler(void)
-{
-    // as you need interrupts add them here.  for now this
-    // default is to remind you
-    error(FILE_LINE, "UNDEFINED");
-}
+/// @brief ISR for Interrupt Vector 32, ADC Sequence 2
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void ADC0Sequence2ISR(void) __attribute__((weak, alias ("DefaultISR")));
 
+/// @brief ISR for Interrupt Vector 33, ADC Sequence 3
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void ADC0Sequence3ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 34, Watchdog timer
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WatchdogTimers0and1ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 35, Timer 0 subtimer A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Timer0AISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 36, Timer 0 subtimer B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Timer0BISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 37, Timer 1 subtimer A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Timer1AISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 38, Timer 1 subtimer B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Timer1BISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 39, Timer 2 subtimer A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Timer2AISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 40, Timer 2 subtimer B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Timer2BISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 41, Analog Comparator 0
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void AnalogComparator0ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 42, Analog Comparator 1
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void AnalogComparator1ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 44, System Control (PLL, OSC, BO)
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void SystemControlISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 45, FLASH Control
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void FlashAndEEPROMISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 46, GPIO Port F
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void GPIOPortFISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 49, UART2 Rx and Tx
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void UART2ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 50, SSI1 Rx and Tx
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void SSI1ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 51, Timer 3 subtimer A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Timer3AISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 52, Timer 3 subtimer B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Timer3BISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 53, I2C1 Master and Slave
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void I2C1ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 54, Quadrature Encoder 1
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void QEI1ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 55, CAN0
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Can0ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 56, CAN1
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Can1ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 59, Hibernate
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void HibernationModuleISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 60, USB0
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void USBISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 61, PWM Generator 3
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void PWMGenerator3ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 62, uDMA Software Transfer
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void uDMASoftwareISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 63, uDMA Error
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void uDMAErrorISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 64, ADC1 Sequence 0
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void ADC1Sequence0ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 65, ADC1 Sequence 1
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void ADC1Sequence1ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 66, ADC1 Sequence 2
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void ADC1Sequence2ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 67, ADC1 Sequence 3
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void ADC1Sequence3ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 73, SSI2 Rx and Tx
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void SSI2ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 74, SSI3 Rx and Tx
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void SSI3ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 75, UART3 Rx and Tx
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void UART3ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 76, UART4 Rx and Tx
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void UART4ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 77, UART5 Rx and Tx
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void UART5ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 78, UART6 Rx and Tx
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void UART6ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 79, UART7 Rx and Tx
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void UART7ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 84, I2C2 Master and Slave
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void I2C2ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 85, I2C3 Master and Slave
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void I2C3ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 86, Timer 4 subtimer A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Timer4AISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 87, Timer 4 subtimer B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Timer4BISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 108, Timer 5 subtimer A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Timer5AISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 109, Timer 5 subtimer B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void Timer5BISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 110, Wide Timer 0 subtimer A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WTimer0AISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 111, Wide Timer 0 subtimer B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WTimer0BISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 112, Wide Timer 1 subtimer A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WTimer1AISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 113, Wide Timer 1 subtimer B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WTimer1BISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 114, Wide Timer 2 subtimer A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WTimer2AISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 115, Wide Timer 2 subtimer B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WTimer2BISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 116, Wide Timer 3 subtimer A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WTimer3AISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 117, Wide Timer 3 subtimer B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WTimer3BISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 118, Wide Timer 4 subtimer A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WTimer4AISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 119, Wide Timer 4 subtimer B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WTimer4BISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 120, Wide Timer 5 subtimer A
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WTimer5AISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 121, Wide Timer 5 subtimer B
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void WTimer5BISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 122, FPU
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void SystemExceptionISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 150, PWM 1 Generator 0
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void PWM1Generator0ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 151, PWM 1 Generator 1
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void PWM1Generator1ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 152, PWM 1 Generator 2
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void PWM1Generator2ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 153, PWM 1 Generator 3
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void PWM1Generator3ISR(void) __attribute__((weak, alias ("DefaultISR")));
+
+/// @brief ISR for Interrupt Vector 154, PWM 1 Fault
+/// This just is another name for DefaultISR unless it is defined elsewhere
+void PWM1FaultISR(void) __attribute__((weak, alias ("DefaultISR")));
 
 // a variable holding the top of the stack address
-// we need t
-extern uintptr_t __STACK_END;
+extern unsigned int * __STACK_END;
 
 // The vector table.  Note that the proper constructs must be placed on this to
 // ensure that it ends up at physical address 0x0000.0000 or at the start of
@@ -184,7 +378,7 @@ __attribute__ ((section(".intvecs")))
 void (* const tlib_int_vectors[])(void) =
 {
     // initial stack pointer (defined in linker script)
-    (void (*)(void))(uint32_t)&__STACK_END, 
+    (void (*)(void))(unsigned int)&__STACK_END, 
     
     ResetISR,                 // 1    The reset handler
     NonMaskableInterruptISR,  // 2    The NMI handler
