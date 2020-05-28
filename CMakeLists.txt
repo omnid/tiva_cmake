@@ -7,10 +7,10 @@ project(tiva-cmake LANGUAGES NONE)
 # We build each combination of library/compiler as an external project
 include(ExternalProject)
 
-# Build tivaware as an external project
+# Build external libraries (tivaware and the startup code) with different compiler combinations
 #   compiler - Name of the compiler: either arm-none-eabi-gcc or ti-cgt-arm
 #   buildtype - the CMakeBuildtype to use
-function(external_tivaware compiler buildtype)
+function(external_libraries compiler buildtype)
   ExternalProject_Add(
     tivaware-${compiler}-${buildtype}
     SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/tivaware
@@ -19,12 +19,21 @@ function(external_tivaware compiler buildtype)
     -DCMAKE_BUILD_TYPE=${buildtype}
     -DCMAKE_INSTALL_PREFIX=install
     )
+
+  ExternalProject_Add(
+    startup-${compiler}-${buildtype}
+    SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/lib
+    CMAKE_ARGS
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/cmake/${compiler}-toolchain.cmake
+    -DCMAKE_BUILD_TYPE=${buildtype}
+    -DCMAKE_INSTALL_PREFIX=install
+    )
 endfunction()
 
 # Build debug and release versions of the tivaware library for each compiler
-external_tivaware(ti-cgt-arm Debug)
-external_tivaware(ti-cgt-arm Release)
-external_tivaware(arm-none-eabi-gcc Debug)
-external_tivaware(arm-none-eabi-gcc Release)
+external_libraries(ti-cgt-arm Debug)
+external_libraries(ti-cgt-arm Release)
+#external_libraries(arm-none-eabi-gcc Debug)
+#external_libraries(arm-none-eabi-gcc Release)
 
 
