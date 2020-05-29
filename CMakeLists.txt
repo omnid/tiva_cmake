@@ -32,13 +32,16 @@ function(external_libraries compiler_id toolchain buildtype)
 endfunction()
 
 # Build debug and release versions of the tivaware library for each compiler
-external_libraries(TI ti-cgt-arm Debug)
-external_libraries(TI ti-cgt-arm Release)
+external_libraries(TI ti-cgt-arm-toolchain.cmake Debug)
+external_libraries(TI ti-cgt-arm-toolchain.cmake Release)
 #external_libraries(GCC arm-none-eabi-gcc Debug)
 #external_libraries(GCC arm-none-eabi-gcc Release)
 
+# Options for which version of driverlib to use
+
+
 # Add the tivaware and startup code for this configuration to the module path
-ExternalProject_Get_Property(tivaware-${CMAKE_C_COMPILER_ID}-${CMAKE_BUILD_TYPE} INSTALL_DIR)
-message(INFO "POOPSIGN ${INSTALL_DIR}")
+#ExternalProject_Get_Property(tivaware-${CMAKE_C_COMPILER_ID}-${CMAKE_BUILD_TYPE} INSTALL_DIR)
+#message(INFO "POOPSIGN ${INSTALL_DIR}")
 #list(APPEND CMAKE_MODULE_PATH 
 #add_subdirectory(src)

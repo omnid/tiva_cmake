@@ -2,7 +2,16 @@
 # It is used to import targets for TivaWare and then adjust
 # some compile options based on the user's configuration
 # See [1] for information about the C #defines that are added by this file
-include("${CMAKE_CURRENT_LIST_DIR}/TivaWareTargets.cmake")
+# It also handles which version (Debug or Release) of tivaware to add
+set(DRIVERLIB_DEBUG OFF CACHE BOOL "If ON, link against the debugging version of driverlib")
+
+if(DRIVERLIB_DEBUG)
+  include("${CMAKE_CURRENT_LIST_DIR}/TivaWareTargets_Debug.cmake")
+  add_library(driverlib alias driverlib_Debug)
+else()
+  include("${CMAKE_CURRENT_LIST_DIR}/TivaWareTargets_Release.cmake")
+  add_library(driverlib alias driverlib_Release)
+endif()
 
 target_compile_definitions(driverlib INTERFACE PART_${CMAKE_SYSTEM_PROCESSOR})
 
