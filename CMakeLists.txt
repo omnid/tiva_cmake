@@ -1,77 +1,12 @@
-# Build tivaware and the example code
-# If using tiva-cmake as a template, you likely want to edit the files in src/
-# It is unlikely that you need to modify this file unless you are working on tiva-cmake itself
+# During configuration time build all the external libraries and install them
+# to a local prefix. Then build the source directory
 cmake_minimum_required(VERSION 3.9)
-project(tiva-cmake)
+project(TivaCMakeExternal LANGUAGES NONE)
 
-# The first part of this file builds dependencies such as the startup code and tivaware driverlib libraries
-# The second part then shifts control over to the src/ directory, which compiles the project
+# configure the external cmake processes
+execute_process(
+  COMMAND ${CMAKE_COMMAND} -S external -B build/external)
 
-# We build each combination of library/compiler as an external project
-include(ExternalProject)
-
-
-# Build tivaware libraries (tivaware and the startup code) with different compiler combinations
-#   compiler_id - ID of the compiler, either GCC or TI
-#   toolchain - name of the toolchain file
-#   buildtype - the CMakeBuildtype to use
-function(tivaware_libraries compiler_id toolchain buildtype)
-  ExternalProject_Add(
-    tivaware-${compiler_id}-${buildtype}
-    SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/tivaware
-    CMAKE_ARGS
-    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/cmake/${toolchain}
-    -DCMAKE_BUILD_TYPE=${buildtype}
-    -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
-    )
-endfunction()
-
-# Build startup libraries with different compilers and build types
-#   compiler_id - ID of the compiler, either GNU or TI
-#   toolchain - name of the toolchain file
-#   buildtype - the CMakeBuildtype to use
-#   processor - the processor model
-function(startup_libraries compiler_id toolchain buildtype processor)
-  ExternalProject_Add(
-    startup-${compiler_id}-${buildtype}
-    SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/lib
-    CMAKE_ARGS
-    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/cmake/${toolchain}
-    -DCMAKE_BUILD_TYPE=${buildtype}
-    -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
-    )
-endfunction()
-
-
-find_package(TiCgtArm)
-find_package(ArmNoneEabiGCC)
-if((NOT TiCgtArm_FOUND) AND (NOT ArmNoneEabiGCC_FOUND))
-  message(FATAL_ERROR "Could not find a suitable C compiler, eithe ti-cgt or arm-none-eabi-gcc")
-endif()
-
-# Build debug and release versions of the tivaware library for each compiler
-if(TiCgtArm_FOUND)
-  tivaware_libraries(TI ti-cgt-arm-toolchain.cmake Debug)
-  tivaware_libraries(TI ti-cgt-arm-toolchain.cmake Release)
-  startup_libraries(TI ti-cgt-arm-toolchain.cmake Debug TM4C123GH6PM)
-  startup_libraries(TI ti-cgt-arm-toolchain.cmake Release TM4C123GH6PM)
-else()
-  message(NOTICE "ti-cgt compiler not found, not building ti-cgt libraries")
-endif()
-
-if(ArmNoneEabiGCC_FOUND)
-  tivaware_libraries(GNU arm-none-eabi-gcc-toolchain.cmake Debug)
-  tivaware_libraries(GNU arm-none-eabi-gcc-toolchain.cmake Release)
-else()
-  message(NOTICE "arm-none-eabi-gcc compiler not found, not building gcc libraries")
-endif()
-
-
-# Options for which version of driverlib to use
-
-
-# Add the tivaware and startup code for this configuration to the module path
-#ExternalProject_Get_Property(tivaware-${CMAKE_C_COMPILER_ID}-${CMAKE_BUILD_TYPE} INSTALL_DIR)
-#message(INFO "POOPSIGN ${INSTALL_DIR}")
-#list(APPEND CMAKE_MODULE_PATH 
-#add_subdirectory(src)
+# Build the external libraries
+execute_process(
+  COMMAND ${CMAKE_COMMAND} --build build/external)

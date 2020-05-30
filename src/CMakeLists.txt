@@ -16,3 +16,4 @@ add_executable(led_example main.c)
 # EDIT: if you use any other libraries or changed the name of the executable
 # Link against the startup code and driverlib
 target_link_libraries(led_example TivaCMake::startup TivaWare::driverlib)
+

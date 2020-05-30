@@ -15,14 +15,18 @@ The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and
 
 1. Clone this repository:
    - ~git clone https://github.com/m-elwin/tiva-cmake my_project_directory~
-2. Create the build directory, compile, and flash:
+2. Generate the project
    #+BEGIN_SRC bash
    cd my_project_directory
-   mkdir build
-   cd build
-   cmake ..
-   make
-   make led_example.write 
+   cmake -B build .
+   #+END_SRC bash
+3. Compile the project
+   #+BEGIN_SRC bash
+   cmake --build build 
+   #+END_SRC
+4. Write led_example to the microcontroller
+   #+BEGIN_SRC bash
+   cmake --build build --target led_example.write
    #+END_SRC
 
 When successful, you should see LED on the ~EK-TM4C123GXL~ cycle between red, white, and blue.
