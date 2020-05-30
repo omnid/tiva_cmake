@@ -10,9 +10,13 @@ file(GLOB DRIVERLIB_SOURCE driverlib/*.c)
 
 add_library(driverlib ${DRIVERLIB_SOURCE})
 
+# root installation directory
+set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware})
+
+
 target_include_directories(driverlib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware>)
+  $<INSTALL_INTERFACE:${INSTALL_ROOT}>)
 
 
 # All librareis are installed to usr/share since the files are not for the host platform
@@ -24,35 +28,36 @@ target_include_directories(driverlib PUBLIC
 install(TARGETS driverlib
   EXPORT TivaWareTargets_Debug
   CONFIGURATIONS Debug
-  LIBRARY DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/Debug_${CMAKE_C_COMPILER_ID}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/Debug_${CMAKE_C_COMPILER_ID}
+  LIBRARY DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}
+  ARCHIVE DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}
   )
 
 install(TARGETS driverlib
   EXPORT TivaWareTargets_Release
   CONFIGURATIONS Release
-  LIBRARY DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/Release_${CMAKE_C_COMPILER_ID}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/Release_${CMAKE_C_COMPILER_ID}
+  LIBRARY DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}
+  ARCHIVE DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}
   )
 
 install(DIRECTORY inc
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware)
+  DESTINATION ${INSTALL_ROOT})
 
 install(EXPORT TivaWareTargets_Debug
   NAMESPACE TivaWare::
   CONFIGURATIONS Debug
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/Debug_${CMAKE_C_COMPILER_ID}
+  DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}
   )
 
 install(EXPORT TivaWareTargets_Release
   NAMESPACE TivaWare::
   CONFIGURATIONS Release
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/Release_${CMAKE_C_COMPILER_ID}
+  DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}
   )
 
 # The TivaWareConfig.cmake file imports the targets based on the value of DRIVERLIB_DEBUG and what
 # compiler is being used
-install(FILES "${CMAKE_CURRENT_LIST_DIR}/TivaWareConfig.cmake"
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware)
+configure_file(TivaWareConfig.cmake.in TivaWareConfig.cmake @ONLY)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/TivaWareConfig.cmake"
+  DESTINATION ${INSTALL_ROOT})
 
 

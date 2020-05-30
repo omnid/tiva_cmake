@@ -5,11 +5,14 @@
 # It also handles which version (Debug or Release) of tivaware to add
 set(DRIVERLIB_DEBUG OFF CACHE BOOL "If ON, link against the debugging version of driverlib")
 
+# Form the install path when being configured, so we know where to find each library
+set(INSTALL_PATH @CMAKE_INSTALL_PREFIX@/@INSTALL_ROOT@)
+
 if(DRIVERLIB_DEBUG)
-  include("${CMAKE_CURRENT_LIST_DIR}/Debug_${CMAKE_C_COMPILER_ID}/TivaWareTargets.cmake")
+  include("${INSTALL_PATH}/Debug_${CMAKE_C_COMPILER_ID}/TivaWareTargets.cmake")
   add_library(driverlib alias driverlib_Debug)
 else()
-  include("${CMAKE_CURRENT_LIST_DIR}/Release_${CMAKE_C_COMPILER_ID}/TivaWareTargets.cmake")
+  include("${INSTALL_PATH}/Release_${CMAKE_C_COMPILER_ID}/TivaWareTargets.cmake")
   add_library(driverlib alias driverlib_Release)
 endif()
 
