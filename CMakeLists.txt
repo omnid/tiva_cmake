@@ -4,6 +4,9 @@
 cmake_minimum_required(VERSION 3.9)
 project(tiva-cmake)
 
+# The first part of this file builds dependencies such as the startup code and tivaware driverlib libraries
+# The second part then shifts control over to the src/ directory, which compiles the project
+
 # We build each combination of library/compiler as an external project
 include(ExternalProject)
 
