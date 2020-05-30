@@ -7,6 +7,7 @@ project(tiva-cmake)
 # We build each combination of library/compiler as an external project
 include(ExternalProject)
 
+
 # Build tivaware libraries (tivaware and the startup code) with different compiler combinations
 #   compiler_id - ID of the compiler, either GCC or TI
 #   toolchain - name of the toolchain file
@@ -27,7 +28,7 @@ endfunction()
 #   toolchain - name of the toolchain file
 #   buildtype - the CMakeBuildtype to use
 #   processor - the processor model
-function(startup_libraries_proc compiler_id toolchain buildtype processor)
+function(startup_libraries compiler_id toolchain buildtype processor)
   ExternalProject_Add(
     startup-${compiler_id}-${buildtype}
     SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/lib
@@ -38,22 +39,29 @@ function(startup_libraries_proc compiler_id toolchain buildtype processor)
     )
 endfunction()
 
-# Build startup libraries for each processor using different compilers and build types
-#    processor - the processor model to use
-function(startup_libraries processor)
-  startup_libraries_proc(TI ti-cgt-arm-toolchain.cmake Debug processor)
-  startup_libraries_proc(TI ti-cgt-arm-toolchain.cmake Release processor)
-  #startup_libraries_proc(TI ti-cgt-arm-toolchain.cmake Debug processor)
-  #startup_libraries_proc(TI ti-cgt-arm-toolchain.cmake Release processor)
-endfunction()
+
+find_package(TiCgtArm)
+find_package(ArmNoneEabiGCC)
+if((NOT TiCgtArm_FOUND) AND (NOT ArmNoneEabiGCC_FOUND))
+  message(FATAL_ERROR "Could not find a suitable C compiler, eithe ti-cgt or arm-none-eabi-gcc")
+endif()
 
 # Build debug and release versions of the tivaware library for each compiler
-tivaware_libraries(TI ti-cgt-arm-toolchain.cmake Debug)
-tivaware_libraries(TI ti-cgt-arm-toolchain.cmake Release)
-tivaware_libraries(GNU arm-none-eabi-gcc-toolchain.cmake Debug)
-tivaware_libraries(GNU arm-none-eabi-gcc-toolchain.cmake Release)
+if(TiCgtArm_FOUND)
+  tivaware_libraries(TI ti-cgt-arm-toolchain.cmake Debug)
+  tivaware_libraries(TI ti-cgt-arm-toolchain.cmake Release)
+  startup_libraries(TI ti-cgt-arm-toolchain.cmake Debug TM4C123GH6PM)
+  startup_libraries(TI ti-cgt-arm-toolchain.cmake Release TM4C123GH6PM)
+else()
+  message(NOTICE "ti-cgt compiler not found, not building ti-cgt libraries")
+endif()
 
-startup_libraries(TM4C123GH6PM)
+if(ArmNoneEabiGCC_FOUND)
+  tivaware_libraries(GNU arm-none-eabi-gcc-toolchain.cmake Debug)
+  tivaware_libraries(GNU arm-none-eabi-gcc-toolchain.cmake Release)
+else()
+  message(NOTICE "arm-none-eabi-gcc compiler not found, not building gcc libraries")
+endif()
 
 
 # Options for which version of driverlib to use
