@@ -11,7 +11,7 @@ file(GLOB DRIVERLIB_SOURCE driverlib/*.c)
 add_library(driverlib ${DRIVERLIB_SOURCE})
 
 # root installation directory
-set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware})
+set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware)
 
 
 target_include_directories(driverlib PUBLIC
