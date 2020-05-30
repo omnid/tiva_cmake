@@ -50,6 +50,5 @@ install(EXPORT TivaCMakeTargets_Release
 
 # The TivaCMakeConfig file imports the targets based on the value of STARTUPLIB_DEBUG and what
 # compiler is being used
-configure_file(TivaCMakeConfig.cmake.in TivaCMakeConfig.cmake @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/TivaCMakeConfig.cmake"
   DESTINATION ${INSTALL_ROOT})

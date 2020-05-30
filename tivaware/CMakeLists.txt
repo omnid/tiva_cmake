@@ -56,7 +56,6 @@ install(EXPORT TivaWareTargets_Release
 
 # The TivaWareConfig.cmake file imports the targets based on the value of DRIVERLIB_DEBUG and what
 # compiler is being used
-configure_file(TivaWareConfig.cmake.in TivaWareConfig.cmake @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/TivaWareConfig.cmake"
   DESTINATION ${INSTALL_ROOT})
 
