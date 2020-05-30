@@ -53,8 +53,7 @@ tivaware_libraries(TI ti-cgt-arm-toolchain.cmake Release)
 tivaware_libraries(GNU arm-none-eabi-gcc-toolchain.cmake Debug)
 tivaware_libraries(GNU arm-none-eabi-gcc-toolchain.cmake Release)
 
-
-#startup_libraries(TM4C123GH6PM)
+startup_libraries(TM4C123GH6PM)
 
 
 # Options for which version of driverlib to use

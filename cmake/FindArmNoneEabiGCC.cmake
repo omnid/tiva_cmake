@@ -35,65 +35,68 @@ The following cache variables may also be set:
   The arm-none-eabi-g++ C++ compiler executable
 #]========================================================================]
 # A guide for writing find modules: https://cmake.org/cmake/help/v3.17/manual/cmake-developer.7.html
-find_package(CodeComposerStudio)
 
-# Glob each search directory since the name contains the version of the compiler
-# Reverse the results so that the directory with the highest versions are first
-file(GLOB ArmNoneEabiGCC_HINTS1 $ENV{HOME}/arm-none-eabi-gcc*)
-list(REVERSE ArmNoneEabiGCC_HINTS1)
-
-file(GLOB ArmNoneEabiGCC_HINTS2 $ENV{HOME}/gcc-arm-none-eabi*)
-list(REVERSE ArmNoneEabiGCC_HINTS2)
-
-file(GLOB ArmNoneEabiGCC_HINTS3 /opt/arm-none-eabi-gcc*)
-list(REVERSE ArmNoneEabiGCC_HINTS3)
-
-file(GLOB ArmNoneEabiGCC_HINTS4 /opt/gcc-arm-none-eabi*)
-list(REVERSE ArmNoneEabiGCC_HINTS4)
-
-file(GLOB ArmNoneEabiGCC_HINT_CCS ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/gcc-arm-none-eabi* ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/arm-none-eabi-gcc*)
-list(REVERSE ArmNoneEabiGCC_HINT_CCS)
-          
-find_program(ArmNoneEabiGCC_C_COMPILER
-        NAMES arm-none-eabi-gcc
-        HINTS ${ArmNoneEabiGCC_HINTS1} ${ArmNoneEabiGCC_HINTS2} ${ArmNoneEabiGCC_HINTS3} ${ArmNoneEabiGCC_HINTS4} 
-        DOC "The GNU C compiler for arm with the none-eabi (i.e., no operating system)"
-        PATH_SUFFIXES bin
-        )
-
- if( "${ArmNoneEabiGCC_C_COMPILER}" STREQUAL "ArmNoneEabiGCC_C_COMPILER-NOTFOUND")
-   find_program(ArmNoneEabiGCC_C_COMPILER
-         NAMES arm-none-eabi-gcc
-         HINTS ${ArmNoneEabiGCC_HINT_CCS}
-         PATH_SUFFIXES bin
-         DOC "arm-none-eabi-gcc: it's location tells the toolchain where to find all the GNU compiler tools"
-         NO_DEFAULT_PATH
-         )
-endif()
-
-# compute paths to the C standard library
-get_filename_component(ArmNoneEabiGCC_BIN_DIR ${ArmNoneEabiGCC_C_COMPILER} DIRECTORY)
-get_filename_component(ArmNoneEabiGCC_ROOT_DIR ${ArmNoneEabiGCC_BIN_DIR}/.. ABSOLUTE)
-
-# compute the version, if have found the package
-if(NOT "${ArmNoneEabiGCC_C_COMPILER}" STREQUAL "ArmNoneEabiGCC_EXECUTABLE-NOTFOUND")
-  get_filename_component(ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_ROOT_DIR} NAME)
-  string(REGEX REPLACE "arm-none-eabi-gcc." "" ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_VERSION})
-  string(REGEX REPLACE "gcc-arm-none-eabi." "" ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_VERSION})
-endif()
-
-find_program(ArmNoneEabiGCC_CXX_COMPILER
-  NAMES arm-none-eabi-g++
-  HINTS ${ArmNoneEabiGCC_BIN_DIR}
-  DOC "The GNU C++ compiler for arm with the none-eabi (i.e., no operating system)"
-  )
+if(NOT ArmNoneEabiGCC_FOUND)
   
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(ArmNoneEabiGCC
-        FOUND_VAR ArmNoneEabiGCC_FOUND
-        REQUIRED_VARS
-        ArmNoneEabiGCC_C_COMPILER
-        ArmNoneEabiGCC_CXX_COMPILER
-        VERSION_VAR ArmNoneEabiGCC_VERSION
-        )
-        
+  find_package(CodeComposerStudio)
+
+  # Glob each search directory since the name contains the version of the compiler
+  # Reverse the results so that the directory with the highest versions are first
+  file(GLOB ArmNoneEabiGCC_HINTS1 $ENV{HOME}/arm-none-eabi-gcc*)
+  list(REVERSE ArmNoneEabiGCC_HINTS1)
+
+  file(GLOB ArmNoneEabiGCC_HINTS2 $ENV{HOME}/gcc-arm-none-eabi*)
+  list(REVERSE ArmNoneEabiGCC_HINTS2)
+
+  file(GLOB ArmNoneEabiGCC_HINTS3 /opt/arm-none-eabi-gcc*)
+  list(REVERSE ArmNoneEabiGCC_HINTS3)
+
+  file(GLOB ArmNoneEabiGCC_HINTS4 /opt/gcc-arm-none-eabi*)
+  list(REVERSE ArmNoneEabiGCC_HINTS4)
+
+  file(GLOB ArmNoneEabiGCC_HINT_CCS ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/gcc-arm-none-eabi* ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/arm-none-eabi-gcc*)
+  list(REVERSE ArmNoneEabiGCC_HINT_CCS)
+  
+  find_program(ArmNoneEabiGCC_C_COMPILER
+    NAMES arm-none-eabi-gcc
+    HINTS ${ArmNoneEabiGCC_HINTS1} ${ArmNoneEabiGCC_HINTS2} ${ArmNoneEabiGCC_HINTS3} ${ArmNoneEabiGCC_HINTS4} 
+    DOC "The GNU C compiler for arm with the none-eabi (i.e., no operating system)"
+    PATH_SUFFIXES bin
+    )
+
+  if( "${ArmNoneEabiGCC_C_COMPILER}" STREQUAL "ArmNoneEabiGCC_C_COMPILER-NOTFOUND")
+    find_program(ArmNoneEabiGCC_C_COMPILER
+      NAMES arm-none-eabi-gcc
+      HINTS ${ArmNoneEabiGCC_HINT_CCS}
+      PATH_SUFFIXES bin
+      DOC "arm-none-eabi-gcc: it's location tells the toolchain where to find all the GNU compiler tools"
+      NO_DEFAULT_PATH
+      )
+  endif()
+
+  # compute paths to the C standard library
+  get_filename_component(ArmNoneEabiGCC_BIN_DIR ${ArmNoneEabiGCC_C_COMPILER} DIRECTORY)
+  get_filename_component(ArmNoneEabiGCC_ROOT_DIR ${ArmNoneEabiGCC_BIN_DIR}/.. ABSOLUTE)
+
+  # compute the version, if have found the package
+  if(NOT "${ArmNoneEabiGCC_C_COMPILER}" STREQUAL "ArmNoneEabiGCC_EXECUTABLE-NOTFOUND")
+    get_filename_component(ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_ROOT_DIR} NAME)
+    string(REGEX REPLACE "arm-none-eabi-gcc." "" ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_VERSION})
+    string(REGEX REPLACE "gcc-arm-none-eabi." "" ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_VERSION})
+  endif()
+
+  find_program(ArmNoneEabiGCC_CXX_COMPILER
+    NAMES arm-none-eabi-g++
+    HINTS ${ArmNoneEabiGCC_BIN_DIR}
+    DOC "The GNU C++ compiler for arm with the none-eabi (i.e., no operating system)"
+    )
+  
+  include(FindPackageHandleStandardArgs)
+  find_package_handle_standard_args(ArmNoneEabiGCC
+    FOUND_VAR ArmNoneEabiGCC_FOUND
+    REQUIRED_VARS
+    ArmNoneEabiGCC_C_COMPILER
+    ArmNoneEabiGCC_CXX_COMPILER
+    VERSION_VAR ArmNoneEabiGCC_VERSION
+    )
+endif()  

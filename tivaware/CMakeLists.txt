@@ -56,6 +56,3 @@ install(FILES "${CMAKE_CURRENT_LIST_DIR}/TivaWareConfig.cmake"
   DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware)
 
 
-# This export file can be included from other projects without installing this project
-export(EXPORT TivaWareTargets_Debug NAMESPACE TivaWare:: FILE TivaWare_Debug.cmake)
-export(EXPORT TivaWareTargets_Release NAMESPACE TivaWare:: FILE TivaWare_Release.cmake)
