@@ -8,35 +8,54 @@ include(GNUInstallDirs)
 # more danger in missing a new file that is added whenever driverlib is updated
 file(GLOB DRIVERLIB_SOURCE driverlib/*.c)
 
-# We add the buildtype to the library name so we can easily refer to different builds
-add_library(driverlib_${CMAKE_BUILD_TYPE} ${DRIVERLIB_SOURCE})
+add_library(driverlib ${DRIVERLIB_SOURCE})
 
-target_include_directories(driverlib_${CMAKE_BUILD_TYPE} PUBLIC
+target_include_directories(driverlib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware>)
 
 
-# All install directories are in share since the files are not for the host platform
+# All librareis are installed to usr/share since the files are not for the host platform
+# There are different installation paths for the Debug and Release configurations
+# And the path depends on the compiler, so all versions can be installed simultaneously
+# We duplicate the install command for each configuration to make this file compatible
+# with multi-configuration generators (such as visual studio)
 # The Targets are also labeled by build type
-install(TARGETS driverlib_${CMAKE_BUILD_TYPE}
-  EXPORT TivaWareTargets_${CMAKE_BUILD_TYPE}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/${CMAKE_INSTALL_LIBDIR}
+install(TARGETS driverlib
+  EXPORT TivaWareTargets_Debug
+  CONFIGURATIONS Debug
+  LIBRARY DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/Debug_${CMAKE_C_COMPILER_ID}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/Debug_${CMAKE_C_COMPILER_ID}
+  )
+
+install(TARGETS driverlib
+  EXPORT TivaWareTargets_Release
+  CONFIGURATIONS Release
+  LIBRARY DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/Release_${CMAKE_C_COMPILER_ID}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/Release_${CMAKE_C_COMPILER_ID}
   )
 
 install(DIRECTORY inc
   DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware)
 
-install(EXPORT TivaWareTargets_${CMAKE_BUILD_TYPE}
-  FILE TivaWareTargets_${CMAKE_BUILD_TYPE}.cmake
+install(EXPORT TivaWareTargets_Debug
   NAMESPACE TivaWare::
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware
+  CONFIGURATIONS Debug
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/Debug_${CMAKE_C_COMPILER_ID}
   )
 
-# The TivaWareConfig.cmake file imports the targets based on the value of DRIVERLIB_DEBUG
+install(EXPORT TivaWareTargets_Release
+  NAMESPACE TivaWare::
+  CONFIGURATIONS Release
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware/Release_${CMAKE_C_COMPILER_ID}
+  )
+
+# The TivaWareConfig.cmake file imports the targets based on the value of DRIVERLIB_DEBUG and what
+# compiler is being used
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/TivaWareConfig.cmake"
   DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware)
 
 
 # This export file can be included from other projects without installing this project
-export(EXPORT TivaWareTargets_${CMAKE_BUILD_TYPE} NAMESPACE TivaWare:: FILE TivaWare_${CMAKE_BUILD_TYPE}.cmake)
+export(EXPORT TivaWareTargets_Debug NAMESPACE TivaWare:: FILE TivaWare_Debug.cmake)
+export(EXPORT TivaWareTargets_Release NAMESPACE TivaWare:: FILE TivaWare_Release.cmake)
