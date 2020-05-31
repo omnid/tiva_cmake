@@ -55,5 +55,9 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSS_COMPILING))
       )
   endfunction()
 
+  # get a list of all the targets
+  get_directory_properties(TARGETS BUILDSYSTEM_TARGETS)
+
+  # Add the other targets to each executable
 endif()
 

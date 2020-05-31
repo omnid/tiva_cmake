@@ -105,7 +105,9 @@ For example, if using ~Makefiles~ you can can use ~make target_name.write~ from 
 
 ** Debugging with GDB
 - You need ~arm-none-eabi-gdb~ or ~gdb-multiarch~ and ~openocd~ (see [[*Development Tools][Development Tools]]).
+- You also need [[https://openocd.org][OpenOCD]] (See [[*Development Tools][Development Tools]]).
 - For best results build your code with ~CMAKE_BUILD_TYPE=Debug~ (see [[*Build Types][Build Types]])
+  - You can also debug [[*TivaWare Driverlib][TivaWare]] and [[*Startup Library][Startup Library]]
 - ~make target_name.attach~ will attach to an already running debug session with gdb
 - ~make target_name.gdb~ will flash the firmware using openocd and load the program into the debugger
 
@@ -169,10 +171,12 @@ TI has released TivaWare ~driverlib~ under a BSD license and this project redist
 By default, ~tiva-cmake~ uses it's own bundled version of ~driverlib~. To use driverlib:
 
 #+BEGIN_SRC
-find_package(TivaWare)
+include(TivaCMake)
 # ...
-target_link_libraries(mytarget TivaWare::driverlib)
+target_link_libraries(mytarget TivaCMake::driverlib)
 #+END_SRC
+
+The ~driverlib~ library can also be found without the other parts of ~TivaCMake~ using ~find_package(TivaWare)~
 
 By default, the project links against the release version of ~driverlib~. If you would like to build against the debugging version of ~driverlib~
 set ~DRIVERLIB_DEBUG=ON~.
