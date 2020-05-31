@@ -28,4 +28,6 @@ if(NOT CONFIG_SUCCESS EQUAL 0)
   message(FATAL_ERROR "CMake failed to compile the external project dependencies")
 endif()
 
+# Set to enable find_package from within src/ to find the packages built with this project and installed in the build directory
+set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_BINARY_DIR}/external/install/share/tiva-cmake/cmake" CACHE INTERNAL "Path to external install directory")
 add_subdirectory(src)
