@@ -165,7 +165,12 @@ To support another microcontrollers a few additions are needed
 - For convenience, The template ~CMakeLists.txt~ file defaults the build type to ~Debug~.
   - Debug-level optimizations ~-Og~ are turned on for ~gcc~, as the [[https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html][gcc manual]] recommends this debug level.  
   - The blank (~""~) build type does not specify an optimization level.
-  
+** Executable Adding  
+By default ~TivaCMake~ overrides the built in ~add_executable~ with a macro that
+sets up the targets enabling write to flash.  You can disable this behavior by
+setting ~TivaCMake_AddExecutable~ to ~OFF~. You can then add the writes on
+a per-executable basis using ~tiva_cmake_add_executable~ and providing the target name.
+
 * TivaWare Driverlib
 TI has released TivaWare ~driverlib~ under a BSD license and this project redistributes it under that license in the ~driverlib~ directory.
 By default, ~tiva-cmake~ uses it's own bundled version of ~driverlib~. To use driverlib:

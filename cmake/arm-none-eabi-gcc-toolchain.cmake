@@ -19,6 +19,7 @@ set(CMAKE_SYSTEM_NAME Generic)
 # By default assume a TM4C123GH6PM microcontroller
 set(CMAKE_SYSTEM_PROCESSOR TM4C123GH6PM CACHE STRING "The microcontroller model")
 
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 find_package(ArmNoneEabiGCC)
 
 # The user can override these settings to choose a different compiler

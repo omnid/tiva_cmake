@@ -2,6 +2,7 @@
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR TM4C123GH6PM CACHE STRING "The microcontroller model")
 
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 find_package(TiCgtArm)
 
 

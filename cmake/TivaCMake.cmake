@@ -55,10 +55,5 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
       )
   endfunction()
 
-  # get a list of all the targets
-  get_directory_properties(TARGETS BUILDSYSTEM_TARGETS)
-  foreach(TARGET TARGETS)
-    message(STATUS ${TARGET})
-  endforeach()
 endif()
 
