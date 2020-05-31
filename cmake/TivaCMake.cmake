@@ -21,10 +21,10 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSS_COMPILING))
   # adds a makefile target that will write to the tiva using openocd
   # and attach the gcc debugger
   function(add_openocd_gdb target_name)
-    if(TIVA_CLIB_SRC_PATH)
-      set(TIVA_CLIB_DIR_CMD "-ex dir ${TIVA_CLIB_SRC_PATH}")
+    if(TiCgtArm_FOUND)
+      # if we have c standard library source code put it on the source path for gdb
+      set(TiCgtArm_SourceDirs "-ex dir ${TIVA_CLIB_SRC_PATH}")
     endif()
-    # the dir ${TIVA_CLIB_SRC_PATH} puts the c standard library source code on gdb's path
     # that variable is set in FindArmNoneEabiGcc and FIndTiCgt
     add_custom_target(${target_name}.gdb
       COMMAND ${ARMGDB} ${TIVA_CLIB_DIR_CMD}
@@ -41,8 +41,8 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSS_COMPILING))
   # attaches gdb to the running target, and assumes that the
   # target is running the desired binary file
   function(add_openocd_attach target_name)
-    if(TIVA_CLIB_SRC_PATH)
-      set(TIVA_CLIB_DIR_CMD "-ex dir ${TIVA_CLIB_SRC_PATH}")
+    if(TiCgtArm_FOUND)
+      set(TiCgtArm_SourceDirs "-ex dir ${TIVA_CLIB_SRC_PATH}")
     endif()
     add_custom_target(${target_name}.attach
       COMMAND ${ARMGDB} "$<TARGET_FILE:${target_name}>" 
@@ -58,6 +58,5 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSS_COMPILING))
   # get a list of all the targets
   get_directory_properties(TARGETS BUILDSYSTEM_TARGETS)
 
-  # Add the other targets to each executable
 endif()
 
