@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.9)
 project(startup)
 
+include(GNUInstallDirs)
+
+# root installation directory
+set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/tiva-cmake/startup)
+
 add_library(startup "${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_C_COMPILER_ID}.c")
 
 # Disable a warning about link time optimization when using the TI compiler
@@ -12,11 +17,10 @@ target_link_libraries(startup PUBLIC
     $<$<C_COMPILER_ID:TI>:${CMAKE_SYSTEM_PROCESSOR}.cmd>
     $<$<C_COMPILER_ID:GNU>:-lm -Wl,-T${CMAKE_SYSTEM_PROCESSOR}.lds>
     >)
+target_link_directories(startup PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<INSTALL_INTERFACE:${INSTALL_ROOT}>)
 
-include(GNUInstallDirs)
-
-# root installation directory
-set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/tiva-cmake/startup)
 
 # All install directories are in share since the files are not for the host platform
 # We split into commands for Debug and Release versions to be compatible with multi-configuration generators
@@ -52,3 +56,9 @@ install(EXPORT TivaCMakeTargets_Release
 # compiler is being used
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/TivaCMakeConfig.cmake"
   DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/cmake)
+
+install(FILES
+  "${CMAKE_CURRENT_LIST_DIR}/${CMAKE_SYSTEM_PROCESSOR}.cmd"
+  "${CMAKE_CURRENT_LIST_DIR}/${CMAKE_SYSTEM_PROCESSOR}.lds"
+  DESTINATION ${INSTALL_ROOT}
+  )
