@@ -39,7 +39,8 @@ install(TARGETS driverlib
   ARCHIVE DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}
   )
 
-install(DIRECTORY inc
+# install the include files.  Some .c files also get installed, but I see no harm in this.
+install(DIRECTORY inc driverlib
   DESTINATION ${INSTALL_ROOT})
 
 install(EXPORT TivaWareTargets_Debug
