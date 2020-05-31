@@ -2,7 +2,6 @@
 # Edit this file to add your own executables and c files.
 # Lines to modify are marked with Edit:
 cmake_minimum_required(VERSION 3.9)
-
 # EDIT to change the name of the cmake project (not overly important)
 project(LedExample)
 

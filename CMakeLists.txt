@@ -6,11 +6,11 @@ project(TivaCMakeExternal LANGUAGES NONE)
 # We invoke cmake during configuration time to ensure that these files are
 # build prior to attempting to build the project.
 # Thus, when this project is configured, another cmake instance is launched
-# That configures, builds, and (within the build directory) installs the dependencies.
+# That configures, builds, and (within the build directory) installs the dependencies
 
 # configure the external cmake processes
 execute_process(
-  COMMAND ${CMAKE_COMMAND} -S external -B build/external
+  COMMAND ${CMAKE_COMMAND} -S external -B ${CMAKE_CURRENT_BINARY_DIR}/external
   RESULT_VARIABLE CONFIG_SUCCESS
   )
 
@@ -20,13 +20,12 @@ endif()
 
 # Build the external libraries
 execute_process(
-  COMMAND ${CMAKE_COMMAND} --build build/external
+  COMMAND ${CMAKE_COMMAND} --build ${CMAKE_CURRENT_BINARY_DIR}/external
   RESULT_VARIABLE BUILD_SUCCESS
   )
 
+if(NOT CONFIG_SUCCESS EQUAL 0)
+  message(FATAL_ERROR "CMake failed to compile the external project dependencies")
+endif()
 
-#if(NOT CONFIG_SUCCESS EQUAL 0)
-#  message(FATAL_ERROR "CMake failed to compile the external project dependencies")
-#endif()
-
-#add_subdirectory(src)
+add_subdirectory(src)

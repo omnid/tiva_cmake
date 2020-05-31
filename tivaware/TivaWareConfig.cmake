@@ -6,12 +6,11 @@
 set(DRIVERLIB_DEBUG OFF CACHE BOOL "If ON, link against the debugging version of driverlib")
 
 if(DRIVERLIB_DEBUG)
-  include("${CMAKE_CURRENT_LIST_DIR}/Debug_${CMAKE_C_COMPILER_ID}/TivaWareTargets.cmake")
-  add_library(driverlib alias driverlib_Debug)
+  include("${CMAKE_CURRENT_LIST_DIR}/../tivaware/Debug_${CMAKE_C_COMPILER_ID}/TivaWareTargets_Debug.cmake")
 else()
-  include("${CMAKE_CURRENT_LIST_DIR}/Release_${CMAKE_C_COMPILER_ID}/TivaWareTargets.cmake")
-  add_library(driverlib alias driverlib_Release)
+  include("${CMAKE_CURRENT_LIST_DIR}/../tivaware/Release_${CMAKE_C_COMPILER_ID}/TivaWareTargets_Release.cmake")
 endif()
+
 
 target_compile_definitions(driverlib INTERFACE PART_${CMAKE_SYSTEM_PROCESSOR})
 
@@ -21,8 +20,8 @@ target_compile_definitions(driverlib INTERFACE PART_${CMAKE_SYSTEM_PROCESSOR})
 # See [1] for a list of revisions for TM4C123 chips
 # See [2] for a list of revisions for TM4C129 chips
 
-set(TM4C123_REVISION "B2" CACHE "Silicon Die Revision for TM4C123 microcontrollers")
-set(TM4C129_REVISION "A2" CACHE "Silicon Die Revision for TM4C129 microcontrollers")
+set(TM4C123_REVISION "B2" CACHE STRING "Silicon Die Revision for TM4C123x")
+set(TM4C129_REVISION "A2" CACHE STRING "Silicon Die Revision for TM4C129x")
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "TM4C123")
   target_compile_definitions(driverlib INTERFACE TARGET_IS_TM4C123_${TM4C123_REVISION})
@@ -32,7 +31,7 @@ else()
     message(WARNING "TivaWare does not support ${CMAKE_SYSTEM_PROCESSOR}, use at your own risk!")
 endif()
 
-target_compile_definitions(driverlib INTERFACE $<$<COMPILER_ID:TI>:ccs>)
+target_compile_definitions(driverlib INTERFACE $<$<C_COMPILER_ID:TI>, ccs>)
 
 #[[======================== Works Cited ======================================================
 [1] "TivaWare Peripheral Driver Library: User's Guide", Literature Number SPMU298E
@@ -41,4 +40,4 @@ target_compile_definitions(driverlib INTERFACE $<$<COMPILER_ID:TI>:ccs>)
      https://www.ti.com/lit/pdf/spmz849 (Accessed on 05/20/2020)
 [3] "Tiva C Series TM4C129x Microcontrollers Silicon Revisions 1, 2, and 3 Silicon Errata", Literature Number SPMZ850G
      https://www.ti.com/lit/pdf/spmz850 (Accessed on 05/20/2020)
-#]]=========================================================================================
+#=========================================================================================]]
