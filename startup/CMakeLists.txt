@@ -25,36 +25,36 @@ target_link_directories(startup PUBLIC
 # All install directories are in share since the files are not for the host platform
 # We split into commands for Debug and Release versions to be compatible with multi-configuration generators
 install(TARGETS startup
-  EXPORT TivaCMakeTargets_Debug
+  EXPORT TivaStartupTargets_Debug
   CONFIGURATIONS Debug
   LIBRARY DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
   ARCHIVE DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
   )
 
 install(TARGETS startup
-  EXPORT TivaCMakeTargets_Release
+  EXPORT TivaStartupTargets_Release
   CONFIGURATIONS Release
   LIBRARY DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
   ARCHIVE DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
   )
 
-# Export the targets directly into a TivaCMakeConfig file since we have no other configuration or dependencies
-install(EXPORT TivaCMakeTargets_Debug
+# Export the targets directly into a TivaStartupConfig file since we have no other configuration or dependencies
+install(EXPORT TivaStartupTargets_Debug
   CONFIGURATIONS Debug
-  NAMESPACE TivaCMake::
+  NAMESPACE TivaStartup::
   DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
   )
 
-install(EXPORT TivaCMakeTargets_Release
+install(EXPORT TivaStartupTargets_Release
   CONFIGURATIONS Release
   NAMESPACE TivaCMake::
   DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
   )
 
 
-# The TivaCMakeConfig file imports the targets based on the value of STARTUPLIB_DEBUG and what
+# The TivaStartupConfig file imports the targets based on the value of STARTUPLIB_DEBUG and what
 # compiler is being used
-install(FILES "${CMAKE_CURRENT_LIST_DIR}/TivaCMakeConfig.cmake"
+install(FILES "${CMAKE_CURRENT_LIST_DIR}/TivaStartupConfig.cmake"
   DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/cmake)
 
 install(FILES

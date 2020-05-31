@@ -54,7 +54,7 @@ install(EXPORT TivaWareTargets_Debug
   )
 
 install(EXPORT TivaWareTargets_Release
-  NAMESPACE TivaWare::
+  NAMESPACE TivaCMake::
   CONFIGURATIONS Release
   DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}
   )

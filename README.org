@@ -90,15 +90,19 @@ The project source code resides in ~src/~, which is the sole location you should
 - Use ~cmake -P tiva-template > CMakeLists.txt~ to create your project's ~CMakeLists.txt~
 - Edit ~CMakeLists.txt~ to add your source code and specify your libraries and executables.
 - Use ~cmake~ as usual, except specify ~-DCMAKE_TOOLCHAIN_FILE=tiva-cmake-toolchain.cmake~ when
-  configuring the project for the first time.
+  configuring the project for the first time. If you set this as a cache variable in ~PreLoad.cmake~ you
+  can enable a default toolchain.
 - See [[*CMake Settings][CMake Settings]] for other options
 
 ** Flashing the Firmware
 Every executable target you create (via ~add_executable(target_name ...)~ in ~cmake~ adds methods for flashing the firmware using the LaunchPad's In-Circuit Debugger.
-1. ~make target_name.write~ Flash the program onto the microcontroller using one of the methods below, which are listed in order of preference
-   1. ~make target_name.ocd~ Flash the program using ~openocd~ 
-   2. ~make target_name.uni~ Flash the program using ~UniFlash~ 
-   3. ~make target_name.lm4~ Flash the program using ~lm4tools~
+1. ~cmake --build build --target target_name.write~ Flash the program onto the microcontroller using one of the methods below, which are listed in order of preference
+   1. ~cmake --build build --target target_name.ocd~ Flash the program using ~openocd~ 
+   2. ~cmake --build build --target target_name.uni~ Flash the program using ~UniFlash~ 
+The program will automatically be built prior to being flashed.
+Note: ~cmake --build build~ just calls your build tool (e.g. ~make~) in the build directory~. The ~--target~ option specifies the target.
+For example, if using ~Makefiles~ you can can use ~make target_name.write~ from the ~build~ directory to compile and flash the program
+
 ** Debugging with GDB
 - You need ~arm-none-eabi-gdb~ or ~gdb-multiarch~ and ~openocd~ (see [[*Development Tools][Development Tools]]).
 - For best results build your code with ~CMAKE_BUILD_TYPE=Debug~ (see [[*Build Types][Build Types]])
@@ -225,15 +229,8 @@ You can install TI's compiler and flash tool indepedently of Code Composer Studi
 2. [[http://www.ti.com/tool/UNIFLASH][UNIFLASH]]
    Install to either ~/opt~ or ~/home/$whoami~
    - ~openocd~ is better supported than the independently installed uniflash tool.
-** Third-Party Flash Tools
-You can install ~openocd~ or ~lm4tools~.  Instructions are provided for ~openocd~ since it has been more reliable than ~lm4tools~ in my experience.
-** Ubuntu
-~sudo apt install openocd~
-** Archlinux
-~pacman -S openocd~
-** Other
-Download from http://openocd.org/ and install to the standard location or ~/home/$(whoami)/openocd~
-
+** Flash Tools
+You can use uniflash (which comes with Code Composer Studio) or [[https://openocd.org][openocd]] (which may be available via your package manager).
 * Note
 I have not tested all possible combinations of installation/locations, but the behavior described in this document constitutes a loose specification.
 If you think you have the proper tools installed to a permissible location, or think this package should allow installation to a different location, please file an issue.

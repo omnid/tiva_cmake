@@ -4,7 +4,7 @@ set(STARTUPLIB_DEBUG OFF CACHE BOOL "If ON, link against the debugging version o
 
 # CMAKE_CURRENT_LIST_DIR expands to where this file is located in the installation
 if(STARTUPLIB_DEBUG)
-  include("${CMAKE_CURRENT_LIST_DIR}/../startup/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}/TivaCMakeTargets_Debug.cmake")
+  include("${CMAKE_CURRENT_LIST_DIR}/../startup/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}/TivaStartupTargets_Debug.cmake")
 else()
-  include("${CMAKE_CURRENT_LIST_DIR}/../startup/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}/TivaCMakeTargets_Release.cmake")
+  include("${CMAKE_CURRENT_LIST_DIR}/../startup/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}/TivaStartupTargets_Release.cmake")
 endif()
