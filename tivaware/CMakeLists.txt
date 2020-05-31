@@ -1,7 +1,10 @@
 # CMake Build for tivaware driverlib
 cmake_minimum_required(VERSION 3.9)
 project(TivaWare)
+
 include(GNUInstallDirs)
+# root installation directory
+set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware)
 
 # Usually it is bad practice to glob, but here the files we need are designed
 # to be donloaded from within code composer studio and copied and there is
@@ -9,9 +12,10 @@ include(GNUInstallDirs)
 file(GLOB DRIVERLIB_SOURCE driverlib/*.c)
 
 add_library(driverlib ${DRIVERLIB_SOURCE})
-
-# root installation directory
-set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware)
+target_compile_definitions(driverlib PUBLIC
+  $<$<C_COMPILER_ID:TI>:ccs>
+  $<$<C_COMPILER_ID:GNU>:gcc>
+  )
 
 
 target_include_directories(driverlib PUBLIC
