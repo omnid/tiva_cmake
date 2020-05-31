@@ -61,7 +61,7 @@ if(NOT CodeComposerStudio_FOUND)
   get_filename_component(CodeComposerStudio_VERSION ${CodeComposerStudio_ARTIFACT} NAME )
   unset(CodeComposerStudio_ARTIFACT CACHE)
 
-  find_program(CodeComposerStudio_EXECUTABLE
+  find_program(CodeComposerStudio_UniFlash_EXECUTABLE
     uniflash.sh
     PATHS ${CodeComposerStudio_ROOT_DIR}/ccs/ccs_base/scripting/examples/uniflash/cmdLine
     NO_DEFAULT_PATH)

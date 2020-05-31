@@ -1,7 +1,7 @@
 # Brings in the TivaCMake::startup and TivaWare::driverlib libraries
 # Enables cmake targets for writing code to the microcontroller and debugging
 # If we are not cross-compiling 
-if((NOT TivaCMake_FOUND) AND (CMAKE_CROSS_COMPILING)) 
+if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING)) 
   set(TivaCMake_FOUND TRUE)
   find_package(TivaStartup)
   find_package(TivaWare)
@@ -57,6 +57,8 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSS_COMPILING))
 
   # get a list of all the targets
   get_directory_properties(TARGETS BUILDSYSTEM_TARGETS)
-
+  foreach(TARGET TARGETS)
+    message(STATUS ${TARGET})
+  endforeach()
 endif()
 
