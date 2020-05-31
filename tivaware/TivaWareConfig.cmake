@@ -11,6 +11,10 @@ else()
   include("${CMAKE_CURRENT_LIST_DIR}/../tivaware/Release_${CMAKE_C_COMPILER_ID}/TivaWareTargets_Release.cmake")
 endif()
 
+# Create an interface library so we can add compile definitions to it when
+# a program links against it
+add_library(driverlib INTERFACE IMPORTED)
+target_link_libraries(driverlib INTERFACE driverlib)
 
 target_compile_definitions(driverlib INTERFACE PART_${CMAKE_SYSTEM_PROCESSOR})
 
