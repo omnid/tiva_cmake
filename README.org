@@ -176,7 +176,7 @@ set ~DRIVERLIB_DEBUG=ON~.
 * Startup Library
 The startup library contains code that runs before ~main()~ to initialize the microcontroller,
 the linker scripts, and the interrupt vector table.  This code differs between microcontroller models
-and is stored in ~lib/<model>~.  
+and is stored in ~startup/<model>~.  
 
 The startup code is different than the code provided by TI and is designed to make development easier. 
 1. To define an interrupt in your code, simply declare a function with the name of that interrupt, no need to modify the startup library

@@ -30,7 +30,7 @@ endfunction()
 function(startup_libraries compiler_id toolchain buildtype processor)
   ExternalProject_Add(
     startup-${compiler_id}-${buildtype}
-    SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../lib
+    SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../startup
     CMAKE_ARGS
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/../cmake/${toolchain}
     -DCMAKE_BUILD_TYPE=${buildtype}

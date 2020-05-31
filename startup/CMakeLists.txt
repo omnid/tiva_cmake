@@ -16,7 +16,7 @@ target_link_libraries(startup PUBLIC
 include(GNUInstallDirs)
 
 # root installation directory
-set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/tiva-cmake/lib)
+set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/tiva-cmake/startup)
 
 # All install directories are in share since the files are not for the host platform
 # We split into commands for Debug and Release versions to be compatible with multi-configuration generators
@@ -51,4 +51,4 @@ install(EXPORT TivaCMakeTargets_Release
 # The TivaCMakeConfig file imports the targets based on the value of STARTUPLIB_DEBUG and what
 # compiler is being used
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/TivaCMakeConfig.cmake"
-  DESTINATION ${INSTALL_ROOT})
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/cmake)
