@@ -1,11 +1,11 @@
 # Build tivaware and the startup library for each combination of compiler, processor and release mode
+# Also install the cmake files
 cmake_minimum_required(VERSION 3.9)
 project(tiva-cmake NONE)
 
 
 # We build each combination of library/compiler as an external project
 include(ExternalProject)
-
 
 # Build tivaware libraries (tivaware and the startup code) with different compiler combinations
 #   compiler_id - ID of the compiler, either GCC or TI
@@ -61,3 +61,11 @@ if(ArmNoneEabiGCC_FOUND)
 else()
   message(NOTICE "arm-none-eabi-gcc compiler not found, not building gcc libraries")
 endif()
+
+# Install the CMake Files to the local directory
+ExternalProject_Add(
+  tiva-cmake
+  SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../cmake
+    CMAKE_ARGS
+    -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
+    )
