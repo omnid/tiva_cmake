@@ -9,11 +9,12 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
   find_package(CodeComposerStudio)
   find_package(ArmNoneEabiGdb)
 
+
   # adds a target that will write to the tiva using openocd
   function(add_openocd_write target_name)
     add_custom_target(${target_name}.ocd
       DEPENDS ${target_name}
-      COMMAND ${OPENOCD} -f ${OPENOCD_CONFIG} -c "program $<TARGET_FILE:${target_name}> verify reset exit"
+      COMMAND ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c "program $<TARGET_FILE:${target_name}> verify reset exit"
       COMMENT "Using openocd to load ${target_name} onto the microcontroller."
       )
   endfunction()
@@ -23,12 +24,12 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
   function(add_openocd_gdb target_name)
     if(TiCgtArm_FOUND)
       # if we have c standard library source code put it on the source path for gdb
-      set(TiCgtArm_SourceDirs "-ex dir ${TIVA_CLIB_SRC_PATH}")
+      set(TIVA_CLIB_DIR_CMD "-ex dir ${TiCgtArm_SOURCE_DIRS}")
     endif()
     # that variable is set in FindArmNoneEabiGcc and FIndTiCgt
     add_custom_target(${target_name}.gdb
       COMMAND ${ARMGDB} ${TIVA_CLIB_DIR_CMD}
-      -ex "target extended-remote | ${OPENOCD} -f ${OPENOCD_CONFIG} -c \"gdb_port pipe; log_output ${CMAKE_BINARY_DIR}/openocd.log\"" 
+      -ex "target extended-remote | ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c \"gdb_port pipe; log_output ${CMAKE_BINARY_DIR}/openocd.log\"" 
       -ex "monitor reset halt" 
       -ex "load" 
       "$<TARGET_FILE:${target_name}>"
@@ -42,7 +43,7 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
   # target is running the desired binary file
   function(add_openocd_attach target_name)
     if(TiCgtArm_FOUND)
-      set(TiCgtArm_SourceDirs "-ex dir ${TIVA_CLIB_SRC_PATH}")
+      set(TIVA_CLIB_DIR_CMD "-ex dir ${TiCgtArm_SOURCE_DIRS}")
     endif()
 
     add_custom_target(${target_name}.attach
