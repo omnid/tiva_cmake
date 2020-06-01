@@ -44,6 +44,7 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
     if(TiCgtArm_FOUND)
       set(TiCgtArm_SourceDirs "-ex dir ${TIVA_CLIB_SRC_PATH}")
     endif()
+
     add_custom_target(${target_name}.attach
       COMMAND ${ARMGDB} "$<TARGET_FILE:${target_name}>" 
       ${TIVA_CLIB_DIR_CMD}
@@ -55,5 +56,23 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
       )
   endfunction()
 
+  # combine all the extra custom build steps
+  function(tiva_cmake_add target)
+    add_openocd_write(${target})
+    add_openocd_gdb(${target})
+    add_openocd_attach(${target})
+  endfunction()
+
+  set(TivaCMake_AddExecutable ON CACHE BOOL "Include extra tiva_cmake targets when calling add_executable")
+  mark_as_advanced(TivaCMake_AddExecutable)
+
+  if(TivaCMake_AddExecutable)
+    # Override add_executable to add these other targets
+    function(add_executable target)
+      # call the original
+      _add_executable(${target} ${ARGN})
+      tiva_cmake_add(${target})
+    endfunction()
+  endif()
 endif()
 
