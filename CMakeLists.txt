@@ -10,7 +10,7 @@ project(TivaCMakeExternal LANGUAGES NONE)
 
 # configure the external cmake processes
 execute_process(
-  COMMAND ${CMAKE_COMMAND} -S ${CMAKE_CURRENT_SOURCE_DIR}/external -B ${CMAKE_CURRENT_BINARY_DIR}/external
+  COMMAND ${CMAKE_COMMAND} -S ${CMAKE_CURRENT_SOURCE_DIR}/external -B ${CMAKE_CURRENT_BINARY_DIR}/external 
   RESULT_VARIABLE CONFIG_SUCCESS
   )
 
@@ -32,5 +32,7 @@ if(NOT CONFIG_SUCCESS EQUAL 0)
 endif()
 
 # Set to enable find_package from within src/ to find the packages built with this project and installed in the build directory
+# Also, Overwrite the CMAKE_MODULE_PATH so that installed modules are used
 set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_BINARY_DIR}/external/install/share/tiva-cmake/cmake" CACHE INTERNAL "Path to external install directory")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_BINARY_DIR}/external/install/share/tiva-cmake/cmake" CACHE INTERNAL "Path to external install directory")
 add_subdirectory(src)

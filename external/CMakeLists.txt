@@ -19,6 +19,7 @@ function(tivaware_libraries compiler_id toolchain buildtype)
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/../cmake/${toolchain}
     -DCMAKE_BUILD_TYPE=${buildtype}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
+    -DCMAKE_MODULE_PATH=${CMAKE_CURRENT_LIST_DIR}/../cmake
     )
 endfunction()
 
@@ -35,6 +36,7 @@ function(startup_libraries compiler_id toolchain buildtype processor)
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/../cmake/${toolchain}
     -DCMAKE_BUILD_TYPE=${buildtype}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
+    -DCMAKE_MODULE_PATH=${CMAKE_CURRENT_LIST_DIR}/../cmake
     )
 endfunction()
 

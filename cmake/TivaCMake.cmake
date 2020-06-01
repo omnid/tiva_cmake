@@ -9,7 +9,20 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
   find_package(CodeComposerStudio)
   find_package(ArmNoneEabiGdb)
 
-
+  # adds a uniflash target that uses uniflash to write to the tiva
+  function(add_uniflash target_name)
+    # TODO: choose ccxml file based on CMAKE_SYSTEM_PROCESSOR.
+    # currently these are the same name
+    add_custom_target(${target_name}.uni
+      DEPENDS ${target_name}
+      COMMAND ${CodeComposerStudio_UniFlash_EXECUTABLE} -ccxml "/home/elwin/research/tiva-cmake/startup/${CMAKE_SYSTEM_PROCESSOR}.ccxml"
+      -program "$<TARGET_FILE:${target_name}>"
+      -verify "$<TARGET_FILE:${target_name}>"
+      COMMENT "Using uniflash to load ${target_name} onto the microcontroller."
+      VERBATIM
+      )
+    endfunction()
+      
   # adds a target that will write to the tiva using openocd
   function(add_openocd_write target_name)
     add_custom_target(${target_name}.ocd
@@ -52,6 +65,7 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
 
   # combine all the extra custom build steps
   function(tiva_cmake_add target)
+    add_uniflash(${target})
     add_openocd_write(${target})
     add_openocd_gdb(${target})
     add_openocd_attach(${target})
