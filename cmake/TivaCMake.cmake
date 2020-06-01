@@ -24,7 +24,7 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
   function(add_openocd_gdb target_name)
     # that variable is set in FindArmNoneEabiGcc and FIndTiCgt
     add_custom_target(${target_name}.gdb
-      COMMAND ${ARMGDB} 
+      COMMAND ${ArmNoneEabiGdb_EXECUTABLE} 
       -ex "dir $cdir:$cwd:${TiCgtArm_SOURCE_DIRS}"
       -ex "target extended-remote | ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c \"gdb_port pipe; log_output ${CMAKE_BINARY_DIR}/openocd.log\"" 
       -ex "monitor reset halt" 
@@ -40,7 +40,7 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
   # target is running the desired binary file
   function(add_openocd_attach target_name)
     add_custom_target(${target_name}.attach
-      COMMAND ${ARMGDB} "$<TARGET_FILE:${target_name}>"
+      COMMAND ${ArmNoneEabiGdb_EXECUTABLE} "$<TARGET_FILE:${target_name}>"
       -ex "dir $cdir:$cwd:${TiCgtArm_SOURCE_DIRS}"
       -ex "target extended-remote | ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c \"gdb_port pipe; log_output ${CMAKE_BINARY_DIR}/openocd.log\"" 
       -ex "monitor halt"
