@@ -10,7 +10,7 @@ project(TivaCMakeExternal LANGUAGES NONE)
 
 # configure the external cmake processes
 execute_process(
-  COMMAND ${CMAKE_COMMAND} -S external -B ${CMAKE_CURRENT_BINARY_DIR}/external
+  COMMAND ${CMAKE_COMMAND} -S ${CMAKE_CURRENT_SOURCE_DIR}/external -B ${CMAKE_CURRENT_BINARY_DIR}/external
   RESULT_VARIABLE CONFIG_SUCCESS
   )
 
@@ -23,6 +23,9 @@ execute_process(
   COMMAND ${CMAKE_COMMAND} --build ${CMAKE_CURRENT_BINARY_DIR}/external
   RESULT_VARIABLE BUILD_SUCCESS
   )
+
+# copy the external project CMakeLists.txt. This helps when running make after cmake files have changed
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/external/CMakeLists.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/external)
 
 if(NOT CONFIG_SUCCESS EQUAL 0)
   message(FATAL_ERROR "CMake failed to compile the external project dependencies")
