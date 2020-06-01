@@ -19,7 +19,7 @@ The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and
    #+BEGIN_SRC bash
    cd my_project_directory
    cmake -B build .
-   #+END_SRC bash
+   #+END_SRC 
 3. Compile the project
    #+BEGIN_SRC bash
    cmake --build build 
