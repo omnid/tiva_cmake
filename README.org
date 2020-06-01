@@ -134,7 +134,8 @@ If the compiler you specify is compatible with ~gcc~ you should use ~tiva-gcc-to
 
 ** Changing the Microcontroller
 - Passing ~-DCMAKE_SYSTEM_PROCESSOR=<model>~ when invoking ~cmake~ will change the targeted microcontroller from the default (~TM4C123GH6PM~).
-
+- Passing ~-DOpenOCD_CONFIG~ controls which development board is used when using OpenOCD. The default value depends on ~CMAKE_SYSTEM_PROCESSOR~
+  
 ** Microcontroller Support
 The code has only been tested with the ~EK-TM4C123GXL~ LaunchPad. Therefore some options are specific to the ~TM4C123GH6PM~ microcontroller
 and must be modified for other microcontrollers (issues/pull requests welcome)
@@ -152,6 +153,8 @@ To support another microcontrollers a few additions are needed
   - Memory locations likely differ between microcontroller models and so the linker scripts should be adjusted.
 - The startup code and linker scripts incorporated via ~target_link_libraries(<my_target> ${STARTUP_LIBRARIES})~. You can
   omit this line to use your own startup code or linker scripts in your own projects.
+- Edit ~cmake/FindOpenOCD.cmake~ to add support for flashing different development boards. 
+
 *** Automatic Generation of Startup Library
 - Future work will use TI's targetDB files, which provide information about MCU's including peripheral layout and compiler flags to automatically generate
   startup files. The generated startup files will then be included in this repository, to avoid a hard dependency on Code Composer Studio

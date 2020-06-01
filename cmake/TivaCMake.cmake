@@ -49,7 +49,7 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
     add_custom_target(${target_name}.attach
       COMMAND ${ARMGDB} "$<TARGET_FILE:${target_name}>" 
       ${TIVA_CLIB_DIR_CMD}
-      -ex "target extended-remote | ${OPENOCD} -f ${OPENOCD_CONFIG} -c \"gdb_port pipe; log_output ${CMAKE_BINARY_DIR}/openocd.log\"" 
+      -ex "target extended-remote | ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c \"gdb_port pipe; log_output ${CMAKE_BINARY_DIR}/openocd.log\"" 
       -ex "monitor halt"
       DEPENDS ${target_name}
       COMMENT "Using openocd and arm-none-eabi-gdb to debug ${target_name} while it is already running."
