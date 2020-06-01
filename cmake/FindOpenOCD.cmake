@@ -8,7 +8,7 @@ Finds `openocd`
 Search in the following order:
 1. Locally installed versions `/home/$(whoami)/openocd`
 
-2. Globally installed versions: `/opt/arm-none-eabi-gcc*`, `/opt/gcc-arm-none-eabi*` and the system path
+2. Globally installed versions: in the usual system places (~/usr/bin~ etc).
 
 
 Result Variables
@@ -16,40 +16,52 @@ Result Variables
 
 This will define the following variables:
 
-``ArmNoneEabiGCC_FOUND``
+``OpenOCD_FOUND``
   True if the system has ti-cgt-arm installed
-``ArmNoneEabiGCC_VERSION``
-  The version of ti-cgt-arm that was found.
-``ArmNoneEabiGCC_ROOT_DIR``
-  The root directory of the arm-none-eabi-gcc compiler
 
 Cache Variables
 ^^^^^^^^^^^^^^^
 
 The following cache variables may also be set:
 
-``OpenOCD_Executable``
+``OpenOCD_EXECUTABLE``
   The openocd executable
 
-``OpenOCD_DATADIR``
-  The 
+``OpenOCD_CONFIG``
+  The configuration file used by openocd for a given dev board
 
 #]========================================================================]
 # A guide for writing find modules: https://cmake.org/cmake/help/v3.17/manual/cmake-developer.7.html
 
-find_program(OPENOCD openocd)
-
-if(${OPENOCD} STREQUAL "OPENOCD-NOTFOUND")
-  message(WARNING
-    "${CMAKE_CURRENT_LIST_FILE}:${CMAKE_CURRENT_LIST_LINE} - Could not find openocd,
-     make target.gdb, make target.attach, and make target.write will not work.")
+# Determine what openocd board configuration file we are looking for based
+# on CMAKE_SYSTEM_PROCESSOR or (if set in the cache) the OpenOCD_BOARD variable
+# This is the configuration filename to search for when we try to find openocd configurations
+if(CMAKE_SYSTEM_PROCESSOR STREQUAL "TM4C123GH6PM")
+  set(OpenOCD_BOARD "ek-tm4c123gxl.cfg" CACHE STRING "The openocd configuration to use")
 endif()
+
+find_program(OpenOCD_EXECUTABLE openocd
+  HINTS $ENV{HOME}/openocd
+  PATH_SUFFIXES bin
+  )
 
 # find the open ocd configruation file
-find_file(OPENOCD_CONFIG
-  "ek-tm4c123gxl.cfg" PATHS "/usr/share/openocd/scripts/board" CMAKE_FIND_ROOT_PATH_BOTH)
-if(${OPENOCD_CONFIG} STREQUAL "OPENOCD_CONFIG-NOTFOUND")
-  message(FATAL_ERROR
-    "${CMAKE_CURRENT_LIST_FILE}:${CMAKE_CURRENT_LIST_LINE} - could not find openocd configration file")
-endif()
+find_file(OpenOCD_CONFIG
+  ${OpenOCD_BOARD}
+  PATHS
+  "$ENV{HOME}/openocd"
+  "$ENV{HOME}/openocd/share"
+  "$ENV{HOME}/openocd/usr/share"
+  "/usr/local/share/openocd/"
+  "/usr/share/openocd/"
+  PATH_SUFFIXES "scripts/board"
+  CMAKE_FIND_ROOT_PATH_BOTH)
 
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(OpenOCD
+    FOUND_VAR OpenOCD_FOUND
+    REQUIRED_VARS
+    OpenOCD_EXECUTABLE
+    OpenOCD_CONFIG
+    #VERSION_VAR OpenOCD_VERSION - TODO
+    )
