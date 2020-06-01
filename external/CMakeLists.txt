@@ -2,7 +2,7 @@
 # Also install the cmake files
 cmake_minimum_required(VERSION 3.9)
 project(tiva-cmake NONE)
-
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/../cmake)
 
 # We build each combination of library/compiler as an external project
 include(ExternalProject)
