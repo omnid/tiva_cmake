@@ -87,7 +87,7 @@ if(NOT TiCgtArm_FOUND)
 
   set(TiCgtArm_INCLUDE_DIRS ${TiCgtArm_ROOT_DIR}/include)
   set(TiCgtArm_LIBRARY_DIRS ${TiCgtArm_ROOT_DIR}/lib)
-  set(TiCgtArm_SOURCE_DIRS ${TiCgtArm_C_LIBRARY_DIRS}/src)
+  set(TiCgtArm_SOURCE_DIRS ${TiCgtArm_LIBRARY_DIRS}/src)
 
   # compute the version, if have found the package
   if(NOT "${TiCgtArm_EXECUTABLE}" STREQUAL "TiCgtArm_EXECUTABLE-NOTFOUND")
