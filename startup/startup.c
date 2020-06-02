@@ -48,14 +48,17 @@ __attribute__((naked)) void _c_int00(void)
     // enabled).
     // See 3.1.5.7 in the datasheet for example code and explanation
     // basically it's FPUEnable() from tivaware
-    __asm__ (
-          "    ldr.w  r0, =0xE000ED88\n"
-          "    ldr r1, [r0]\n"
-          "    orr r1, r1, #(0xF << 20)\n"
-          "    str r1, [r0]\n"
-          "    dsb\n"
-          "    isb"
-        );
+
+    // the Coprocessor Access Control Register (CPAC)
+    volatile unsigned int * CPAC = 0xE000ED88;
+
+    // set the CP11 and CP10 bits to all 1's to enable the FPU. leave other bits unchanged
+    *CPAC = (*CPAC & ~0x00F00000) | 0x00F00000;
+
+    // reset the pipeline with some barrier/synchronization instructions (see 3.1.5.7 on the FPU).
+    // Might be unnecessary, but can't hurt
+    __asm__ volatile ("DSB\n"
+                      "ISB");
 #endif
     _start(); // call the newlib startup code, which calls main
 }
