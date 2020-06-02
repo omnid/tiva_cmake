@@ -186,8 +186,9 @@ The startup code is different than the code provided by TI and is designed to ma
    - For example 
      - "Non-Maskable Interrupt (NMI)" becomes ~NonMaskableInterruptISR~
      - "16/32-Bit Timer 0A" becomes ~Timer0AISR~
-2. By default, all ISRs (except ~Reset~) are aliased to ~DefaultISR~, a function that does nothing. By providing your own definition for ~DefaultISR~ you
-   can modify that this default behavior.  Even if you don't enable interrupts, fault ISRs can still be triggered.
+2. By default, most ISRs are aliased to ~DefaultISR~, a function that loops forever. By providing your own definition for ~DefaultISR~ you
+   can modify that this default behavior. The only exceptions are the ~HardFaultISR~ and ~NonMaskableInterruptISR~ 
+  which have their own infinite loops to preserve state and let you know which fault was triggered.  ~ResetISR~ runs the startup code.  
 
 It may be beneficial to modify the startup code directly in your project, in which case simply omit ~TivaCMake::startup~ from the target link libraries.
 You can make basic changes to the stack and heap sizes using options for the compiler, but such changes may also require editing the linker scripts.

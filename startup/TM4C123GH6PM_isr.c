@@ -14,11 +14,23 @@ __attribute__((weak)) void DefaultISR(void)
 
 /// @brief ISR for Interrupt Vector 2, The NMI handler.
 /// This just is another name for DefaultISR unless it is defined elsewhere
-void NonMaskableInterruptISR(void) __attribute__((weak, alias ("DefaultISR")));
+__attribute__((weak)) void NonMaskableInterruptISR(void)
+{
+    for(;;)
+    {
+        // loop forever
+    }
+}
 
 /// @brief ISR for Interrupt Vector 3,    The hard fault handler
 /// This just is another name for DefaultISR unless it is defined elsewhere
-void HardFaultISR(void) __attribute__((weak, alias ("DefaultISR")));
+__attribute__((weak)) void HardFaultISR(void)
+{
+    for(;;)
+    {
+        // loop forever
+    }
+}
 
 /// @brief ISR for Interrupt Vector 4, The MPU fault handler
 /// This just is another name for DefaultISR unless it is defined elsewhere

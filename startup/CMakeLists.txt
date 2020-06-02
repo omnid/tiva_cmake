@@ -6,7 +6,11 @@ include(GNUInstallDirs)
 # root installation directory
 set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/tiva-cmake/startup)
 
-add_library(startup ${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_C_COMPILER_ID}.c )#${CMAKE_SYSTEM_PROCESSOR}_isr.c)
+add_library(startup
+  ${CMAKE_SYSTEM_PROCESSOR}_isr.c
+  reset.c
+  $<$<C_COMPILER_ID:GNU>:startup.c>
+  )
 
 # Disable a warning about link time optimization when using the TI compiler
 set_source_files_properties(
