@@ -5,34 +5,28 @@ It enables the use of ~arm-none-eabi-gcc~ or TI's Code Generation Tools (~ti-cgt
 code to flash memory using the in-circuit debugger (ICD) on TI's LaunchPad development boards. 
 For convenience, it also comes bundled with ~TivaWare~ ~driverlib~.
 
-You can use ~tiva-cmake~ as a [[*Template Mode (No Installation)][template]] or [[*Installation][install]] it (either to your home directory or system-wide) and use it as a dependency. 
-
-When using ~tiva-cmake~ as a [[*Template Mode (No Installation)][template]] you must manually install the [[*Development Tools][Development Tools]] ([[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] is sufficient but not necessary).
-Some [[*Installation][installation]] methods automatically install the required development tools.
+You can use ~tiva-cmake~ as a [[*Template Mode (No Installation)][template]] or [[*Installation][install]] it and use it as a dependency. 
 
 * Template Mode (No Installation)
 The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[*Development Tools][Development Tools]] installed.
 
 1. Clone this repository:
-   - ~git clone https://github.com/m-elwin/tiva-cmake my_project_directory~
-2. Generate the project
+   #+BEGIN_SRC
+   git clone https://github.com/m-elwin/tiva-cmake my_project
+   cd my_project
+   #+END_SRC
+2. Configure the project and build the dependencies
    #+BEGIN_SRC bash
    cd my_project_directory
    cmake -B build .
    #+END_SRC 
-3. Compile the project
-   #+BEGIN_SRC bash
-   cmake --build build 
-   #+END_SRC
-4. Write led_example to the microcontroller
+3. Compile the project and load it onto the microcontroller
    #+BEGIN_SRC bash
    cmake --build build --target led_example.write
    #+END_SRC
-
 When successful, you should see LED on the ~EK-TM4C123GXL~ cycle between red, white, and blue.
 
-The project source code resides in ~src/~, which is the sole location you should need to edit.
-- ~src/PreLoad.cmake~ sets the default toolchain
+- The project source code resides in ~src/~, which is the sole location you should need to edit.
   - Change the toolchain by editing ~src/PreLoad.cmake~ or specifying ~-DCMAKE_TOOLCHAIN_FILE=<toolchain>~ the first time you run cmake.
   - The default toolchain file is ~cmake/tiva-toolchain.cmake~, which picks ~gcc~ and falls back to ~ti-cgt~ if it cannot find ~gcc~)
   - The toolchain for ~gcc~ is ~cmake/arm-none-eabi-gcc-toolchain.cmake~
