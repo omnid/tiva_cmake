@@ -50,7 +50,7 @@ __attribute__((naked)) void _c_int00(void)
     // basically it's FPUEnable() from tivaware
 
     // the Coprocessor Access Control Register (CPAC)
-    volatile unsigned int * CPAC = 0xE000ED88;
+    volatile unsigned int * CPAC = (unsigned int *)0xE000ED88;
 
     // set the CP11 and CP10 bits to all 1's to enable the FPU. leave other bits unchanged
     *CPAC = (*CPAC & ~0x00F00000) | 0x00F00000;

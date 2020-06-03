@@ -15,10 +15,10 @@ The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and
    git clone https://github.com/m-elwin/tiva-cmake my_project
    cd my_project
    #+END_SRC
-2. Configure the project and build the dependencies
-   #+BEGIN_SRC bash
-   cd my_project_directory
-   cmake -B build .
+2. Generate and build the libraries
+   #+BEGIN_SRC 
+   cmake -B lib/build lib/
+   cmake --build lib/build
    #+END_SRC 
 3. Compile the project and load it onto the microcontroller
    #+BEGIN_SRC bash
@@ -228,20 +228,21 @@ To support another microcontrollers a few additions are needed
   where ~<compilerID>~ is ~GCC~ or ~TI~ and ~<model>~ is the microcontroller model. These files are automatically loaded by CMake.
   - Good defaults for compiler options can be obtained from Code Composer studio
     either by viewing the compile options in a project or reading the provided [[*Automatic Generation of Startup Library][targetDB files]].
-- Startup code is stored in ~startup/~
-  - The interrupt vector table (see [[*Startup Library][Startup Library]]) likely requires adjustment and is stored in <model>_ivt.c
-- Linker scripts for ~gcc~ are stored in ~startup/<model>-GCC.lds~  and ~startup/<model>-TI.cmd~ 
+- Startup code is stored in ~lib/startup/~
+  - The interrupt vector table (see [[*Startup Library][Startup Library]]) likely requires adjustment and is stored in ~<model>_isr.c~
+- Linker scripts for ~gcc~ are stored in ~lib/startup/<model>-GCC.lds~  and ~lib/startup/<model>-TI.cmd~ 
   - Memory locations likely differ between microcontroller models and so the linker scripts should be adjusted.
 - The startup code and linker scripts incorporated via ~target_link_libraries(<my_target> ${STARTUP_LIBRARIES})~. You can
   omit this line to use your own startup code or linker scripts in your own projects.
-- Edit the base ~CMakeLists.txt~ so that it builds the startup libraries for the new processor model
-- Edit ~cmake/FindOpenOCD.cmake~ to add support for flashing different development boards. 
+- Register your new microcontroller in ~lib/CMakeLists.txt~
+- Edit ~cmake/FindOpenOCD.cmake~ to add support for flashing different development boards by selecting the appropriate dev board for your model. 
 - To use ~uniflash~ the proper ~ccxml~ files must be generated.  I've included a few already.  To generate the best way is to
   1. Download [[https://www.ti.com/tool/UNIFLASH][UNIFLASH]]
   2. When you run UNIFLASH, choose the development board that you want, then click start.  At the top of the next window is a link to save the ~ccxml~ file.
-  3. Add the ~ccxml~ file to this repository.  
-  4. It is theoretically possible to generate these files using the uniflash command line example.  
-*** Automatic Generation of Startup Library
+  3. Add the ~ccxml~ file to this repository in ~lib/startup~.
+     - Currently these files are called ~<model>.ccxml~
+  4. It is theoretically possible to generate these files using the uniflash command line example.
+*** TODO Automatic Generation of Startup Library 
 - Future work will use TI's targetDB files, which provide information about MCU's including peripheral layout and compiler flags to automatically generate
   startup files. The generated startup files will then be included in this repository, to avoid a hard dependency on Code Composer Studio
 - The targetDB ffiles and are distributed with Code Composer Studio and located in the ~ccs/ccs_base/common/targetdb~ directory.
