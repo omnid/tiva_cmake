@@ -23,7 +23,7 @@ endif()
 # This is because toolchain files must usually be specified either relative to the source directory or absolute
 if(CMAKE_TOOLCHAIN_FILE)
   if((NOT (EXISTS ${CMAKE_TOOLCHAIN_FILE})) AND (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_TOOLCHAIN_FILE}))
-    set(CMAKE_TOOLCHAIN_FILE "${TivaCMake_ROOT_DIR}/cmake/${CMAKE_TOOLCHAIN_FILE}" CACHE FILEPATH "The toolchain file")
+    set(CMAKE_TOOLCHAIN_FILE "${TivaCMake_ROOT_DIR}/cmake/${CMAKE_TOOLCHAIN_FILE}" CACHE FILEPATH "The toolchain file" FORCE)
   endif()
 endif()
 

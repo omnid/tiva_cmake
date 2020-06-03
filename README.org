@@ -37,6 +37,7 @@ The project source code resides in ~src/~, which is the sole location you should
   - The toolchain for ~gcc~ is ~arm-none-eabi-gcc-toolchain.cmake~
   - The toolchain for ~ti-cgt~ is ~ti-cgt-arm-toolchain.cmake~
   - ~Preload.cmake~ has logic such that the three toolchain files above are automatically found so you don't need to specify the path to them.
+  - To change toolchain files you must delete the contents of the build directory and re-generate the build system
 - See [[*Startup Library][Startup Library]] for information about how to implement interrupt service routines.
 - To change the microcontroller model add ~-DCMAKE_SYSTEM_PROCESSOR=TM4Cxxxxx~ or set it in ~src/PreLoad.cmake~. (See [[*Microcontroller Support][Microcontroller Support]]).
 - See [[*CMake Settings][CMake Settings]] for details and other options.   

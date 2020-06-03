@@ -3,8 +3,8 @@
 //       To specify heap use --heap=<size> linker option
 // Heap is not recommended and will require modifying this file
 
-// Keep the interrupt vector table
---retain=tlib_int_vectors
+// Keep the interrupt vector table (defined in TM4C123GH6PM_isr.c)
+--retain=interrupt_vector_table
 
 // Starting addresses of flash and SRAM
 #define FLASH_BASE 0x00000000

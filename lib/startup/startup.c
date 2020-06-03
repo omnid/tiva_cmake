@@ -10,15 +10,12 @@ extern unsigned int __bss_start__;
 extern unsigned int __bss_end__;
 extern unsigned int __STACK_END;
 
-// the main applciation function
-extern int main(void);
-
 // newlib startup code
 extern void _start(void);
 
 // called on a reset. Do not emit prologue in assembly since the stack is not
 // yet valid
-__attribute__((naked)) void _c_int00(void)
+__attribute__((naked, used)) void _c_int00(void)
 {
     // set up the stack
     __asm__ volatile ("MSR msp, %0\n" : : "r" (&__STACK_END) : "sp");

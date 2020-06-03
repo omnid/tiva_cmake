@@ -1,14 +1,13 @@
 # Brings in the TivaCMake::startup and TivaWare::driverlib libraries
 # Enables cmake targets for writing code to the microcontroller and debugging
 # If we are not cross-compiling 
-if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING)) 
-  set(TivaCMake_FOUND TRUE)
+if(CMAKE_CROSSCOMPILING)
+  find_package(TivaCMake)
   find_package(TivaStartup)
   find_package(TivaWare)
   find_package(OpenOCD)
   find_package(CodeComposerStudio)
   find_package(ArmNoneEabiGdb)
-
   # adds a uniflash target that uses uniflash to write to the tiva
   # ext is the name of the extension to add to the target (so ${target}.${ext} is how to invoke this step)
   function(add_uniflash target_name ext)
@@ -16,7 +15,7 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
     # currently these are the same name
     add_custom_target(${target_name}.${ext}
       DEPENDS ${target_name}
-      COMMAND ${CodeComposerStudio_UniFlash_EXECUTABLE} -ccxml "${CMAKE_CURRENT_LIST_DIR}/../startup/${CMAKE_SYSTEM_PROCESSOR}.ccxml"
+      COMMAND ${CodeComposerStudio_UniFlash_EXECUTABLE} -ccxml "${TivaCMake_ROOT_DIR}/startup/${CMAKE_SYSTEM_PROCESSOR}.ccxml"
       -program "$<TARGET_FILE:${target_name}>"
       -verify "$<TARGET_FILE:${target_name}>"
       COMMENT "Using uniflash to load ${target_name} onto the microcontroller."
@@ -31,6 +30,7 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
       DEPENDS ${target_name}
       COMMAND ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c "program $<TARGET_FILE:${target_name}> verify reset exit"
       COMMENT "Using openocd to load ${target_name} onto the microcontroller."
+      VERBATIM
       )
   endfunction()
 
@@ -72,7 +72,6 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
     add_openocd_write(${target} ocd)
     add_openocd_gdb(${target})
     add_openocd_attach(${target})
-    add_tiva_cmake_write(${target})
     if(OpenOCD_FOUND)
       add_openocd_write(${target} write)
     else()
