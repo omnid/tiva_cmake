@@ -1,1 +1,10 @@
-include(ti-cgt-arm-toolchain)
+find_package(TiCgtArm)
+find_package(ArmNoneEabiGCC)
+
+if(ArmNoneEabiGCC_FOUND)
+  include(arm-none-eabi-gcc-toolchain)
+elseif(TiCgtArm_FOUND)
+  include(ti-cgt-arm-toolchain)
+else()
+  message(FATAL_ERROR "Could not find the GNU or TI toolchain")
+endif()

@@ -8,11 +8,13 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
   find_package(OpenOCD)
   find_package(CodeComposerStudio)
   find_package(ArmNoneEabiGdb)
+
   # adds a uniflash target that uses uniflash to write to the tiva
-  function(add_uniflash target_name)
+  # ext is the name of the extension to add to the target (so ${target}.${ext} is how to invoke this step)
+  function(add_uniflash target_name ext)
     # TODO: choose ccxml file based on CMAKE_SYSTEM_PROCESSOR.
     # currently these are the same name
-    add_custom_target(${target_name}.uni
+    add_custom_target(${target_name}.${ext}
       DEPENDS ${target_name}
       COMMAND ${CodeComposerStudio_UniFlash_EXECUTABLE} -ccxml "${CMAKE_CURRENT_LIST_DIR}/../startup/${CMAKE_SYSTEM_PROCESSOR}.ccxml"
       -program "$<TARGET_FILE:${target_name}>"
@@ -22,9 +24,10 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
       )
     endfunction()
       
-  # adds a target that will write to the tiva using openocd
-  function(add_openocd_write target_name)
-    add_custom_target(${target_name}.ocd
+  # adds a target that will write to the tiva using openocd.
+  # ext is the name of the extension to add to the target (so ${target}.${ext} is how to invoke this step)
+  function(add_openocd_write target_name ext)
+    add_custom_target(${target_name}.${ext}
       DEPENDS ${target_name}
       COMMAND ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c "program $<TARGET_FILE:${target_name}> verify reset exit"
       COMMENT "Using openocd to load ${target_name} onto the microcontroller."
@@ -62,12 +65,19 @@ if((NOT TivaCMake_FOUND) AND (CMAKE_CROSSCOMPILING))
       )
   endfunction()
 
+      
   # combine all the extra custom build steps
   function(tiva_cmake_add target)
-    add_uniflash(${target})
-    add_openocd_write(${target})
+    add_uniflash(${target} uni)
+    add_openocd_write(${target} ocd)
     add_openocd_gdb(${target})
     add_openocd_attach(${target})
+    add_tiva_cmake_write(${target})
+    if(OpenOCD_FOUND)
+      add_openocd_write(${target} write)
+    else()
+      add_uniflash(${target} write)
+    endif()
   endfunction()
 
   set(TivaCMake_AddExecutable ON CACHE BOOL "Include extra tiva_cmake targets when calling add_executable")
