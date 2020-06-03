@@ -20,21 +20,25 @@ The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and
    cmake -B lib/build lib/
    cmake --build lib/build
    #+END_SRC 
-3. Compile the project and load it onto the microcontroller
-   #+BEGIN_SRC bash
-   cmake --build build --target led_example.write
+3. Compile the template project and load it onto the microcontroller
+   #+BEGIN_SRC 
+   cmake -B src/build src/
+   cmake --build src/build --target led_example.write
    #+END_SRC
 
 When successful, you should see LED on the ~EK-TM4C123GXL~ cycle between red, white, and blue.
 
-The project source code resides in ~src/~, which is the sole location you should need to edit.
-- ~src/PreLoad.cmake~ sets the default toolchain
-  - Change the toolchain by editing ~src/PreLoad.cmake~ or specifying ~-DCMAKE_TOOLCHAIN_FILE=<toolchain>~ the first time you run cmake.
-  - The default toolchain file is ~cmake/tiva-toolchain.cmake~, which picks ~gcc~ and falls back to ~ti-cgt~ if it cannot find ~gcc~)
-  - The toolchain for ~gcc~ is ~cmake/arm-none-eabi-gcc-toolchain.cmake~
-  - The toolchain for ~ti-cgt~ is ~cmake/ti-cgt-arm-toolchain.cmake~
+The project source code resides in ~src/~, which is the sole location you should need to edit files in.  
+- You can run ~cmake~ as you normally would from within ~src~ once the ~lib/~ has been built.
+- ~src/PreLoad.cmake~ sets the default toolchain file. 
+  - You can also specify a toolchain file by setting ~CMAKE_TOOLCHAIN_FILE~ when you first run ~cmake~:
+    ~cmake -B src/build src/ -DCMAKE_TOOLCHAIN_FILE=<file>~
+  - The default toolchain file is ~tiva-toolchain.cmake~, which picks ~gcc~ and falls back to ~ti-cgt~ if it cannot find ~gcc~.
+  - The toolchain for ~gcc~ is ~arm-none-eabi-gcc-toolchain.cmake~
+  - The toolchain for ~ti-cgt~ is ~ti-cgt-arm-toolchain.cmake~
+  - ~Preload.cmake~ has logic such that the three toolchain files above are automatically found so you don't need to specify the path to them.
 - See [[*Startup Library][Startup Library]] for information about how to implement interrupt service routines.
-- To change the microcontroller model add ~-DCMAKE_SYSTEM_PROCESSOR=TM4Cxxxxx~ or set it in ~src/PreLoad.cmake~
+- To change the microcontroller model add ~-DCMAKE_SYSTEM_PROCESSOR=TM4Cxxxxx~ or set it in ~src/PreLoad.cmake~. (See [[*Microcontroller Support][Microcontroller Support]]).
 - See [[*CMake Settings][CMake Settings]] for details and other options.   
 
 
