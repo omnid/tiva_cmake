@@ -24,9 +24,11 @@ The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and
    #+BEGIN_SRC bash
    cmake --build build --target led_example.write
    #+END_SRC
+
 When successful, you should see LED on the ~EK-TM4C123GXL~ cycle between red, white, and blue.
 
-- The project source code resides in ~src/~, which is the sole location you should need to edit.
+The project source code resides in ~src/~, which is the sole location you should need to edit.
+- ~src/PreLoad.cmake~ sets the default toolchain
   - Change the toolchain by editing ~src/PreLoad.cmake~ or specifying ~-DCMAKE_TOOLCHAIN_FILE=<toolchain>~ the first time you run cmake.
   - The default toolchain file is ~cmake/tiva-toolchain.cmake~, which picks ~gcc~ and falls back to ~ti-cgt~ if it cannot find ~gcc~)
   - The toolchain for ~gcc~ is ~cmake/arm-none-eabi-gcc-toolchain.cmake~
