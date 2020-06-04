@@ -4,7 +4,7 @@ project(TivaWare)
 
 include(GNUInstallDirs)
 # root installation directory
-set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/tiva-cmake/tivaware)
+set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/TivaWare)
 
 # Usually it is bad practice to glob, but here the files we need are designed
 # to be donloaded from within code composer studio and copied and there is
@@ -62,6 +62,6 @@ install(EXPORT TivaWareTargets_Release
 # The TivaWareConfig.cmake file imports the targets based on the value of DRIVERLIB_DEBUG and what
 # compiler is being used
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/TivaWareConfig.cmake"
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/cmake)
+  DESTINATION ${INSTALL_ROOT}/cmake)
 
 

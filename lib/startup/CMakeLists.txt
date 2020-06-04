@@ -4,7 +4,7 @@ project(startup)
 include(GNUInstallDirs)
 
 # root installation directory
-set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/tiva-cmake/startup)
+set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/TivaStartup)
 
 # The library is a series of object files.
 # We make these as OBJECT files instead of a library (ar archive)
@@ -73,7 +73,7 @@ install(EXPORT TivaStartupTargets_Release
 # The TivaStartupConfig file imports the targets based on the value of STARTUPLIB_DEBUG and what
 # compiler is being used
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/TivaStartupConfig.cmake"
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/tiva-cmake/cmake)
+  DESTINATION ${INSTALL_ROOT}/cmake)
 
 install(FILES
   "${CMAKE_CURRENT_LIST_DIR}/${CMAKE_SYSTEM_PROCESSOR}.cmd"

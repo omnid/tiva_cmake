@@ -3,4 +3,4 @@ cmake_minimum_required(VERSION 3.9)
 project(TivaCMakeFiles LANGUAGES NONE)
 
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
-  DESTINATION share/tiva-cmake)
+  DESTINATION share/TivaCMake)
