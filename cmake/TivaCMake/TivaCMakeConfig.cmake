@@ -45,7 +45,7 @@ if(NOT TivaCMake_FOUND)
     # currently these are the same name
     add_custom_target(${target_name}.${ext}
       DEPENDS ${target_name}
-      COMMAND ${CodeComposerStudio_UniFlash_EXECUTABLE} -ccxml "${TivaCMake_ROOT_DIR}/startup/${CMAKE_SYSTEM_PROCESSOR}.ccxml"
+      COMMAND ${CodeComposerStudio_UniFlash_EXECUTABLE} -ccxml "${TivaStartup_DIR}/../${CMAKE_SYSTEM_PROCESSOR}.ccxml"
       -program "$<TARGET_FILE:${target_name}>"
       -verify "$<TARGET_FILE:${target_name}>"
       COMMENT "Using uniflash to load ${target_name} onto the microcontroller."
