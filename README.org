@@ -50,7 +50,7 @@ The project source code resides in ~src/~, which is the sole location you should
    curl -o tiva-cmake.deb [[https://github.url.comingsoon]]
    sudo apt install ./tiva-cmake
    #+END_SRC 
-2. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[*Dependencies][Dependencies]] 
+2. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[*Development Tools][Development Tools]] 
 
 ** Arch Linux
 1. Download and install the latest ~package~, which will also bring in the dependencies
@@ -59,18 +59,18 @@ The project source code resides in ~src/~, which is the sole location you should
    sudo pacman -U tiva-cmake
    #+END_SRC 
 2. Optional: install the ~arm-none-eabi-gdb~ to use a debugger. 
-3. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[*Dependencies][Dependencies]]
+3. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[*Development Tools][Development Tools]]
 
 ** Windows
-1. Install [[*Dependencies][Dependencies]] 
-2. Download the latest [[windows_installer][windows installer]]
+1. Install [[*Development Tools][Development Tools]] 
+2. Download the latest windows installer (coming soon)
 
 ** macOS
-1. Install [[*Dependencies][Dependencies]]
-2. Download the latest mac installer [[windows_installer][windows installer]]
+1. Install [[*Development Tools][Development Tools]]
+2. Download the latest mac installer (coming soon)
 
 ** All Platforms 
-1. Install [[*Dependencies][Dependencies]] 
+1. Install [[*Development Tools][Development Tools]] 
 2. #+BEGIN_SRC bash
    git clone git@github.com:m-elwin/tiva-cmake
    mkdir tiva-cmake/build
