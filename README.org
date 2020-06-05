@@ -11,10 +11,10 @@ You can use ~tiva-cmake~ as a [[*Template Mode (No Installation)][template]] or 
 The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[*Development Tools][Development Tools]] installed.
 
 1. Clone this repository:
-#+BEGIN_SRC
-git clone https://github.com/m-elwin/tiva-cmake my_project
-cd my_project
-#+END_SRC
+   #+BEGIN_SRC
+   git clone https://github.com/m-elwin/tiva-cmake my_project
+   cd my_project
+   #+END_SRC
 2. Generate and build the libraries
    #+BEGIN_SRC 
    cmake -B lib/build lib/
