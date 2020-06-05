@@ -6,9 +6,7 @@ project(tiva-cmake NONE)
 # List of the supported processor models. Startup code for each model listed here will be generated
 list(APPEND processors TM4C123GH6PM)  
 
-find_package(TivaCMake
-  HINTS ${CMAKE_CURRENT_LIST_DIR}/../cmake
-  )
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/../cmake/TivaCMake)
 find_package(TiCgtArm)
 find_package(ArmNoneEabiGCC)
 
@@ -26,7 +24,7 @@ function(tivaware_libraries compiler_id toolchain buildtype)
     tivaware-${compiler_id}-${buildtype}
     SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/tivaware
     CMAKE_ARGS
-    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/../cmake/${toolchain}
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/../cmake/TivaToolchain/${toolchain}
     -DCMAKE_BUILD_TYPE=${buildtype}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
     )
@@ -42,7 +40,7 @@ function(startup_libraries compiler_id toolchain buildtype processor)
     startup-${compiler_id}-${buildtype}
     SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/startup
     CMAKE_ARGS
-    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/../cmake/${toolchain}
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/../cmake/TivaToolchain/${toolchain}
     -DCMAKE_BUILD_TYPE=${buildtype}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
     )

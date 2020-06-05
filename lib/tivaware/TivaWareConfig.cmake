@@ -6,9 +6,9 @@
 set(DRIVERLIB_DEBUG OFF CACHE BOOL "If ON, link against the debugging version of driverlib")
 
 if(DRIVERLIB_DEBUG)
-  include("${CMAKE_CURRENT_LIST_DIR}/../tivaware/Debug_${CMAKE_C_COMPILER_ID}/TivaWareTargets_Debug.cmake")
+  include("${CMAKE_CURRENT_LIST_DIR}/../Debug_${CMAKE_C_COMPILER_ID}/TivaWareTargets_Debug.cmake")
 else()
-  include("${CMAKE_CURRENT_LIST_DIR}/../tivaware/Release_${CMAKE_C_COMPILER_ID}/TivaWareTargets_Release.cmake")
+  include("${CMAKE_CURRENT_LIST_DIR}/../Release_${CMAKE_C_COMPILER_ID}/TivaWareTargets_Release.cmake")
 endif()
 
 # Create an interface library so we can add compile definitions to it when
