@@ -1,8 +1,6 @@
 # Toolchain file that will use gcc if it is available and if not will switch to ti-cgt
 
-find_package(TivaCMake
-  HINTS ${CMAKE_CURRENT_LIST_DIR}
-  )
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 
 find_package(TiCgtArm QUIET)
 find_package(ArmNoneEabiGCC QUIET)
@@ -14,3 +12,5 @@ elseif(TiCgtArm_FOUND)
 else()
   message(FATAL_ERROR "Could not find the GNU or TI toolchain")
 endif()
+
+list(REMOVE_AT CMAKE_MODULE_PATH -1)
