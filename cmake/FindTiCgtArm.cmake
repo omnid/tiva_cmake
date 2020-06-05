@@ -65,7 +65,7 @@ if(NOT TiCgtArm_FOUND)
   list(REVERSE TiCgtArm_HINT_CCS)
   
   find_program(TiCgtArm_EXECUTABLE
-    NAMES armacl
+    NAMES armcl
     HINTS ${TiCgtArm_HINTS1} ${TiCgtArm_HINTS2} ${TiCgtArm_HINTS3} ${TiCgtArm_HINTS4}
     DOC "armcl (the ti-cgt compiler frontend): it's location tells the toolchain where to find ti-cgt "
     PATH_SUFFIXES bin
