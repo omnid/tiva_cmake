@@ -19,7 +19,10 @@ set(CMAKE_SYSTEM_NAME Generic)
 # By default assume a TM4C123GH6PM microcontroller
 set(CMAKE_SYSTEM_PROCESSOR TM4C123GH6PM CACHE STRING "The microcontroller model")
 
-find_package(ArmNoneEabiGCC)
+find_package(TivaCMake
+  HINTS ${CMAKE_CURRENT_LIST_DIR}
+  )
+find_package(ArmNoneEabiGCC REQUIRED)
 
 # The user can override these settings to choose a different compiler
 set(CMAKE_C_COMPILER ${ArmNoneEabiGCC_C_COMPILER} CACHE STRING "The C compiler")

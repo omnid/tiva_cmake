@@ -6,8 +6,12 @@ project(tiva-cmake NONE)
 # List of the supported processor models. Startup code for each model listed here will be generated
 list(APPEND processors TM4C123GH6PM)  
 
+find_package(TivaCMake
+  HINTS ${CMAKE_CURRENT_LIST_DIR}/../cmake
+  )
+find_package(TiCgtArm)
+find_package(ArmNoneEabiGCC)
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/../cmake)
 
 # We build each combination of library/compiler as an external project
 include(ExternalProject)
@@ -25,7 +29,6 @@ function(tivaware_libraries compiler_id toolchain buildtype)
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/../cmake/${toolchain}
     -DCMAKE_BUILD_TYPE=${buildtype}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
-    -DCMAKE_MODULE_PATH=${CMAKE_CURRENT_LIST_DIR}/../cmake
     )
 endfunction()
 
@@ -42,13 +45,9 @@ function(startup_libraries compiler_id toolchain buildtype processor)
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/../cmake/${toolchain}
     -DCMAKE_BUILD_TYPE=${buildtype}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
-    -DCMAKE_MODULE_PATH=${CMAKE_CURRENT_LIST_DIR}/../cmake
     )
 endfunction()
 
-
-find_package(TiCgtArm)
-find_package(ArmNoneEabiGCC)
 if((NOT TiCgtArm_FOUND) AND (NOT ArmNoneEabiGCC_FOUND))
   message(FATAL_ERROR "Could not find a suitable C compiler, eithe ti-cgt or arm-none-eabi-gcc")
 endif()

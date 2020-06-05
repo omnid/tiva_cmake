@@ -2,7 +2,10 @@
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR TM4C123GH6PM CACHE STRING "The microcontroller model")
 
-find_package(TiCgtArm)
+find_package(TivaCMake
+  HINTS ${CMAKE_CURRENT_LIST_DIR}
+  )
+find_package(TiCgtArm REQUIRED)
 
 
 # only set if not set otherwise the user is overriding
