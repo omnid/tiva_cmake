@@ -48,7 +48,7 @@ install(DIRECTORY inc driverlib
   DESTINATION ${INSTALL_ROOT})
 
 install(EXPORT TivaWareTargets_Debug
-  NAMESPACE TivaWare::
+  NAMESPACE TivaCMake::
   CONFIGURATIONS Debug
   DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}
   )
