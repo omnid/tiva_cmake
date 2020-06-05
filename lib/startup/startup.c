@@ -18,7 +18,7 @@ extern void _start(void);
 __attribute__((naked, used)) void _c_int00(void)
 {
     // set up the stack
-    __asm__ volatile ("MSR msp, %0\n" : : "r" (&__STACK_END) : "sp");
+    __asm__ volatile ("MSR msp, %0\n" : : "r" (&__STACK_END));
 
     unsigned int *source = &__data_load__ ;
     unsigned int *destination = &__data_start__;

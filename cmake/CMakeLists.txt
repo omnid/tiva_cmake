@@ -2,6 +2,7 @@
 cmake_minimum_required(VERSION 3.9)
 project(TivaCMakeFiles LANGUAGES NONE)
 
+set(CMAKE_SYSTEM_NAME ${CMAKE_HOST_NAME})
 include(GNUInstallDirs)
 
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/TivaCMake
