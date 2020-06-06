@@ -5,9 +5,12 @@ It enables the use of ~arm-none-eabi-gcc~ or TI's Code Generation Tools (~ti-cgt
 code to flash memory using the in-circuit debugger (ICD) on TI's LaunchPad development boards. 
 For convenience, it also comes bundled with ~TivaWare~ ~driverlib~.
 
-You can use ~tiva-cmake~ as a [[TemplateMode][template]] or [[*Installation][install]] it and use it as a dependency. 
+You can use ~tiva-cmake~ as a [[#TemplateMode][template]] or [[*Installation][install]] it and use it as a dependency. 
 
-* Template Mode (No Installation) <<TemplateMode>>
+* Template Mode (Quickstart, No Installation)
+:PROPERTIES:
+:CUSTOM_ID: TemplateMode
+:END:
 The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[*Development Tools][Development Tools]] installed.
 
 1. Clone this repository:
