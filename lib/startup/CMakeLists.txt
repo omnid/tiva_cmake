@@ -26,7 +26,7 @@ add_library(startup
 
 # Disable a warning about link time optimization when using the TI compiler
 set_source_files_properties(
-  "${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_C_COMPILER_ID}.c" $<$<C_COMPILER_ID:TI>,-pds=1463>>)
+  "${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_C_COMPILER_ID}.c" PROPERTIES COMPILE_FLAGS $<$<C_COMPILER_ID:TI>:-pds=1463>)
 
 # Include the linker script
 target_link_libraries(startup PUBLIC

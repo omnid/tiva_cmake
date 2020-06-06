@@ -5,3 +5,4 @@ add_subdirectory(lib)
 
 install(DIRECTORY ${CMAKE_BINARY_DIR}/install/share
   DESTINATION ".")
+

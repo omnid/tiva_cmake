@@ -16,6 +16,9 @@ target_compile_definitions(driverlib PUBLIC
   $<$<C_COMPILER_ID:TI>:ccs>
   $<$<C_COMPILER_ID:GNU>:gcc>
   )
+# Disable a warning about converting packed members
+set_source_files_properties(
+  "driverlib/emac.c" PROPERTIES COMPILE_FLAGS $<$<C_COMPILER_ID:GNU>:-Wno-address-of-packed-member>)
 
 
 target_include_directories(driverlib PUBLIC
