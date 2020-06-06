@@ -1,0 +1,29 @@
+# Template PKGBUILD to be used by CPack to build archlinux packages
+pkgname=@PROJECT_NAME@
+pkgver=@PROJECT_VERSION@
+pkgrel=1
+epoch=
+pkgdesc="build files for programming tiva microcontrollers"
+arch=('any')
+url="https://github.com/m-elwin/tiva-cmake/"
+license=('MIT')
+groups=()
+depends=(arm-none-eabi-gcc arm-none-eabi-newlib)
+makedepends=()
+checkdepends=()
+optdepends=(arm-none-eabi-gdb ti-cgt-arm)
+provides=(@PROJECT_NAME@)
+conflicts=()
+replaces=()
+backup=()
+options=(!strip) # disable stripping of symbols since we are installing debugging libraries
+install=
+changelog=
+source=("tiva-cmake-$pkgver-Generic.tar.gz")
+noextract=()
+md5sums=('SKIP') 
+validpgpkeys=()
+
+package() {
+	cp -r "$pkgname-$pkgver-Generic/"* $pkgdir
+}

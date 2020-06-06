@@ -64,9 +64,10 @@ The project source code resides in ~src/~, which is the sole location you should
    curl -o tiva-cmake.pkg.tar.zst [[https://github.url.comingsoon]]
    sudo pacman -U tiva-cmake
    #+END_SRC 
-2. Optional: install the ~arm-none-eabi-gdb~ to use a debugger. 
-3. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[#development-tools][Development Tools]]
-4. ~tiva-cmake/PKGBUILD~ contains a ~PKGBUILD~ for the binary package
+2. Optional: install the ~arm-none-eabi-gdb~ package to use a debugger. 
+3. Optional: install ~ti-cgt-arm~ (AUR) to get the TI compilers. 
+4. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[#development-tools][Development Tools]]
+5. ~tiva-cmake/PKGBUILD~ contains a ~PKGBUILD~ for the binary package
 
 ** Binary (All platforms)
 1. Install [[#development-tools][Development Tools]] 
@@ -89,7 +90,8 @@ The project source code resides in ~src/~, which is the sole location you should
    - Change the install prefix using ~-DCMAKE_INSTALL_PREFIX=/your/prefix/path~ when invoking ~cmake~
    - CMake Files are placed in ~$prefix/share/cmake/tiva-cmake~ 
    - Release and debug driverlib versions are installed to ~$prefix/lib/libdriverlib*~
-
+3. To create packages run ~make package~ in the build directory.  You will need
+   ~makepkg~, ~dpkg~ and ~rpm-tools~ on your system to make all the packages.
 
 
 * Usage 
