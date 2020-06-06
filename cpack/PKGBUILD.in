@@ -19,11 +19,11 @@ backup=()
 options=(!strip) # disable stripping of symbols since we are installing debugging libraries
 install=
 changelog=
-source=("tiva-cmake-$pkgver-Generic.tar.gz")
+source=("tiva-cmake-$pkgver-any.tar.gz")
 noextract=()
 md5sums=('SKIP') 
 validpgpkeys=()
 
 package() {
-	cp -r "$pkgname-$pkgver-Generic/"* $pkgdir
+	cp -r "$pkgname-$pkgver-any/"* $pkgdir
 }

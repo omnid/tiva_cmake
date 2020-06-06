@@ -16,7 +16,7 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/install/share
 
 configure_file(${CMAKE_CURRENT_LIST_DIR}/cpack/PKGBUILD.in ${CMAKE_BINARY_DIR}/archlinux/PKGBUILD @ONLY)
 set(CPACK_GENERATOR "TGZ;ZIP;DEB;RPM;External")
-set(CPACK_SYSTEM_NAME "Generic")
+set(CPACK_SYSTEM_NAME "any")
 set(CPACK_PACKAGE_CONTACT "elwin@northwestern.edu")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "all")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "gcc-arm-none-eabi;libnewlib-arm-none-eabi;openocd")
