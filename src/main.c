@@ -5,7 +5,28 @@
 #include <stdbool.h>
 #include "driverlib/sysctl.h"
 #include "driverlib/gpio.h"
+#include "driverlib/timer.h"
+#include "driverlib/interrupt.h"
 #include "inc/hw_memmap.h"
+#include "inc/hw_ints.h"
+
+/// \brief interrupt for Timer0A. Toggle between blue and white
+void Timer0AISR(void)
+{
+    TimerIntClear(TIMER0_BASE, TIMER_A);
+    static bool blue = false;
+    if(!blue)
+    {
+        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2 | GPIO_PIN_3, GPIO_PIN_2);
+        blue = true;
+    }
+    else
+    {
+        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2 | GPIO_PIN_3, GPIO_PIN_3);
+        blue = false;
+    }
+}
+
 int main(void)
 {
     // Setup clock frequency to 80MHz
@@ -23,13 +44,28 @@ int main(void)
     {
         ; // do nothing, wait for port to be ready
     }
-
     // set led pins as outputs
     GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 
-    GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2 | GPIO_PIN_2, GPIO_PIN_2 | GPIO_PIN_2);
+    // Enable the timer0
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
+    while(!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER0))
+    {
+        ; // do nothing wait for the timer module to be ready
+    }
 
-    while(true)
+    // configure timer0 to run at 1Hz
+    TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC); 
+
+    // clock frequency is 80Mhz/freq (80000000/1)
+    TimerLoadSet(TIMER0_BASE, TIMER_A, 80000000);
+
+    // Enable the interrupt on the timer and the nvic
+    TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+    IntEnable(INT_TIMER0A);
+    IntMasterEnable();
+
+    for(;;)
     {
         ; // loop forever
     }
