@@ -1,4 +1,16 @@
 #+TITLE: CMake Cross-compile for Tiva Microcontrollers
+# From https://github.com/snosov1/toc-org, run toc org-insert-toc
+* Table of Contents :TOC_1:
+- [[#introduction][Introduction]]
+- [[#template-mode-quickstart-no-installation][Template Mode (Quickstart, No Installation)]]
+- [[#installation][Installation]]
+- [[#usage][Usage]]
+- [[#cmake-settings][CMake Settings]]
+- [[#tivaware-driverlib][TivaWare Driverlib]]
+- [[#startup-library][Startup Library]]
+- [[#development-tools][Development Tools]]
+- [[#microcontroller-support][Microcontroller Support]]
+
 * Introduction
 A CMake toolchain focused on Texas Instruments (TI) Tiva-C microcontrollers (although likely modifiable to other arm processors).  
 It enables the use of ~arm-none-eabi-gcc~ or TI's Code Generation Tools (~ti-cgt~) and provides a method to write your
@@ -81,7 +93,8 @@ The project source code resides in ~src/~, which is the sole location you should
 
 ** From Source
 1. Install [[#development-tools][Development Tools]]
-2. #+BEGIN_SRC bash
+2. 
+   #+BEGIN_SRC bash
    git clone git@github.com:m-elwin/tiva-cmake
    mkdir tiva-cmake/build
    cd tiva-cmake/build
