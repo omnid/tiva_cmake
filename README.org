@@ -53,7 +53,7 @@ The project source code resides in ~src/~, which is the sole location you should
 ** Ubuntu/Debian
 1. Download and install the latest package, which will also bring in the dependencies
    #+BEGIN_SRC bash
-   curl -o tiva-cmake.deb [[https://github.url.comingsoon]]
+   curl -o tiva-cmake.deb [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.deb]]
    sudo apt install ./tiva-cmake.deb
    #+END_SRC 
 2. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[#development-tools][Development Tools]] 
@@ -61,7 +61,7 @@ The project source code resides in ~src/~, which is the sole location you should
 ** Arch Linux
 1. Download and install the latest, which will also bring in the dependencies
    #+BEGIN_SRC bash
-   curl -o tiva-cmake.pkg.tar.zst [[https://github.url.comingsoon]]
+   curl -o tiva-cmake.pkg.tar.xz [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-1-any.pkg.tar.xz]]
    sudo pacman -U tiva-cmake
    #+END_SRC 
 2. Optional: install the ~arm-none-eabi-gdb~ package to use a debugger. 
@@ -71,10 +71,13 @@ The project source code resides in ~src/~, which is the sole location you should
 
 ** Binary (All platforms)
 1. Install [[#development-tools][Development Tools]] 
-2. Download the [[tiva-cmake.zip][zipfile]] 
-3. Extract to a place where ~cmake~ ~find_package~ looks
-   - Windows this could be ~C:\Program Files~ (Not tested)
-   - macOS this could be ~/usr/local/share~ (Not tested)
+2. Download the [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.zip][zipfile]] or the [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.tar.gz][tarball]]. 
+3. Extract the contents.  The top level directory of is ~tiva-cmake-x.y.z-any~
+3. Copy the contents of ~tiva-cmake-x.y.z-any~ to somewhere it can be found by ~CMake~
+   - Linux: ~/usr/local/~ or ~/usr/~ (e.g., ~sudo cp -r tiva-cmake-x.y.z-any/* /usr/local~)
+   - Windows this could be ~C:\Program Files~ 
+   - macOS this could be ~/usr/local/share~ 
+4. Alternatively you can set ~CMAKE_PREFIX_PATH~ to the ~tiva-cmake-x.y.z-any~ when running cmake
 
 ** From Source
 1. Install [[#development-tools][Development Tools]]
@@ -221,11 +224,10 @@ To use ~gcc~ you need the ~arm-none-eabi~ toolchain with the ~newlib~ C library 
 either ~multiarch gdb~ or ~arm-none-eabi-gdb~. Code composer studio comes bundled with ~gcc~, but it is usally an older version.
 *** Ubuntu
 The necessary files can be installed from ~apt~ (including ~gdb~).
-~sudo apt install  gcc-arm-none-eabi libnewlib-arm-none-eabi gdb-multiarch~
+- ~sudo apt install  gcc-arm-none-eabi libnewlib-arm-none-eabi gdb-multiarch~
 *** Arch Linux
 The necessary files can be installed via ~pacman~ (including ~gdb~).
-~sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib arm-none-eabi-gdb~
-
+- ~sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib arm-none-eabi-gdb~
 *** Other
 If the toolchain is unavailable in your package manager it can be [[https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads][downloaded directly from arm]]
 - On Linux, move the tarball you downloaded either to ~/opt~ or to ~/home/$(whoami)~ and upack it with ~tar xf~.
@@ -234,12 +236,13 @@ If the toolchain is unavailable in your package manager it can be [[https://deve
 ** TI Tools (Without Code Composer Studio)
 You can install TI's compiler and flash tool indepedently of Code Composer Studio 
 1. [[http://www.ti.com/tool/ARM-CGT][ARM-CGT (TI's arm compiler)]]
-   On Linux, install either to ~/opt~ or ~/home/$(whoami)~, keeping the default subdirectory name ~ti-cgt-arm_...etc...~.
-2. [[http://www.ti.com/tool/UNIFLASH][UNIFLASH]]
-   Install to either ~/opt~ or ~/home/$whoami~
+   - On Linux, install either to ~/opt~ or ~/home/$(whoami)~, keeping the default subdirectory name ~ti-cgt-arm_...etc...~.
+   - On ArchLinux, this is available as ~ti-cgt-arm~ in the AUR.
+2. [[http://www.ti.com/tool/UNIFLASH][UNIFLASH]] comes with Code Composer Studio.  The standalone version does not support the command-line interface that we use.
    - ~openocd~ is better supported than the independently installed uniflash tool.
 ** Flash Tools
-You can use uniflash (which comes with Code Composer Studio) or [[https://openocd.org][openocd]] (which may be available via your package manager).
+If not downloading Code Composer Studio, [[https://openocd.org][openocd]] is recommended and may be available via your package manager
+
 * Microcontroller Support
 :PROPERTIES:
 :CUSTOM_ID: microcontroller-support
