@@ -5,13 +5,13 @@ It enables the use of ~arm-none-eabi-gcc~ or TI's Code Generation Tools (~ti-cgt
 code to flash memory using the in-circuit debugger (ICD) on TI's LaunchPad development boards. 
 For convenience, it also comes bundled with ~TivaWare~ ~driverlib~.
 
-You can use ~tiva-cmake~ as a [[#TemplateMode][template]] or [[*Installation][install]] it and use it as a dependency. 
+You can use ~tiva-cmake~ as a [[#TemplateMode][template]] or [[#Installation][install]] it and use it as a dependency. 
 
 * Template Mode (Quickstart, No Installation)
 :PROPERTIES:
 :CUSTOM_ID: TemplateMode
 :END:
-The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[*Development Tools][Development Tools]] installed.
+0. The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[#DevelopmentTools][Development Tools]] installed.
 
 1. Clone this repository:
    #+BEGIN_SRC
@@ -41,19 +41,22 @@ The project source code resides in ~src/~, which is the sole location you should
   - The toolchain for ~ti-cgt~ is ~ti-cgt-arm-toolchain.cmake~
   - ~Preload.cmake~ has logic such that the three toolchain files above are automatically found so you don't need to specify the path to them.
   - To change toolchain files you must delete the contents of the build directory and re-generate the build system
-- See [[*Startup Library][Startup Library]] for information about how to implement interrupt service routines.
-- To change the microcontroller model add ~-DCMAKE_SYSTEM_PROCESSOR=TM4Cxxxxx~ or set it in ~src/PreLoad.cmake~. (See [[*Microcontroller Support][Microcontroller Support]]).
-- See [[*CMake Settings][CMake Settings]] for details and other options.   
+- See [[StartupLibrary][Startup Library]] for information about how to implement interrupt service routines.
+- To change the microcontroller model add ~-DCMAKE_SYSTEM_PROCESSOR=TM4Cxxxxx~ or set it in ~src/PreLoad.cmake~. (See [[MicrocontrollerSupport][Microcontroller Support]]).
+- See [[CMakeSettings][CMake Settings]] for details and other options.   
 
 
 * Installation
+:PROPERTIES:
+:CUSTOM_ID: Installation
+:END:
 ** Ubuntu/Debian
 1. Download and install the latest package, which will also bring in the dependencies
    #+BEGIN_SRC bash
    curl -o tiva-cmake.deb [[https://github.url.comingsoon]]
    sudo apt install ./tiva-cmake.deb
    #+END_SRC 
-2. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[*Development Tools][Development Tools]] 
+2. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[#DevelopmentTools][Development Tools]] 
 
 ** Arch Linux
 1. Download and install the latest, which will also bring in the dependencies
@@ -62,18 +65,18 @@ The project source code resides in ~src/~, which is the sole location you should
    sudo pacman -U tiva-cmake
    #+END_SRC 
 2. Optional: install the ~arm-none-eabi-gdb~ to use a debugger. 
-3. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[*Development Tools][Development Tools]]
+3. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[#DevelopmentTools][Development Tools]]
 4. ~tiva-cmake/PKGBUILD~ contains a ~PKGBUILD~ for the binary package
 
 ** Binary (All platforms)
-1. Install [[*Development Tools][Development Tools]] 
+1. Install [[#DevelopmentTools][Development Tools]] 
 2. Download the [[tiva-cmake.zip][zipfile]] 
 3. Extract to a place where ~cmake~ ~find_package~ looks
    - Windows this could be ~C:\Program Files~ (Not tested)
    - macOS this could be ~/usr/local/share~ (Not tested)
 
 ** From Source
-1. Install [[*Development Tools][Development Tools]]
+1. Install [[#DevelopmentTools][Development Tools]]
 2. #+BEGIN_SRC bash
    git clone git@github.com:m-elwin/tiva-cmake
    mkdir tiva-cmake/build
@@ -96,7 +99,7 @@ The project source code resides in ~src/~, which is the sole location you should
 - Use ~cmake~ as usual, except specify ~-DCMAKE_TOOLCHAIN_FILE=tiva-cmake-toolchain.cmake~ when
   configuring the project for the first time. If you set this as a cache variable in ~PreLoad.cmake~ you
   can enable a default toolchain.
-- See [[*CMake Settings][CMake Settings]] for other options
+- See [[CMakeSettings][CMake Settings]] for other options
 
 ** Flashing the Firmware
 Every executable target you create (via ~add_executable(target_name ...)~ in ~cmake~ adds methods for flashing the firmware using the LaunchPad's In-Circuit Debugger.
@@ -108,14 +111,17 @@ Note: ~cmake --build build~ just calls your build tool (e.g. ~make~) in the buil
 For example, if using ~Makefiles~ you can can use ~make target_name.write~ from the ~build~ directory to compile and flash the program
 
 ** Debugging with GDB
-- You need ~arm-none-eabi-gdb~ or ~gdb-multiarch~ and ~openocd~ (see [[*Development Tools][Development Tools]]).
-- You also need [[https://openocd.org][OpenOCD]] (See [[*Development Tools][Development Tools]]).
+- You need ~arm-none-eabi-gdb~ or ~gdb-multiarch~ and ~openocd~ (see [[#DevelopmentTools][Development Tools]]).
+- You also need [[https://openocd.org][OpenOCD]] (See [[#DevelopmentTools][Development Tools]]).
 - For best results build your code with ~CMAKE_BUILD_TYPE=Debug~ (see [[*Build Types][Build Types]])
-  - You can also debug [[*TivaWare Driverlib][TivaWare]] and [[*Startup Library][Startup Library]]
+  - You can also debug [[*TivaWare Driverlib][TivaWare]] and [[StartupLibrary][Startup Library]]
 - ~make target_name.attach~ will attach to an already running debug session with gdb
 - ~make target_name.gdb~ will flash the firmware using openocd and load the program into the debugger
 
 * CMake Settings
+:PROPERTIES:
+:CUSTOM_ID: CMakeSettings
+:END:
 Most ~cmake~ settings can be modifed using the ~cmake-gui~ (where the toolchain can also be selected when first configuring the project). 
 
 ** Selecting the toolchain
@@ -172,6 +178,9 @@ By default, the project links against the release version of ~driverlib~. If you
 set ~DRIVERLIB_DEBUG=ON~.
 
 * Startup Library
+:PROPERTIES:
+:CUSTOM_ID: StartupLibrary
+:END:
 The startup library contains code that runs before ~main()~ to initialize the microcontroller,
 the linker scripts, and the interrupt vector table.  This code differs between microcontroller models
 and is stored in ~startup/<model>~.  
@@ -199,6 +208,9 @@ You can make basic changes to the stack and heap sizes using options for the com
 See compiler documentation for details.
 
 * Development Tools
+:PROPERTIES:
+:CUSTOM_ID: DevelopmentTools
+:END:
 Installing [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.
 However, Code Composer Studio is a large program and it may be desirable to obtain your tools elsewhere.
 
@@ -227,6 +239,9 @@ You can install TI's compiler and flash tool indepedently of Code Composer Studi
 ** Flash Tools
 You can use uniflash (which comes with Code Composer Studio) or [[https://openocd.org][openocd]] (which may be available via your package manager).
 * Microcontroller Support
+:PROPERTIES:
+:CUSTOM_ID: MicrocontrollerSupport
+:END:
 The code has only been tested with the ~EK-TM4C123GXL~ LaunchPad. Therefore some options are specific to the ~TM4C123GH6PM~ microcontroller
 and must be modified for other microcontrollers (issues/pull requests welcome)
 
@@ -237,7 +252,7 @@ To support another microcontrollers a few additions are needed
   - Good defaults for compiler options can be obtained from Code Composer studio
     either by viewing the compile options in a project or reading the provided [[*Automatic Generation of Startup Library][targetDB files]].
 - Startup code is stored in ~lib/startup/~
-  - The interrupt vector table (see [[*Startup Library][Startup Library]]) likely requires adjustment and is stored in ~<model>_isr.c~
+  - The interrupt vector table (see [[StartupLibrary][Startup Library]]) likely requires adjustment and is stored in ~<model>_isr.c~
 - Linker scripts for ~gcc~ are stored in ~lib/startup/<model>-GCC.lds~  and ~lib/startup/<model>-TI.cmd~ 
   - Memory locations likely differ between microcontroller models and so the linker scripts should be adjusted.
 - The startup code and linker scripts incorporated via ~target_link_libraries(<my_target> ${STARTUP_LIBRARIES})~. You can
