@@ -26,7 +26,7 @@ The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and
    cmake --build src/build --target led_example.write
    #+END_SRC
 
-When successful, you should see LED on the ~EK-TM4C123GXL~ cycle between red, white, and blue.
+When successful, you should see LED on the ~EK-TM4C123GXL~ cycle between blue and white.
 
 The project source code resides in ~src/~, which is the sole location you should need to edit files in.  
 - You can run ~cmake~ as you normally would from within ~src~ once the ~lib/~ has been built.
@@ -60,7 +60,7 @@ The project source code resides in ~src/~, which is the sole location you should
    #+END_SRC 
 2. Optional: install the ~arm-none-eabi-gdb~ to use a debugger. 
 3. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[*Development Tools][Development Tools]]
-4. The ~PKGBUILD~ used to create the package is in the ~tiva-cmake~ directory
+4. ~tiva-cmake/PKGBUILD~ contains a ~PKGBUILD~ for the binary package
 
 ** Binary (All platforms)
 1. Install [[*Development Tools][Development Tools]] 
