@@ -14,10 +14,10 @@ endif()
 # Create an interface library so we can add compile definitions to it when
 # a program links against it. This is important so we can set some compiler
 # definitions that are specific to a processor when a project links against
-# this library
+# this library. Thus you want to use TivaCMake::driverlib not TivaWare::Driverlib
 add_library(driverlib INTERFACE)
 add_library(TivaCMake::driverlib ALIAS driverlib)
-target_link_libraries(driverlib INTERFACE TivaCMake::driverlib_all)
+target_link_libraries(driverlib INTERFACE TivaWare_internal::driverlib)
 target_compile_definitions(driverlib INTERFACE PART_${CMAKE_SYSTEM_PROCESSOR})
 
 # You need to set the Silicon Revision for the actual part you are using in order to

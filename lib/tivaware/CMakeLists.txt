@@ -11,8 +11,8 @@ set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/TivaWare)
 # more danger in missing a new file that is added whenever driverlib is updated
 file(GLOB DRIVERLIB_SOURCE driverlib/*.c)
 
-add_library(driverlib_all ${DRIVERLIB_SOURCE})
-target_compile_definitions(driverlib_all PUBLIC
+add_library(driverlib ${DRIVERLIB_SOURCE})
+target_compile_definitions(driverlib PUBLIC
   $<$<C_COMPILER_ID:TI>:ccs>
   $<$<C_COMPILER_ID:GNU>:gcc>
   )
@@ -21,7 +21,7 @@ set_source_files_properties(
   "driverlib/emac.c" PROPERTIES COMPILE_FLAGS $<$<C_COMPILER_ID:GNU>:-Wno-address-of-packed-member>)
 
 
-target_include_directories(driverlib_all PUBLIC
+target_include_directories(driverlib PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   $<INSTALL_INTERFACE:${INSTALL_ROOT}>)
 
@@ -32,14 +32,14 @@ target_include_directories(driverlib_all PUBLIC
 # We duplicate the install command for each configuration to make this file compatible
 # with multi-configuration generators (such as visual studio)
 # The Targets are also labeled by build type
-install(TARGETS driverlib_all
+install(TARGETS driverlib
   EXPORT TivaWareTargets_Debug
   CONFIGURATIONS Debug
   LIBRARY DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}
   ARCHIVE DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}
   )
 
-install(TARGETS driverlib_all
+install(TARGETS driverlib
   EXPORT TivaWareTargets_Release
   CONFIGURATIONS Release
   LIBRARY DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}
@@ -53,13 +53,13 @@ install(DIRECTORY inc driverlib
   )
 
 install(EXPORT TivaWareTargets_Debug
-  NAMESPACE TivaCMake::
+  NAMESPACE TivaWare_internal::
   CONFIGURATIONS Debug
   DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}
   )
 
 install(EXPORT TivaWareTargets_Release
-  NAMESPACE TivaCMake::
+  NAMESPACE TivaWare_internal::
   CONFIGURATIONS Release
   DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}
   )

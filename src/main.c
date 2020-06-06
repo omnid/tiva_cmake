@@ -17,12 +17,12 @@ void Timer0AISR(void)
     static bool blue = false;
     if(!blue)
     {
-        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2 | GPIO_PIN_3, GPIO_PIN_2);
+        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, GPIO_PIN_2);
         blue = true;
     }
     else
     {
-        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2 | GPIO_PIN_3, GPIO_PIN_3);
+        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
         blue = false;
     }
 }
@@ -60,9 +60,16 @@ int main(void)
     // clock frequency is 80Mhz/freq (80000000/1)
     TimerLoadSet(TIMER0_BASE, TIMER_A, 80000000);
 
-    // Enable the interrupt on the timer and the nvic
+    // Enable the interrupt on the timer
     TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+
+    // Enable timer interrupt on the nvic
     IntEnable(INT_TIMER0A);
+
+    // Enable the timer itself
+    TimerEnable(TIMER0_BASE, TIMER_A);
+
+    // enable interrupts
     IntMasterEnable();
 
     for(;;)
