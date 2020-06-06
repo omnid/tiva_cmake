@@ -1,7 +1,7 @@
 # Build tivaware and the startup library for each combination of compiler, processor and release mode
 # Also install the cmake files
 cmake_minimum_required(VERSION 3.9)
-project(tiva-cmake NONE)
+project(tiva-cmake-libs NONE)
 
 # List of the supported processor models. Startup code for each model listed here will be generated
 list(APPEND processors TM4C123GH6PM)  
@@ -78,5 +78,5 @@ ExternalProject_Add(
   tiva-cmake
   SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../cmake
     CMAKE_ARGS
-    -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
+   -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
     )
