@@ -1,8 +1,9 @@
 #+TITLE: CMake Cross-compile for Tiva Microcontrollers
-# From https://github.com/snosov1/toc-org, run toc org-insert-toc
+# From https://github.com/snosov1/toc-org, run toc-org-insert-toc.
+# The tags need to be changed to match the custom ids
 * Table of Contents :TOC_1:
 - [[#introduction][Introduction]]
-- [[#template-mode-quickstart-no-installation][Template Mode (Quickstart, No Installation)]]
+- [[#template-mode][Template Mode (Quickstart, No Installation)]]
 - [[#installation][Installation]]
 - [[#usage][How To Use]]
 - [[#cmake-settings][CMake Settings]]
@@ -12,6 +13,9 @@
 - [[#microcontroller-support][Microcontroller Support]]
 
 * Introduction
+:PROPERTIES:
+:CUSTOM_ID: introduction
+:END:
 A CMake toolchain focused on Texas Instruments (TI) Tiva-C microcontrollers (although likely modifiable to other arm processors).  
 It enables the use of ~arm-none-eabi-gcc~ or TI's Code Generation Tools (~ti-cgt~) and provides a method to write your
 code to flash memory using the in-circuit debugger (ICD) on TI's LaunchPad development boards. 
@@ -62,7 +66,7 @@ The project source code resides in ~src/~, which is the sole location you should
 
 * Installation
 :PROPERTIES:
-:CUSTOM_ID: Installation
+:CUSTOM_ID: installation
 :END:
 ** Ubuntu/Debian
 1. Download and install the [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.deb][latest package]], which will also bring in the dependencies
@@ -186,6 +190,9 @@ setting ~TivaCMake_AddExecutable~ to ~OFF~. You can then add the writes on
 a per-executable basis using ~tiva_cmake_add~ and providing the executable target name.
 
 * TivaWare Driverlib
+:PROPERTIES:
+:CUSTOM_ID: tivaware-driverlib
+:END:
 TI has released TivaWare ~driverlib~ under a BSD license and this project redistributes it under that license in the ~driverlib~ directory.
 By default, ~tiva-cmake~ uses it's own bundled version of ~driverlib~. To use driverlib:
 
