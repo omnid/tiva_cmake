@@ -61,8 +61,13 @@ if(NOT CodeComposerStudio_FOUND)
   get_filename_component(CodeComposerStudio_VERSION ${CodeComposerStudio_ARTIFACT} NAME )
   unset(CodeComposerStudio_ARTIFACT CACHE)
 
+  if(CMAKE_HOST_NAME STREQUAL "Windows")
+    set(uniflash_name "uniflash.bat")
+  else()
+    set(uniflash_name "uniflash.sh")
+  endif()
   find_program(CodeComposerStudio_UniFlash_EXECUTABLE
-    uniflash.sh
+    ${uniflash_name}
     PATHS ${CodeComposerStudio_ROOT_DIR}/ccs/ccs_base/scripting/examples/uniflash/cmdLine
     NO_DEFAULT_PATH)
   

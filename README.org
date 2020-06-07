@@ -24,27 +24,28 @@ You can use ~tiva-cmake~ as a [[#template-mode][template]] or [[#Installation][i
 :CUSTOM_ID: template-mode
 :END:
 0. The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[#development-tools][Development Tools]] installed (git, make, cmake, arm compiler).
-   
 1. Clone this repository:
    #+BEGIN_SRC
    git clone https://github.com/m-elwin/tiva-cmake my_project
    cd my_project
    #+END_SRC
-2. Generate and build the libraries
+2. Generate and build the libraries (only need to run once))
    #+BEGIN_SRC 
-   cmake -B lib/build lib/
+   cmake -G"Unix Makefiles" -B lib/build lib/
    cmake --build lib/build
    #+END_SRC 
 3. Compile the template project and load it onto the microcontroller
    #+BEGIN_SRC 
-   cmake -B src/build src/
+   cmake -B"Unix Makefiles" src/build src/
    cmake --build src/build --target led_example.write
    #+END_SRC
 
 When successful, you should see LED on the ~EK-TM4C123GXL~ cycle between blue and white.
 
+
 The project source code resides in ~src/~, which is the sole location you should need to edit files in.  
 - You can run ~cmake~ as you normally would from within ~src~ once the ~lib/~ has been built.
+  - ~cmake --build src/build --target led_example.write~ is equivalent to calling ~make led_example.write~ from within the ~src/build~ directory (when Unix Makefiles are used).
 - ~src/PreLoad.cmake~ sets the default toolchain file. 
   - You can also specify a toolchain file by setting ~CMAKE_TOOLCHAIN_FILE~ when you first run ~cmake~:
     ~cmake -B src/build src/ -DCMAKE_TOOLCHAIN_FILE=<file>~
@@ -53,6 +54,7 @@ The project source code resides in ~src/~, which is the sole location you should
   - The toolchain for ~ti-cgt~ is ~ti-cgt-arm-toolchain.cmake~
   - ~Preload.cmake~ has logic such that the three toolchain files above are automatically found so you don't need to specify the path to them.
   - To change toolchain files you must delete the contents of the build directory and re-generate the build system
+- Only Makefile generators are supported.  On non-Windows platforms, you can omit the ~-G"Unix Makefiles"~ because that is the default on those platforms.
 - See [[#startup-library][Startup Library]] for information about how to implement interrupt service routines.
 - To change the microcontroller model add ~-DCMAKE_SYSTEM_PROCESSOR=TM4Cxxxxx~ or set it in ~src/PreLoad.cmake~. (See [[#microcontroller-support][Microcontroller Support]]).
 - See [[#cmake-settings][CMake Settings]] for details and other options.   
@@ -234,16 +236,9 @@ See compiler documentation for details.
 2. [[https://git-scm.com][Git]] 
 3. A cross compiler.  [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.
    - However, Code Composer Studio is a large program and it may be desirable to obtain your tools elsewhere (see below).
-4. Make
-*** Windows Users
-- You need to explicitly specify the generator as Unix Makefiles.  So everywhere you see a ~cmake -B <otherstuff>~, insert ~-G"Unix Makefiles"~ as the first option.
+4. Make. You can install it separately or use the version that comes with Code Composer Studio;
+   just add ~<ccstudio_install_dir>/ccs/utils/bin/~ to your path.
 
-
-You can install Windows versions of
-1. Install [[https://www.msys2.org][MSYS2]]
-2. ~pacman -Sy~
-3. ~pacman -S make cmake git~
-- You can now run all commands from within MSYS2.  The ~C:~ drive is located at ~/c~.
 ** GNU GCC Toolchain
 To use ~gcc~ you need the ~arm-none-eabi~ toolchain with the ~newlib~ C library and optionally (for debugging)
 either ~multiarch gdb~ or ~arm-none-eabi-gdb~. Code composer studio comes bundled with ~gcc~, but it is usally an older version.
