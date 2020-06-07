@@ -24,7 +24,7 @@ You can use ~tiva-cmake~ as a [[#template-mode][template]] or [[#Installation][i
 :CUSTOM_ID: template-mode
 :END:
 0. The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[#development-tools][Development Tools]] installed (git, make, cmake, arm compiler).
-
+   
 1. Clone this repository:
    #+BEGIN_SRC
    git clone https://github.com/m-elwin/tiva-cmake my_project
@@ -231,15 +231,19 @@ See compiler documentation for details.
 :END:
 ** Prerequisites
 1. [[https://cmake.org/download][CMake]] 
-2. [[https://git-scm.com][Git]]
-3. A buildtool (such as make or ninja)
-4. A cross compiler.  [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.
+2. [[https://git-scm.com][Git]] 
+3. A cross compiler.  [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.
    - However, Code Composer Studio is a large program and it may be desirable to obtain your tools elsewhere (see below).
+4. Make
 *** Windows Users
-Here is the recommended installation:
+- You need to explicitly specify the generator as Unix Makefiles.  So everywhere you see a ~cmake -B <otherstuff>~, insert ~-G"Unix Makefiles"~ as the first option.
+
+
+You can install Windows versions of
 1. Install [[https://www.msys2.org][MSYS2]]
-2. MSYS2 uses the ~pacman~ package manager from Arch Linux, so you can proceed to follow the Arch Linux installation instructions from
-   within MSYS2
+2. ~pacman -Sy~
+3. ~pacman -S make cmake git~
+- You can now run all commands from within MSYS2.  The ~C:~ drive is located at ~/c~.
 ** GNU GCC Toolchain
 To use ~gcc~ you need the ~arm-none-eabi~ toolchain with the ~newlib~ C library and optionally (for debugging)
 either ~multiarch gdb~ or ~arm-none-eabi-gdb~. Code composer studio comes bundled with ~gcc~, but it is usally an older version.
