@@ -1,9 +1,9 @@
 #+TITLE: CMake Cross-compile for Tiva Microcontrollers
 # From https://github.com/snosov1/toc-org, run toc-org-insert-toc.
-# The tags need to be changed to match the custom ids
+# Be sure to name custom ids as all lowercase with space to dash
 * Table of Contents :TOC_1:
 - [[#introduction][Introduction]]
-- [[#template-mode][Template Mode (Quickstart, No Installation)]]
+- [[#template-mode-quickstart-no-installation][Template Mode (Quickstart, No Installation)]]
 - [[#installation][Installation]]
 - [[#usage][How To Use]]
 - [[#cmake-settings][CMake Settings]]
@@ -21,11 +21,11 @@ It enables the use of ~arm-none-eabi-gcc~ or TI's Code Generation Tools (~ti-cgt
 code to flash memory using the in-circuit debugger (ICD) on TI's LaunchPad development boards. 
 For convenience, it also comes bundled with ~TivaWare~ ~driverlib~.
 
-You can use ~tiva-cmake~ as a [[#template-mode][template]] or [[#Installation][install]] it and use it as a dependency. 
+You can use ~tiva-cmake~ as a [[#template-mode-quickstart-no-installation][template]] or [[#Installation][install]] it and use it as a dependency. 
 
 * Template Mode (Quickstart, No Installation)
 :PROPERTIES:
-:CUSTOM_ID: template-mode
+:CUSTOM_ID: template-mode-quickstart-no-installation
 :END:
 0. The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[#development-tools][Development Tools]] installed (git, make, cmake, arm compiler).
 1. Clone this repository:
