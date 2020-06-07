@@ -14,6 +14,11 @@ add_subdirectory(lib)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/install/share
   DESTINATION ".")
 
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src
+  DESTINATION share/TivaCMake
+  PATTERN build EXCLUDE
+  )
+
 configure_file(${CMAKE_CURRENT_LIST_DIR}/cpack/PKGBUILD.in ${CMAKE_BINARY_DIR}/archlinux/PKGBUILD @ONLY)
 set(CPACK_GENERATOR "TGZ;ZIP;DEB;RPM;External")
 set(CPACK_SYSTEM_NAME "any")

@@ -4,7 +4,7 @@
 - [[#introduction][Introduction]]
 - [[#template-mode-quickstart-no-installation][Template Mode (Quickstart, No Installation)]]
 - [[#installation][Installation]]
-- [[#usage][Usage]]
+- [[#usage][How To Use]]
 - [[#cmake-settings][CMake Settings]]
 - [[#tivaware-driverlib][TivaWare Driverlib]]
 - [[#startup-library][Startup Library]]
@@ -36,7 +36,7 @@ You can use ~tiva-cmake~ as a [[#template-mode][template]] or [[#Installation][i
    #+END_SRC 
 3. Compile the template project and load it onto the microcontroller
    #+BEGIN_SRC 
-   cmake -B"Unix Makefiles" src/build src/
+   cmake -G"Unix Makefiles" -B src/build src/
    cmake --build src/build --target led_example.write
    #+END_SRC
 
@@ -112,13 +112,16 @@ The project source code resides in ~src/~, which is the sole location you should
    ~makepkg~, ~dpkg~ and ~rpm-tools~ on your system to make all the packages.
 
 
-* Usage 
+* How To Use 
+:PROPERTIES:
+:CUSTOM_ID: usage
+:END:
 ** New Project (Using an installed copy ~tiva-cmake~)
-- Use ~cmake -P tiva-template > CMakeLists.txt~ to create your project's ~CMakeLists.txt~
+- Copy the ~tiva-cmake/src~ directory to a new location
+  - Upon installation, this directory is installed to ~<prefix>/TivaCMake/src~
+  - For example, on Linux: ~cp -R /usr/share/TivaCMake/src my_project~
 - Edit ~CMakeLists.txt~ to add your source code and specify your libraries and executables.
-- Use ~cmake~ as usual, except specify ~-DCMAKE_TOOLCHAIN_FILE=tiva-cmake-toolchain.cmake~ when
-  configuring the project for the first time. If you set this as a cache variable in ~PreLoad.cmake~ you
-  can enable a default toolchain.
+- Use ~cmake~ as usual
 - See [[#cmake-settings][CMake Settings]] for other options
 
 ** Flashing the Firmware

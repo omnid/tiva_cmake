@@ -25,5 +25,6 @@ md5sums=('SKIP')
 validpgpkeys=()
 
 package() {
-	cp -r "$pkgname-$pkgver-any/"* $pkgdir
+        mkdir $pkgdir/usr
+	cp -r "$pkgname-$pkgver-any/"* $pkgdir/usr
 }
