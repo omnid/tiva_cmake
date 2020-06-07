@@ -177,12 +177,11 @@ If the compiler you specify is compatible with ~gcc~ you should use ~tiva-gcc-to
   - This is likely the name of a ~ccxml~ file in ~startup~ or one you generated yourself.
 - The ~TM4C123_REVISION~ and ~TM4C129_REVISION~ are used to set the silicon revision when using TivaWare. See ~tivaware/TivaWareConfig.cmake~ for details.
 
-** Build Types
-- CMake defaults to ~CMAKE_BUILD_TYPE=""~ which does not set any compiler flags (other than those necessary for cross compiling)
+** Build Types and Compiler Settings
+- CMake defaults to ~CMAKE_BUILD_TYPE = ""~ which does not set any compiler flags (other than those necessary for cross compiling)
   - This mode is useful if you want complete control over flags
 - For convenience, The template ~CMakeLists.txt~ file defaults the build type to ~Debug~.
-  - Debug-level optimizations ~-Og~ are turned on for ~gcc~, as the [[https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html][gcc manual]] recommends this debug level.  
-  - The blank (~""~) build type does not specify an optimization level.
+- By default, the compiler uses C99 mode with enhanced warning levels
 ** Executable Adding  
 By default ~TivaCMake~ overrides the built in ~add_executable~ with a macro that
 sets up the targets enabling write to flash.  You can disable this behavior by
