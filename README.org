@@ -23,7 +23,7 @@ You can use ~tiva-cmake~ as a [[#template-mode][template]] or [[#Installation][i
 :PROPERTIES:
 :CUSTOM_ID: template-mode
 :END:
-0. The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[#development-tools][Development Tools]] installed.
+0. The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[#development-tools][Development Tools]] installed (git, make, cmake, arm compiler).
 
 1. Clone this repository:
    #+BEGIN_SRC
@@ -63,17 +63,17 @@ The project source code resides in ~src/~, which is the sole location you should
 :CUSTOM_ID: Installation
 :END:
 ** Ubuntu/Debian
-1. Download and install the latest package, which will also bring in the dependencies
+1. Download and install the [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.deb][latest package]], which will also bring in the dependencies
    #+BEGIN_SRC bash
-   curl -o tiva-cmake.deb [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.deb]]
+   curl -o tiva-cmake.deb https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.deb
    sudo apt install ./tiva-cmake.deb
    #+END_SRC 
 2. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[#development-tools][Development Tools]] 
 
 ** Arch Linux
-1. Download and install the latest, which will also bring in the dependencies
+1. Download and install the [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-1-any.pkg.tar.xz][latest package]], which will also bring in the dependencies
    #+BEGIN_SRC bash
-   curl -o tiva-cmake.pkg.tar.xz [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-1-any.pkg.tar.xz]]
+   curl -o tiva-cmake.pkg.tar.xz https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-1-any.pkg.tar.xz
    sudo pacman -U tiva-cmake
    #+END_SRC 
 2. Optional: install the ~arm-none-eabi-gdb~ package to use a debugger. 
@@ -229,9 +229,17 @@ See compiler documentation for details.
 :PROPERTIES:
 :CUSTOM_ID: development-tools
 :END:
-Installing [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.
-However, Code Composer Studio is a large program and it may be desirable to obtain your tools elsewhere.
-
+** Prerequisites
+1. [[https://cmake.org/download][CMake]] 
+2. [[https://git-scm.com][Git]]
+3. A buildtool (such as make or ninja)
+4. A cross compiler.  [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.
+   - However, Code Composer Studio is a large program and it may be desirable to obtain your tools elsewhere (see below).
+*** Windows Users
+Here is the recommended installation:
+1. Install [[https://www.msys2.org][MSYS2]]
+2. MSYS2 uses the ~pacman~ package manager from Arch Linux, so you can proceed to follow the Arch Linux installation instructions from
+   within MSYS2
 ** GNU GCC Toolchain
 To use ~gcc~ you need the ~arm-none-eabi~ toolchain with the ~newlib~ C library and optionally (for debugging)
 either ~multiarch gdb~ or ~arm-none-eabi-gdb~. Code composer studio comes bundled with ~gcc~, but it is usally an older version.
@@ -251,10 +259,8 @@ You can install TI's compiler and flash tool indepedently of Code Composer Studi
 1. [[http://www.ti.com/tool/ARM-CGT][ARM-CGT (TI's arm compiler)]]
    - On Linux, install either to ~/opt~ or ~/home/$(whoami)~, keeping the default subdirectory name ~ti-cgt-arm_...etc...~.
    - On ArchLinux, this is available as ~ti-cgt-arm~ in the AUR.
-2. [[http://www.ti.com/tool/UNIFLASH][UNIFLASH]] comes with Code Composer Studio.  The standalone version does not support the command-line interface that we use.
-   - ~openocd~ is better supported than the independently installed uniflash tool.
 ** Flash Tools
-If not downloading Code Composer Studio, [[https://openocd.org][openocd]] is recommended and may be available via your package manager
+If not downloading Code Composer Studio, [[https://openocd.org][openocd]] is recommended and may be available via your package manager.
 
 * Microcontroller Support
 :PROPERTIES:
