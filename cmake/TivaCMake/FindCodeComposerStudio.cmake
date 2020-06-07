@@ -61,7 +61,7 @@ if(NOT CodeComposerStudio_FOUND)
   get_filename_component(CodeComposerStudio_VERSION ${CodeComposerStudio_ARTIFACT} NAME )
   unset(CodeComposerStudio_ARTIFACT CACHE)
 
-  if(CMAKE_HOST_NAME STREQUAL "Windows")
+  if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
     set(uniflash_name "uniflash.bat")
   else()
     set(uniflash_name "uniflash.sh")
