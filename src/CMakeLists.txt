@@ -1,7 +1,7 @@
 # Basic template for using tiva-cmake
 # Edit this file to add your own executables and c files.
 # Lines to modify are marked with Edit:
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.12)
 # EDIT below to change the name of the cmake project 
 project(LedExample)
 

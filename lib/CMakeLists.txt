@@ -1,6 +1,6 @@
 # Build tivaware and the startup library for each combination of compiler, processor and release mode
 # Also install the cmake files
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.12)
 project(tiva-cmake-libs NONE)
 
 # List of the supported processor models. Startup code for each model listed here will be generated

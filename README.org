@@ -241,7 +241,10 @@ See compiler documentation for details.
 :CUSTOM_ID: development-tools
 :END:
 ** Prerequisites
-1. [[https://cmake.org/download][CMake]] 
+1. [[https://cmake.org/download][CMake]]  (Version 3.12 or later). 
+   - On Ubuntu 18.04 install a later version from the website. 
+   - You can install the official binaries to a non-standard prefix and access a newer version while maintaining the old version
+
 2. [[https://git-scm.com][Git]] 
 3. A cross compiler.  [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything needed to build and flash your program.
    - However, Code Composer Studio is a large program and it may be desirable to obtain your tools elsewhere (see below).

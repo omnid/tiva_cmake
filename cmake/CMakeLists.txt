@@ -1,5 +1,5 @@
 # Used to install the cmake files for tiva-cmake
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.12)
 project(TivaCMakeFiles LANGUAGES NONE)
 
 

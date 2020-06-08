@@ -1,5 +1,5 @@
 # Ensure that dependencies are up to date and then build the src directory
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.12)
 project(tiva-cmake
   VERSION 0.1.0
   DESCRIPTION "CMake Files for working with Tiva microcontrollers"
