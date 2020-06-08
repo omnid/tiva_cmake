@@ -27,7 +27,7 @@ You can use ~tiva-cmake~ as a [[#template-mode-quickstart-no-installation][templ
 :PROPERTIES:
 :CUSTOM_ID: template-mode-quickstart-no-installation
 :END:
-0. The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[#development-tools][Development Tools]] installed (git, make, cmake, arm compiler).
+0. The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[#development-tools][Development Tools]] installed (git, make, cmake (>= 3.12), arm compiler).
 1. Clone this repository:
    #+BEGIN_SRC
    git clone https://github.com/m-elwin/tiva-cmake my_project
