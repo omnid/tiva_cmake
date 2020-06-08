@@ -74,6 +74,7 @@ The project source code resides in ~src/~, which is the sole location you should
    curl -o tiva-cmake.deb https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.deb
    sudo apt install ./tiva-cmake.deb
    #+END_SRC 
+2. You will need at least CMake 3.12.  Ubuntu 18.04 has an older version so download cmake separately.
 2. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[#development-tools][Development Tools]] 
 
 ** Arch Linux
