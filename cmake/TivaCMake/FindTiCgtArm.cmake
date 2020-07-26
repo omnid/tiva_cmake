@@ -61,12 +61,15 @@ if(NOT TiCgtArm_FOUND)
   file(GLOB TiCgtArm_HINTS4 /opt/ti-cgt-arm*)
   list(REVERSE TiCgtArm_HINTS4)
 
+  file(GLOB TiCgtArm_HINTS5 /opt/ccstudio/ccs/tools/compiler/ti-cgt-arm*)
+  list(REVERSE TiCgtArm_HINTS5)
+  
   file(GLOB TiCgtArm_HINT_CCS ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/ti-cgt-arm*)
   list(REVERSE TiCgtArm_HINT_CCS)
-  
+
   find_program(TiCgtArm_EXECUTABLE
     NAMES armcl
-    HINTS ${TiCgtArm_HINTS1} ${TiCgtArm_HINTS2} ${TiCgtArm_HINTS3} ${TiCgtArm_HINTS4}
+    HINTS ${TiCgtArm_HINTS1} ${TiCgtArm_HINTS2} ${TiCgtArm_HINTS3} ${TiCgtArm_HINTS4} ${TiCgtArm_HINTS5}
     DOC "armcl (the ti-cgt compiler frontend): it's location tells the toolchain where to find ti-cgt "
     PATH_SUFFIXES bin
     )
