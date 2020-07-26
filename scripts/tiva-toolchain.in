@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+echo "@CMAKE_INSTALL_PREFIX@/share/TivaToolchain/tiva-toolchain.cmake"
