@@ -56,7 +56,6 @@ The project source code resides in ~src/~, which is the sole location you should
   - The default toolchain file is ~tiva-toolchain.cmake~, which picks ~gcc~ and falls back to ~ti-cgt~ if it cannot find ~gcc~.
   - The toolchain for ~gcc~ is ~arm-none-eabi-gcc-toolchain.cmake~
   - The toolchain for ~ti-cgt~ is ~ti-cgt-arm-toolchain.cmake~
-  - ~Preload.cmake~ has logic such that the three toolchain files above are automatically found so you don't need to specify the path to them.
   - To change toolchain files you must delete the contents of the build directory and re-generate the build system
 - Only Makefile generators are supported.  On non-Windows platforms, you can omit the ~-G"Unix Makefiles"~ because that is the default on those platforms.
 - See [[#startup-library][Startup Library]] for information about how to implement interrupt service routines.
@@ -128,7 +127,19 @@ The project source code resides in ~src/~, which is the sole location you should
 - Edit ~CMakeLists.txt~ to add your source code and specify your libraries and executables.
 - Use ~cmake~ as usual
 - See [[#cmake-settings][CMake Settings]] for other options
-
+*** Without Preload
+- ~PreLoad.cmake~ is not officially documented by ~cmake~ however it is the only way to allow certain behaviors without requiring 
+   the user to enter additional command-line arguments
+   - Set a default toolchain
+   - Find toolchain files so the full path does not need to specify them
+- If you want to omit ~Preload.cmake~ from your project then it will
+  - Default to the host's default compiler
+  - Require you to specify the full path to any tiva toolchain file.
+- tiva-cmake installs three scripts that print the path to the respective toolchain files:
+  ~tiva-toolchain~, ~arm-none-eabi-gcc-toolchain~, and ~ti-cgt-arm-toolchain~
+- If you don't use ~PreLoad.cmake~ then users can specify a toolchain by passing the output of one of these scripts; for example:
+  ~-DCMAKE_TOOLCHAIN_FILE=$(tiva-toolchain)~
+  - The binaries are on the path if installed or located in the build directory.
 ** Flashing the Firmware
 Every executable target you create (via ~add_executable(target_name ...)~ in ~cmake~ adds methods for flashing the firmware using the LaunchPad's In-Circuit Debugger.
 1. ~cmake --build build --target target_name.write~ Flash the program onto the microcontroller using one of the methods below, which are listed in order of preference

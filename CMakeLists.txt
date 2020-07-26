@@ -19,6 +19,9 @@ install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src
   PATTERN build EXCLUDE
   )
 
+configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/tiva-toolchain.in tiva-toolchain)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tiva-toolchain DESTINATION bin)
+
 configure_file(${CMAKE_CURRENT_LIST_DIR}/cpack/PKGBUILD.in ${CMAKE_BINARY_DIR}/archlinux/PKGBUILD @ONLY)
 set(CPACK_GENERATOR "TGZ;ZIP;DEB;RPM;External")
 set(CPACK_SYSTEM_NAME "any")
