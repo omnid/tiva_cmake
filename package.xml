@@ -1,0 +1,17 @@
+<package format="2">
+  <name>tiva-cmake</name>
+  <version>0.2.0</version>
+  <description>
+    Use cmake to compile code for Tiva microcontrollers.
+    Also provides peripheral libraries.
+  </description>
+  <maintainer email="elwin@northwestern.edu">Matthew Elwin</maintainer>
+  <license>MIT</license>
+  <url type="repository">https://www.github.com/m-elwin/tiva-cmake</url>
+  <author email="elwin@u.northwestern.edu">Matthew Elwin></author>
+  <buildtool_depend>gcc-arm-none-eabi</buildtool_depend>
+  <buildtool_depend>openocd</buildtool_depend>
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
