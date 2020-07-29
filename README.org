@@ -85,7 +85,6 @@ The project source code resides in ~src/~, which is the sole location you should
 2. Optional: install the ~arm-none-eabi-gdb~ package to use a debugger. 
 3. Optional: install ~ti-cgt-arm~ (AUR) to get the TI compilers. 
 4. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[#development-tools][Development Tools]]
-5. ~tiva-cmake/PKGBUILD~ contains a ~PKGBUILD~ for the binary package
 
 ** Binary (All platforms)
 1. Install [[#development-tools][Development Tools]] 
