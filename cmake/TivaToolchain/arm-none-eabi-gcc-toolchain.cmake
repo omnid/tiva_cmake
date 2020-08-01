@@ -26,6 +26,9 @@ find_package(ArmNoneEabiGCC REQUIRED)
 set(CMAKE_C_COMPILER ${ArmNoneEabiGCC_C_COMPILER} CACHE STRING "The C compiler")
 set(CMAKE_CXX_COMPILER ${ArmNoneEabiGCC_CXX_COMPILER} CACHE STRING "The C++ compiler") 
 
+set(CMAKE_C_LIBRARY_ARCHITECTURE arm-none-eabi)
+set(CMAKE_CXX_LIBRARY_ARCHITECTURE arm-none-eabi)
+
 # Setup search paths for external software that we need
 set(CMAKE_FIND_ROOT_PATH "${ArmNoneEabiGCC_ROOT_DIR}")
 # only find programs on the host
