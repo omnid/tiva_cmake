@@ -30,7 +30,7 @@ You can use ~tiva-cmake~ as a [[#template-mode-quickstart-no-installation][templ
 0. The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[#development-tools][Development Tools]] installed (git, make, cmake (>= 3.12), arm compiler).
 1. Clone this repository:
    #+BEGIN_SRC
-   git clone https://github.com/m-elwin/tiva-cmake my_project
+   git clone https://github.com/omnid/tiva-cmake my_project
    cd my_project
    #+END_SRC
 2. Generate and build the libraries (only need to run once))
@@ -68,18 +68,18 @@ The project source code resides in ~src/~, which is the sole location you should
 :CUSTOM_ID: installation
 :END:
 ** Ubuntu/Debian
-1. Download and install the [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.deb][latest package]], which will also bring in the dependencies
+1. Download and install the [[https://github.com/omnid/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.deb][latest package]], which will also bring in the dependencies
    #+BEGIN_SRC bash
-   curl -o tiva-cmake.deb https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.deb
+   curl -o tiva-cmake.deb https://github.com/omnid/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.deb
    sudo apt install ./tiva-cmake.deb
    #+END_SRC 
 2. You will need at least CMake 3.12.  Ubuntu 18.04 has an older version so download cmake separately.
 2. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[#development-tools][Development Tools]] 
 
 ** Arch Linux
-1. Download and install the [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-1-any.pkg.tar.xz][latest package]], which will also bring in the dependencies
+1. Download and install the [[https://github.com/omnid/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-1-any.pkg.tar.xz][latest package]], which will also bring in the dependencies
    #+BEGIN_SRC bash
-   curl -o tiva-cmake.pkg.tar.xz https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-1-any.pkg.tar.xz
+   curl -o tiva-cmake.pkg.tar.xz https://github.com/omnid/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-1-any.pkg.tar.xz
    sudo pacman -U tiva-cmake
    #+END_SRC 
 2. Optional: install the ~arm-none-eabi-gdb~ package to use a debugger. 
@@ -88,7 +88,7 @@ The project source code resides in ~src/~, which is the sole location you should
 
 ** Binary (All platforms)
 1. Install [[#development-tools][Development Tools]] 
-2. Download the [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.zip][zipfile]] or the [[https://github.com/m-elwin/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.tar.gz][tarball]]. 
+2. Download the [[https://github.com/omnid/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.zip][zipfile]] or the [[https://github.com/omnid/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.tar.gz][tarball]]. 
 3. Extract the contents.  The top level directory of is ~tiva-cmake-x.y.z-any~
 3. Copy the contents of ~tiva-cmake-x.y.z-any~ to somewhere it can be found by ~CMake~
    - Linux: ~/usr/local/~ or ~/usr/~ (e.g., ~sudo cp -r tiva-cmake-x.y.z-any/* /usr/local~)
@@ -100,7 +100,7 @@ The project source code resides in ~src/~, which is the sole location you should
 1. Install [[#development-tools][Development Tools]]
 2. 
    #+BEGIN_SRC bash
-   git clone git@github.com:m-elwin/tiva-cmake
+   git clone git@github.com:omnid/tiva-cmake
    mkdir tiva-cmake/build
    cd tiva-cmake/build
    cmake ..
