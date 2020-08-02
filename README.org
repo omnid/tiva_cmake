@@ -169,6 +169,10 @@ For example, if using ~Makefiles~ you can can use ~make target_name.write~ from 
 :CUSTOM_ID: cmake-settings
 :END:
 Most ~cmake~ settings can be modifed using the ~cmake-gui~ (where the toolchain can also be selected when first configuring the project). 
+- Use ~find_package(TivaCMake)~ to bring in ~TivaCMake~ and use its functions
+- Use ~find_package(TivaCMake COMPONENTS None)~ to check for the existence of ~tiva-cmake~ without actually configuring anything.
+  This feature is useful when the host system (non-cross-compiling) wants to know if ~tiva-cmake~ exists without loading any
+  cross-compiling settings
 
 ** Selecting the toolchain
 - The default toolchain file is ~tiva-toolchain.cmake~ 
@@ -215,7 +219,7 @@ TI has released TivaWare ~driverlib~ under a BSD license and this project redist
 By default, ~tiva-cmake~ uses it's own bundled version of ~driverlib~. To use driverlib:
 
 #+BEGIN_SRC
-include(TivaCMake)
+find_package(TivaCMake)
 # ...
 target_link_libraries(mytarget TivaCMake::driverlib)
 #+END_SRC

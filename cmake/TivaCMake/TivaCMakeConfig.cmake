@@ -20,10 +20,22 @@ Cache Variables
 The following cache variables may also be set:
 
 ``TivaCMake_DIR``
-  The root directory of TivaCMake
+The root directory of TivaCMake
+
+Components
+^^^^^^^^^^
+``None``
+  Do not load any components.  This is useful for detecting if tiva-cmake exists from a host system,
+  since actually loading the file is only useful when cross-compiling. 
+
 #]========================================================================]
 
 if(NOT TivaCMake_FOUND)
+  list(FIND TivaCMake_FIND_COMPONENTS None is_none)
+  if(NOT is_none EQUAL -1)
+    return()
+  endif()
+
   # The cmake modules that come with tiva-cmake are in the current directory
   # (Note that TivaCMake_DIR is set to be this file by find_package)
   list(APPEND CMAKE_MODULE_PATH ${TivaCMake_DIR})
