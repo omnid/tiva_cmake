@@ -59,7 +59,7 @@ install(TARGETS startup
 # Export the targets directly into a TivaStartupConfig file since we have no other configuration or dependencies
 install(EXPORT TivaStartupTargets_Debug
   CONFIGURATIONS Debug
-  NAMESPACE TivaStartup::
+  NAMESPACE TivaCMake::
   DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
   )
 
