@@ -229,15 +229,11 @@ set ~DRIVERLIB_DEBUG=ON~.
 :PROPERTIES:
 :CUSTOM_ID: startup-library
 :END:
-The startup library (~TivaCMake::startup~) contains code that runs before ~main()~ to initialize the microcontroller,
-the linker scripts, and the interrupt vector table.  This code differs between microcontroller models
+Startup code is automatically linked when you ~add_executable~ because it is necessary for any code to run on the microcontroller.
+The startup code is n an ~OBJECT~ library (~TivaCMake::startup~) and runs before ~main()~ to initialize the microcontroller.
+It contains the interrupt vector table and includes the linker script.  This source code differs between microcontroller models
 and is stored in ~startup/<model>~.  
 
-1. The startup code is a CMake OBJECT library, that must be directly linked with your executable to ensures that all
-   the code in the library is included after the final linking.  
-2. If you use ~TivaCMake::startup~ as a dependency of a library, you must specify it as having ~INTERFACE~ linkage, not
-   ~PUBLIC~ or ~PRIVATE~.  If you use ~PUBLIC~ or ~PRIVATE~, the code is linked into the new library you are making and
-   then it won't be linked in fully to the executable.
 
 The startup code is different than the code provided by TI and is designed to make development easier. 
 1. To define an interrupt in your code, simply declare a function with the name of that interrupt, no need to modify the startup library
@@ -257,9 +253,13 @@ The startup code is different than the code provided by TI and is designed to ma
    can modify that this default behavior. The only exceptions are the ~HardFaultISR~ and ~NonMaskableInterruptISR~ 
   which have their own infinite loops to preserve state and let you know which fault was triggered.  ~ResetISR~ runs the startup code.  
 
-It may be beneficial to modify the startup code directly in your project, in which case simply omit ~TivaCMake::startup~ from the target link libraries.
-You can make basic changes to the stack and heap sizes using options for the compiler, but such changes may also require editing the linker scripts.
-See compiler documentation for details.
+It may be beneficial to modify the startup code directly in your project, in which case you should set ~TIVA_CMAKE_USE_CUSTOM_STARTUP~ to true.
+You can make basic changes to the stack and heap sizes using options for the compiler, but such changes may also require editing the linker scripts and
+adding custom startup code. See compiler documentation for details.
+
+ It is necessary that the full startup code be linked in with the project. Compiling to a regular static library is insufficient since
+unused code does not get linked in to the final executable. You can either include the source code directly in your executable,
+use a cmake ~OBJECT~ library, or pass ~--whole-archive~ to the linker (works only for ~gcc~).
 
 * Development Tools
 :PROPERTIES:

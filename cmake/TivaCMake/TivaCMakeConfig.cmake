@@ -38,6 +38,8 @@ if(NOT TivaCMake_FOUND)
   find_package(CodeComposerStudio QUIET)
   find_package(ArmNoneEabiGdb QUIET)
 
+  set(TIVACMAKE_USE_CUSTOM_STARTUP False CACHE BOOL "Stop add_executable from automatically including the TivaCMake::startup startup code.")
+
   # adds a uniflash target that uses uniflash to write to the tiva
   # ext is the name of the extension to add to the target (so ${target}.${ext} is how to invoke this step)
   function(add_uniflash target_name ext)
@@ -117,6 +119,7 @@ if(NOT TivaCMake_FOUND)
     function(add_executable target)
       # call the original
       _add_executable(${target} ${ARGN})
+      target_link_libraries(${target} TivaCMake::startup)
       tiva_cmake_add(${target})
     endfunction()
   endif()

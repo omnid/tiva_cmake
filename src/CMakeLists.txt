@@ -59,12 +59,11 @@ add_compile_options("$<$<C_COMPILER_ID:TI>:-pden;-pdr;-pdv;--c99;--diag_suppress
 
 
 # EDIT below to change the name of the executable and what source files compose it
+# Note: add_executable automatically links in TivaCMake::startup unless this behavior is suppressed
+# by setting TIVA_CMAKE_USE_CUSTOM_STARTUP to true
 add_executable(led_example main.c) 
 
 # EDIT below if you use any other libraries or changed the name of the executable
 # Link against the startup code and driverlib
-# NOTE: when making a library, you should only use TivaCMake::startup as INTERFACE linkage not PUBLIC or PRIVATE
-# Otherwise, its code gets put in the archive and then will be discarded when linking with the executable.
-# See README.org
-target_link_libraries(led_example TivaCMake::driverlib TivaCMake::startup)
+target_link_libraries(led_example TivaCMake::driverlib)
 
