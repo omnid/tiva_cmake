@@ -1,0 +1,16 @@
+# Place this file in /etc/udev/rules.d/
+# Sets up rules to give permanent names to usb cables
+# so that we can easily differentiate between the delta robot
+# and the omni base when both are plugged into the same computer
+# For each new ftdi cable you add to the system, you should add a rule
+# here.  To see the serial number run
+# lsusb -d 0403:6001 -v for ftdi cables
+# and look at the iSerial descriptor
+
+# Generically allow all ftdi, microchip serial devices, and other devices to be read by anyone
+KERNEL=="ttyUSB[0-9]*",MODE:="0666"
+KERNEL=="ttyACM[0-9]*",MODE:="0666"
+
+# TI Tiva Launchpad ICDI
+ATTRS{idVendor}=="1cbe", ATTRS{idProduct}=="00fd", MODE="0666" 
+

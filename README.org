@@ -114,7 +114,15 @@ The project source code resides in ~src/~, which is the sole location you should
 3. To create packages run ~make package~ in the build directory.  You will need
    ~makepkg~, ~dpkg~ and ~rpm-tools~ on your system to make all the packages.
 
-
+** Udev Rules
+1. On Linux, you will need to set permissions on the Tiva to access it
+2. For convenience, a sample udev rules file is included (~20-tiva-uart.rules~).  To use these rules
+   #+BEGIN_SRC bash
+   sudo cp 20-tiva-uart.rules /etc/udev/rules.d
+   sudo udevadm control --reload
+   sudo udevadm trigger
+   #+END_SRC
+   - This rules file is just an example, and it gives permission to all USB-serial ports to every user on the system.
 * How To Use 
 :PROPERTIES:
 :CUSTOM_ID: usage
