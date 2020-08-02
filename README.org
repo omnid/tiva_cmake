@@ -229,9 +229,15 @@ set ~DRIVERLIB_DEBUG=ON~.
 :PROPERTIES:
 :CUSTOM_ID: startup-library
 :END:
-The startup library contains code that runs before ~main()~ to initialize the microcontroller,
+The startup library (~TivaCMake::startup~) contains code that runs before ~main()~ to initialize the microcontroller,
 the linker scripts, and the interrupt vector table.  This code differs between microcontroller models
 and is stored in ~startup/<model>~.  
+
+1. The startup code is a CMake OBJECT library, that must be directly linked with your executable to ensures that all
+   the code in the library is included after the final linking.  
+2. If you use ~TivaCMake::startup~ as a dependency of a library, you must specify it as having ~INTERFACE~ linkage, not
+   ~PUBLIC~ or ~PRIVATE~.  If you use ~PUBLIC~ or ~PRIVATE~, the code is linked into the new library you are making and
+   then it won't be linked in fully to the executable.
 
 The startup code is different than the code provided by TI and is designed to make development easier. 
 1. To define an interrupt in your code, simply declare a function with the name of that interrupt, no need to modify the startup library
