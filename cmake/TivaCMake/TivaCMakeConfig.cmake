@@ -121,6 +121,19 @@ if(NOT TivaCMake_FOUND)
     else()
       add_uniflash(${target} write)
     endif()
+
+    # also convert to a bin file
+    add_custom_command(TARGET ${target} POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -I elf32-little  -O binary "${target}" "${target}.bin"
+    COMMENT "Creating binfile ${target}.bin"
+    BYPRODUCTS "${target}.bin"
+    VERBATIM
+    )
+  #add the executable to the be cleaned by make clean
+  set_property(DIRECTORY APPEND
+    PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
+    ${target}.bin
+    )
   endfunction()
 
   set(TivaCMake_AddExecutable ON CACHE BOOL "Include extra tiva_cmake targets when calling add_executable")
