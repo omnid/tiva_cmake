@@ -111,8 +111,11 @@ The project source code resides in ~src/~, which is the sole location you should
    - Change the install prefix using ~-DCMAKE_INSTALL_PREFIX=/your/prefix/path~ when invoking ~cmake~
    - CMake Files are placed in ~$prefix/share/cmake/tiva-cmake~ 
    - Release and debug driverlib versions are installed to ~$prefix/lib/libdriverlib*~
-3. To create packages run ~make package~ in the build directory.  You will need
-   ~makepkg~, ~dpkg~ and ~rpm-tools~ on your system to make all the packages.
+3. To create packages run ~make package~ in the build directory. 
+   To run this command you need a few dependencies
+   - ~dpkg~ to build Debian packages
+   - ~rpm~ to build RedHat packages
+   - ~makepkg~ and [[https://github.com:omind/cmakeme][cmakeme]] to make ArchLinux packages 
 
 ** Udev Rules
 1. On Linux, you will need to set permissions on the Tiva to access it
