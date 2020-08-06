@@ -30,4 +30,15 @@ install(FILES
   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
   )
 
-cmakeme_package()
+find_package(cmakeme QUIET)
+if(cmakeme-FOUND)
+  cmakeme_package(EMAIL elwin@u.northwestern.edu
+                  ARCH_ANY 
+                  DEBIAN_DEPENDS gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
+                  DEBIAN_RECOMMENDS gdb-multiarch
+                  ARCHLINUX_DEPENDS arm-none-eabi-gcc arm-none-eabi-newlib
+                  ARCHLINUX_RECOMMENDS arm-none-eabi-gdb ti-cgt-arm
+                )
+else()
+  message(STATUS "cmakeme not found, you won't be able to build binary packages with cpack")
+endif()
