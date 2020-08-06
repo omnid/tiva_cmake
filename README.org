@@ -33,7 +33,7 @@ You can use ~tiva-cmake~ as a [[#template-mode-quickstart-no-installation][templ
    git clone https://github.com/omnid/tiva-cmake my_project
    cd my_project
    #+END_SRC
-2. Generate and build the libraries (only need to run once))
+2. Generate and build the libraries (only need to run once)
    #+BEGIN_SRC 
    cmake -G"Unix Makefiles" -B lib/build lib/
    cmake --build lib/build
@@ -101,16 +101,12 @@ The project source code resides in ~src/~, which is the sole location you should
 2. 
    #+BEGIN_SRC bash
    git clone git@github.com:omnid/tiva-cmake
-   mkdir tiva-cmake/build
-   cd tiva-cmake/build
-   cmake ..
-   make 
-   sudo make install
+   cd tiva-cmake
+   cmake -B build .
+   cmake --build build
+   sudo cmake --build build --target install
    #+END_SRC
-   - By default, this method installs into the ~/usr/local~ prefix
-   - Change the install prefix using ~-DCMAKE_INSTALL_PREFIX=/your/prefix/path~ when invoking ~cmake~
-   - CMake Files are placed in ~$prefix/share/cmake/tiva-cmake~ 
-   - Release and debug driverlib versions are installed to ~$prefix/lib/libdriverlib*~
+   - See [[https://github.com/omnid/omnid_docs/blob/master/Installation.md][For more options]]
 3. To create packages run ~make package~ in the build directory. 
    To run this command you need a few dependencies
    - ~dpkg~ to build Debian packages
