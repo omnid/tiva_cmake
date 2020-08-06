@@ -113,6 +113,7 @@ The project source code resides in ~src/~, which is the sole location you should
    - ~rpm~ to build RedHat packages
    - ~makepkg~ and [[https://github.com:omind/cmakeme][cmakeme]] to make ArchLinux packages 
    - [[https://github.com/omnid/cmakeme][cmakeme]] for making packages to be supported
+4. See [[https://github.com/omnid/omnid_docs/blob/master/Installation.md][Installation.md]] for more detailed instructions.
 ** Udev Rules
 1. On Linux, you will need to set permissions on the Tiva to access it
 2. For convenience, a sample udev rules file is included (~20-tiva-uart.rules~).  To use these rules

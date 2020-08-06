@@ -1,0 +1,5 @@
+repositories:
+  cmakeme:
+    type: git
+    url: git@github.com:omnid/cmakeme.git
+    version: master
