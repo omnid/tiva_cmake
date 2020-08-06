@@ -31,7 +31,7 @@ install(FILES
   )
 
 find_package(cmakeme QUIET)
-if(cmakeme-FOUND)
+if(cmakeme_FOUND)
   cmakeme_package(EMAIL elwin@u.northwestern.edu
                   ARCH_ANY 
                   DEBIAN_DEPENDS gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
