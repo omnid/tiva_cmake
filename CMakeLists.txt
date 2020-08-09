@@ -1,9 +1,9 @@
 # Ensure that dependencies are up to date and then build the src directory
 cmake_minimum_required(VERSION 3.12)
-project(tiva-cmake
+project(tiva_cmake
   VERSION 0.2.0
   DESCRIPTION "CMake Files for working with Tiva microcontrollers"
-  HOMEPAGE_URL "https://github.com/m-elwin/tiva-cmake"
+  HOMEPAGE_URL "https://github.com/omnid/tiva_cmake"
   LANGUAGES NONE)
 
 add_subdirectory(lib)

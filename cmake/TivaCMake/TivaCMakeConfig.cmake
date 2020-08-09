@@ -1,4 +1,4 @@
-# Distributed under the LICENSE found in tiva-cmake/LICENSE
+# Distributed under the LICENSE found in tiva_cmake/LICENSE
 #[========================================================================[.rst:
 TivaCMakeConfig
 ----------------------
@@ -25,7 +25,7 @@ The root directory of TivaCMake
 Components
 ^^^^^^^^^^
 ``None``
-  Do not load any components.  This is useful for detecting if tiva-cmake exists from a host system,
+  Do not load any components.  This is useful for detecting if tiva_cmake exists from a host system,
   since actually loading the file is only useful when cross-compiling. 
 
 #]========================================================================]
@@ -36,7 +36,7 @@ if(NOT TivaCMake_FOUND)
     return()
   endif()
 
-  # The cmake modules that come with tiva-cmake are in the current directory
+  # The cmake modules that come with tiva_cmake are in the current directory
   # (Note that TivaCMake_DIR is set to be this file by find_package)
   list(APPEND CMAKE_MODULE_PATH ${TivaCMake_DIR})
 

@@ -1,4 +1,4 @@
-# Distributed under the LICENSE found in tiva-cmake/LICENSE
+# Distributed under the LICENSE found in tiva_cmake/LICENSE
 #[========================================================================[.rst:
 FindArmNoneEabiGdb
 ----------------------

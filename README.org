@@ -21,7 +21,7 @@ It enables the use of ~arm-none-eabi-gcc~ or TI's Code Generation Tools (~ti-cgt
 code to flash memory using the in-circuit debugger (ICD) on TI's LaunchPad development boards. 
 For convenience, it also comes bundled with ~TivaWare~ ~driverlib~.
 
-You can use ~tiva-cmake~ as a [[#template-mode-quickstart-no-installation][template]] or [[#Installation][install]] it and use it as a dependency. 
+You can use ~tiva_cmake~ as a [[#template-mode-quickstart-no-installation][template]] or [[#Installation][install]] it and use it as a dependency. 
 
 * Template Mode (Quickstart, No Installation)
 :PROPERTIES:
@@ -30,7 +30,7 @@ You can use ~tiva-cmake~ as a [[#template-mode-quickstart-no-installation][templ
 0. The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[#development-tools][Development Tools]] installed (git, make, cmake (>= 3.12), arm compiler).
 1. Clone this repository:
    #+BEGIN_SRC
-   git clone https://github.com/omnid/tiva-cmake my_project
+   git clone https://github.com/omnid/tiva_cmake my_project
    cd my_project
    #+END_SRC
 2. Generate and build the libraries (only need to run once)
@@ -68,19 +68,19 @@ The project source code resides in ~src/~, which is the sole location you should
 :CUSTOM_ID: installation
 :END:
 ** Ubuntu/Debian
-1. Download and install the [[https://github.com/omnid/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.deb][latest package]], which will also bring in the dependencies
+1. Download and install the [[https://github.com/omnid/tiva_cmake/releases/download/v0.1.0/tiva_cmake-0.1.0-any.deb][latest package]], which will also bring in the dependencies
    #+BEGIN_SRC bash
-   curl -o tiva-cmake.deb https://github.com/omnid/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.deb
-   sudo apt install ./tiva-cmake.deb
+   curl -o tiva_cmake.deb https://github.com/omnid/tiva_cmake/releases/download/v0.1.0/tiva_cmake-0.1.0-any.deb
+   sudo apt install ./tiva_cmake.deb
    #+END_SRC 
 2. You will need at least CMake 3.12.  Ubuntu 18.04 has an older version so download cmake separately.
 2. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[#development-tools][Development Tools]] 
 
 ** Arch Linux
-1. Download and install the [[https://github.com/omnid/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-1-any.pkg.tar.xz][latest package]], which will also bring in the dependencies
+1. Download and install the [[https://github.com/omnid/tiva_cmake/releases/download/v0.1.0/tiva_cmake-0.1.0-1-any.pkg.tar.xz][latest package]], which will also bring in the dependencies
    #+BEGIN_SRC bash
-   curl -o tiva-cmake.pkg.tar.xz https://github.com/omnid/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-1-any.pkg.tar.xz
-   sudo pacman -U tiva-cmake
+   curl -o tiva_cmake.pkg.tar.xz https://github.com/omnid/tiva_cmake/releases/download/v0.1.0/tiva_cmake-0.1.0-1-any.pkg.tar.xz
+   sudo pacman -U tiva_cmake
    #+END_SRC 
 2. Optional: install the ~arm-none-eabi-gdb~ package to use a debugger. 
 3. Optional: install ~ti-cgt-arm~ (AUR) to get the TI compilers. 
@@ -88,20 +88,20 @@ The project source code resides in ~src/~, which is the sole location you should
 
 ** Binary (All platforms)
 1. Install [[#development-tools][Development Tools]] 
-2. Download the [[https://github.com/omnid/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.zip][zipfile]] or the [[https://github.com/omnid/tiva-cmake/releases/download/v0.1.0/tiva-cmake-0.1.0-any.tar.gz][tarball]]. 
-3. Extract the contents.  The top level directory of is ~tiva-cmake-x.y.z-any~
-3. Copy the contents of ~tiva-cmake-x.y.z-any~ to somewhere it can be found by ~CMake~
-   - Linux: ~/usr/local/~ or ~/usr/~ (e.g., ~sudo cp -r tiva-cmake-x.y.z-any/* /usr/local~)
+2. Download the [[https://github.com/omnid/tiva_cmake/releases/download/v0.1.0/tiva_cmake-0.1.0-any.zip][zipfile]] or the [[https://github.com/omnid/tiva_cmake/releases/download/v0.1.0/tiva_cmake-0.1.0-any.tar.gz][tarball]]. 
+3. Extract the contents.  The top level directory of is ~tiva_cmake-x.y.z-any~
+3. Copy the contents of ~tiva_cmake-x.y.z-any~ to somewhere it can be found by ~CMake~
+   - Linux: ~/usr/local/~ or ~/usr/~ (e.g., ~sudo cp -r tiva_cmake-x.y.z-any/* /usr/local~)
    - Windows this could be ~C:\Program Files~ 
    - macOS this could be ~/usr/local/share~ 
-4. Alternatively you can set ~CMAKE_PREFIX_PATH~ to the ~tiva-cmake-x.y.z-any~ when running cmake
+4. Alternatively you can set ~CMAKE_PREFIX_PATH~ to the ~tiva_cmake-x.y.z-any~ when running cmake
 
 ** From Source
 1. Install [[#development-tools][Development Tools]]
 2. 
    #+BEGIN_SRC bash
-   git clone git@github.com:omnid/tiva-cmake
-   cd tiva-cmake
+   git clone git@github.com:omnid/tiva_cmake
+   cd tiva_cmake
    cmake -B build .
    cmake --build build
    sudo cmake --build build --target install
@@ -127,8 +127,8 @@ The project source code resides in ~src/~, which is the sole location you should
 :PROPERTIES:
 :CUSTOM_ID: usage
 :END:
-** New Project (Using an installed copy ~tiva-cmake~)
-- Copy the ~tiva-cmake/src~ directory to a new location
+** New Project (Using an installed copy ~tiva_cmake~)
+- Copy the ~tiva_cmake/src~ directory to a new location
   - Upon installation, this directory is installed to ~<prefix>/TivaCMake/src~
   - For example, on Linux: ~cp -R /usr/share/TivaCMake/src my_project~
 - Edit ~CMakeLists.txt~ to add your source code and specify your libraries and executables.
@@ -142,7 +142,7 @@ The project source code resides in ~src/~, which is the sole location you should
 - If you want to omit ~Preload.cmake~ from your project then it will
   - Default to the host's default compiler
   - Require you to specify the full path to any tiva toolchain file.
-- tiva-cmake installs three scripts that print the path to the respective toolchain files:
+- tiva_cmake installs three scripts that print the path to the respective toolchain files:
   ~tiva-toolchain~, ~arm-none-eabi-gcc-toolchain~, and ~ti-cgt-arm-toolchain~
 - If you don't use ~PreLoad.cmake~ then users can specify a toolchain by passing the output of one of these scripts; for example:
   ~-DCMAKE_TOOLCHAIN_FILE=$(tiva-toolchain)~
@@ -170,8 +170,8 @@ For example, if using ~Makefiles~ you can can use ~make target_name.write~ from 
 :END:
 Most ~cmake~ settings can be modifed using the ~cmake-gui~ (where the toolchain can also be selected when first configuring the project). 
 - Use ~find_package(TivaCMake)~ to bring in ~TivaCMake~ and use its functions
-- Use ~find_package(TivaCMake COMPONENTS None)~ to check for the existence of ~tiva-cmake~ without actually configuring anything.
-  This feature is useful when the host system (non-cross-compiling) wants to know if ~tiva-cmake~ exists without loading any
+- Use ~find_package(TivaCMake COMPONENTS None)~ to check for the existence of ~tiva_cmake~ without actually configuring anything.
+  This feature is useful when the host system (non-cross-compiling) wants to know if ~tiva_cmake~ exists without loading any
   cross-compiling settings
 
 ** Selecting the toolchain
@@ -216,7 +216,7 @@ a per-executable basis using ~tiva_cmake_add~ and providing the executable targe
 :CUSTOM_ID: tivaware-driverlib
 :END:
 TI has released TivaWare ~driverlib~ under a BSD license and this project redistributes it under that license in the ~driverlib~ directory.
-By default, ~tiva-cmake~ uses it's own bundled version of ~driverlib~. To use driverlib:
+By default, ~tiva_cmake~ uses it's own bundled version of ~driverlib~. To use driverlib:
 
 #+BEGIN_SRC
 find_package(TivaCMake)

@@ -1,4 +1,4 @@
-# Basic template for using tiva-cmake
+# Basic template for using tiva_cmake
 # Edit this file to add your own executables and c files.
 # Lines to modify are marked with Edit:
 cmake_minimum_required(VERSION 3.12)

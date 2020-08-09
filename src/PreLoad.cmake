@@ -9,13 +9,13 @@ set(DEFAULT_TOOLCHAIN tiva-toolchain.cmake)
 # Detect if tiva_cmake is installed 
 find_package(TivaToolchain QUIET)
 if(NOT TivaToolchain_FOUND)
-  # TivaCMake not in an install prefix, this means tiva-cmake has not been installed and we expected the installation to be in the local directory
+  # TivaCMake not in an install prefix, this means tiva_cmake has not been installed and we expected the installation to be in the local directory
   set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}/../lib/build/install/" CACHE FILEPATH "List of locations to search for yyyConfig.cmake with find_package")
   find_package(TivaToolchain REQUIRED)
 endif()  
 
 
-#if a toolchain is specified but does not exist, assume that it is referring to a toolchain file in the tiva-cmake project
+#if a toolchain is specified but does not exist, assume that it is referring to a toolchain file in the tiva_cmake project
 # This is because toolchain files must usually be specified either relative to the source directory or absolute
 if(CMAKE_TOOLCHAIN_FILE)
   if((NOT (EXISTS ${CMAKE_TOOLCHAIN_FILE})) AND (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_TOOLCHAIN_FILE}))
