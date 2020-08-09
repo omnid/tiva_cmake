@@ -22,12 +22,11 @@ install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src
 configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/tiva-toolchain.in tiva-toolchain)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/ti-cgt-arm-toolchain.in ti-cgt-arm-toolchain)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/arm-none-eabi-gcc-toolchain.in arm-none-eabi-gcc-toolchain)
-install(FILES
+install(PROGRAMS
   ${CMAKE_CURRENT_BINARY_DIR}/tiva-toolchain
   ${CMAKE_CURRENT_BINARY_DIR}/arm-none-eabi-gcc-toolchain
   ${CMAKE_CURRENT_BINARY_DIR}/ti-cgt-arm-toolchain
   DESTINATION bin
-  PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
   )
 
 find_package(cmakeme QUIET)
