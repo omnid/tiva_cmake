@@ -141,13 +141,19 @@ if(NOT TivaCMake_FOUND)
 
   if(TivaCMake_AddExecutable)
     # Override add_executable to add these other targets
+    # This might be a bad idea.  Other modules might add an executable in a way that is incompatible
     function(add_executable target)
       # call the original
       _add_executable(${target} ${ARGN})
-      if(NOT TIVACMAKE_USE_CUSTOM_STARTUP)
-        target_link_libraries(${target} TivaCMake::startup)
+
+      # we don't want to add any special things to targets made in other projects
+      get_target_property(imported ${target} IMPORTED)
+      if(NOT imported)
+        if(NOT TIVACMAKE_USE_CUSTOM_STARTUP)
+          target_link_libraries(${target} TivaCMake::startup)
+        endif()
+        tiva_cmake_add(${target})
       endif()
-      tiva_cmake_add(${target})
     endfunction()
   endif()
 endif()
