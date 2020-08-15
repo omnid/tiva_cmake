@@ -332,7 +332,7 @@ To support another microcontrollers a few additions are needed
 *** TODO Automatic Generation of Startup Library 
 - Future work will use TI's targetDB files, which provide information about MCU's including peripheral layout and compiler flags to automatically generate
   startup files. The generated startup files will then be included in this repository, to avoid a hard dependency on Code Composer Studio
-- The targetDB ffiles and are distributed with Code Composer Studio and located in the ~ccs/ccs_base/common/targetdb~ directory.
+- The targetDB files and are distributed with Code Composer Studio and located in the ~ccs/ccs_base/nuhal/targetdb~ directory.
   - ~targetdb/devices~ contains the ~<model>.xml~ files, which seem to be the main file for each chip.
 
 
