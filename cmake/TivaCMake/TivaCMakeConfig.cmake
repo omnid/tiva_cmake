@@ -123,12 +123,13 @@ if(NOT TivaCMake_FOUND)
     endif()
 
     # also convert to a bin file
-    add_custom_command(TARGET ${target} POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -I elf32-little  -O binary "${target}" "${target}.bin"
-    COMMENT "Creating binfile ${target}.bin"
-    BYPRODUCTS "${target}.bin"
-    VERBATIM
-    )
+    add_custom_target(${target}.bin ALL
+      COMMAND ${CMAKE_OBJCOPY} -I elf32-little  -O binary "${target}" "${target}.bin"
+      COMMENT "Creating binfile ${target}.bin"
+      BYPRODUCTS "${target}.bin"
+      VERBATIM
+      )
+    add_dependencies(${target}.bin ${target})
   #add the executable to the be cleaned by make clean
   set_property(DIRECTORY APPEND
     PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
