@@ -10,8 +10,8 @@ extern unsigned int __bss_start__;
 extern unsigned int __bss_end__;
 extern unsigned int __STACK_END;
 
-// newlib startup code
-extern void _start(void);
+// the main function
+extern void main(void);
 
 // called on a reset. Do not emit prologue in assembly since the stack is not
 // yet valid
@@ -57,5 +57,5 @@ __attribute__((naked, used)) void _c_int00(void)
     __asm__ volatile ("DSB\n"
                       "ISB");
 #endif
-    _start(); // call the newlib startup code, which calls main
+    main(); // call main
 }
