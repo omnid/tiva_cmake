@@ -1,5 +1,9 @@
 /// \file
 /// \brief code to initialize the c library when using gcc
+/// NOTE: This code does not properly call _start() from newlib,
+/// instead it is modeled off the example from code composer studio.
+/// This thread has more information https://e2e.ti.com/support/microcontrollers/other/f/908/t/479812?CCS-GNU-C-Compiler-and-Linker-Setup
+/// This likely means the code won't work with c++
 #include<stddef.h>
 
 // defined in linker script indicating location of various segments
