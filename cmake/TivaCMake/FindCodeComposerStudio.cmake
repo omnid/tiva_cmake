@@ -33,22 +33,29 @@ The following cache variables may also be set:
   The executable that runs the UniFlash tool, used for flashing microcontrollers
 #]========================================================================]
 # A guide for writing find modules: https://cmake.org/cmake/help/v3.17/manual/cmake-developer.7.html
+message(FATAL_ERROR "system name is ${CMAKE_HOST_SYSTEM_NAME}")
 if(NOT CodeComposerStudio_FOUND)
   # Gather directory names to search
   file(GLOB CodeComposerStudio_ROOTS
-    $ENV{HOME}/ti/ccs* $ENV{HOME}/ccs* /opt/ccs* /opt/ti/ccs*)
+    $ENV{HOME}/ti/ccs* $ENV{HOME}/ccs* /opt/ccs* /opt/ti/ccs* /Applications/ti/ccs* )
 
   # Find the code composer studio executable
   find_program(CodeComposerStudio_EXECUTABLE
     NAMES ccstudio
-    HINTS ${CodeComposerStudio_ROOTS}
+	HINTS ${CodeComposerStudio_ROOTS}
     PATH_SUFFIXES ccs/eclipse
     NO_DEFAULT_PATH
     )
 
   # Get the root directory
-  get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
-  get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../.. ABSOLUTE)
+  
+  if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
+	get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
+	get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../../../../.. ABSOLUTE)	
+  else()	
+	get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
+	get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../.. ABSOLUTE)
+  endif()
   # We want ROOT_DIR to be in the cache and also be of type PATH
   set(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_ROOT_DIR} CACHE PATH "Base Directory for Code Composer Studio")
 
@@ -58,6 +65,8 @@ if(NOT CodeComposerStudio_FOUND)
     NAMES artifacts.xml
     HINTS ${CodeComposerStudio_ROOT_DIR}/ccs/install_info/*
     )
+
+
   get_filename_component(CodeComposerStudio_VERSION ${CodeComposerStudio_ARTIFACT} NAME )
   unset(CodeComposerStudio_ARTIFACT CACHE)
 
@@ -66,11 +75,15 @@ if(NOT CodeComposerStudio_FOUND)
   else()
     set(uniflash_name "uniflash.sh")
   endif()
+  
+
+  
   find_program(CodeComposerStudio_UniFlash_EXECUTABLE
     ${uniflash_name}
     PATHS ${CodeComposerStudio_ROOT_DIR}/ccs/ccs_base/scripting/examples/uniflash/cmdLine
     NO_DEFAULT_PATH)
-  
+
+
   include(FindPackageHandleStandardArgs)
   find_package_handle_standard_args(CodeComposerStudio
     FOUND_VAR CodeComposerStudio_FOUND
