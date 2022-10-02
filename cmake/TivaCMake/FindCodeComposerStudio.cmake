@@ -33,7 +33,6 @@ The following cache variables may also be set:
   The executable that runs the UniFlash tool, used for flashing microcontrollers
 #]========================================================================]
 # A guide for writing find modules: https://cmake.org/cmake/help/v3.17/manual/cmake-developer.7.html
-message(FATAL_ERROR "system name is ${CMAKE_HOST_SYSTEM_NAME}")
 if(NOT CodeComposerStudio_FOUND)
   # Gather directory names to search
   file(GLOB CodeComposerStudio_ROOTS
@@ -49,6 +48,7 @@ if(NOT CodeComposerStudio_FOUND)
 
   # Get the root directory
   
+  # on MacOS CodeComposerStudio stories its executable deeper in the directory
   if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
 	get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
 	get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../../../../.. ABSOLUTE)	
