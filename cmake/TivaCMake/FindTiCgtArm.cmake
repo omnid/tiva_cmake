@@ -46,6 +46,8 @@ The following cache variables may also be set:
 if(NOT TiCgtArm_FOUND)
 
   find_package(CodeComposerStudio)
+  
+
 
   # Glob each search directory since the name contains the version of the compiler
   # Reverse the results so that the directory with the highest versions are first
@@ -66,6 +68,7 @@ if(NOT TiCgtArm_FOUND)
   
   file(GLOB TiCgtArm_HINT_CCS ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/ti-cgt-arm*)
   list(REVERSE TiCgtArm_HINT_CCS)
+  
 
   find_program(TiCgtArm_EXECUTABLE
     NAMES armcl
@@ -73,6 +76,7 @@ if(NOT TiCgtArm_FOUND)
     DOC "armcl (the ti-cgt compiler frontend): it's location tells the toolchain where to find ti-cgt "
     PATH_SUFFIXES bin
     )
+
 
   if( "${TiCgtArm_EXECUTABLE}" STREQUAL "TiCgtArm_EXECUTABLE-NOTFOUND")
     find_program(TiCgtArm_EXECUTABLE
@@ -83,6 +87,8 @@ if(NOT TiCgtArm_FOUND)
       NO_DEFAULT_PATH
       )
   endif()
+  
+
 
   # compute paths to the C standard library
   get_filename_component(TiCgtArm_BIN_DIR ${TiCgtArm_EXECUTABLE} DIRECTORY)

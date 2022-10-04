@@ -38,26 +38,33 @@ if(NOT CodeComposerStudio_FOUND)
   file(GLOB CodeComposerStudio_ROOTS
     $ENV{HOME}/ti/ccs* $ENV{HOME}/ccs* /opt/ccs* /opt/ti/ccs* /Applications/ti/ccs* )
 
+
   # Find the code composer studio executable
-  find_program(CodeComposerStudio_EXECUTABLE
-    NAMES ccstudio
-	HINTS ${CodeComposerStudio_ROOTS}
-    PATH_SUFFIXES ccs/eclipse
-    NO_DEFAULT_PATH
-    )
+  
+  find_path(CodeComposerStudio_ROOT_DIR
+	NAMES ccs  
+    HINTS ${CodeComposerStudio_ROOTS}
+  
+  
+	)
+
+
+set(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_BASE} CACHE PATH "Base Directory for Code Composer Studio")
 
   # Get the root directory
   
   # on MacOS CodeComposerStudio stories its executable deeper in the directory
-  if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
-	get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
-	get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../../../../.. ABSOLUTE)	
-  else()	
-	get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
-	get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../.. ABSOLUTE)
-  endif()
+#  if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
+#	get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
+#	get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../../../../.. ABSOLUTE)	
+ # else()	
+#	get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
+#	get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../.. ABSOLUTE)
+ # endif()
   # We want ROOT_DIR to be in the cache and also be of type PATH
-  set(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_ROOT_DIR} CACHE PATH "Base Directory for Code Composer Studio")
+#  set(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_ROOT_DIR} CACHE PATH "Base Directory for Code Composer Studio")
+  
+
 
   # It should have left an install log with the version
   # Code Composer Studio maintains a folder with the version number
@@ -88,7 +95,6 @@ if(NOT CodeComposerStudio_FOUND)
   find_package_handle_standard_args(CodeComposerStudio
     FOUND_VAR CodeComposerStudio_FOUND
     REQUIRED_VARS
-    CodeComposerStudio_EXECUTABLE
     CodeComposerStudio_UniFlash_EXECUTABLE
     CodeComposerStudio_ROOT_DIR
     VERSION_VAR CodeComposerStudio_VERSION
