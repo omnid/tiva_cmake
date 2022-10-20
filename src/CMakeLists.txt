@@ -3,7 +3,7 @@
 # Lines to modify are marked with Edit:
 cmake_minimum_required(VERSION 3.12)
 # EDIT below to change the name of the cmake project 
-project(LedExample)
+project(echo)
 
 # Make TivaCMake's features available to this file 
 find_package(TivaCMake)
@@ -61,9 +61,9 @@ add_compile_options("$<$<C_COMPILER_ID:TI>:-pden;-pdr;-pdv;--c99;--diag_suppress
 # EDIT below to change the name of the executable and what source files compose it
 # Note: add_executable automatically links in TivaCMake::startup unless this behavior is suppressed
 # by setting TIVA_CMAKE_USE_CUSTOM_STARTUP to true
-add_executable(led_example main.c) 
+add_executable(echo main.c) 
 
 # EDIT below if you use any other libraries or changed the name of the executable
 # Link against the startup code and driverlib
-target_link_libraries(led_example TivaCMake::driverlib)
+target_link_libraries(echo TivaCMake::driverlib)
 

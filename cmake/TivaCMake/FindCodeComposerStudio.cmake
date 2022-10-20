@@ -1,3 +1,9 @@
+
+Shishir Bandapalli <shishirbandapalli2025@u.northwestern.edu>
+●
+9:11 PM (1 minute ago)
+to Shishir
+
 # Distributed under the LICENSE found in tiva_cmake/LICENSE
 #[========================================================================[.rst:
 FindCodeComposerStudio
@@ -27,7 +33,7 @@ The following cache variables may also be set:
   The executable that runs Code Composer Studio
 
 ``CodeComposerStudio_ROOT_DIR``
-  The root directory of Code Composer Studio. 
+  The root directory of Code Composer Studio.
 
 ``CodeComposerStudio_UniFlash_EXECUTABLE``
   The executable that runs the UniFlash tool, used for flashing microcontrollers
@@ -40,30 +46,45 @@ if(NOT CodeComposerStudio_FOUND)
 
 
   # Find the code composer studio executable
-  
+ 
   find_path(CodeComposerStudio_ROOT_DIR
-	NAMES ccs  
+NAMES ccs  
     HINTS ${CodeComposerStudio_ROOTS}
-  
-  
-	)
+ 
+ 
+)
+
+  if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+	  find_program(CodeComposerStudio_EXECUTABLE
+	    NAMES ccstudio
+	    HINTS ${CodeComposerStudio_ROOTS}
+	    PATH_SUFFIXES ccs/eclipse
+	    NO_DEFAULT_PATH
+    )
+
+  	get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
+  	get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../.. ABSOLUTE)
+  	# We want ROOT_DIR to be in the cache and also be of type PATH
+  	set(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_ROOT_DIR} CACHE PATH "Base Directory for Code Composer Studio")
 
 
-set(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_BASE} CACHE PATH "Base Directory for Code Composer Studio")
+   else()
+	set(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_BASE} CACHE PATH "Base Directory for Code Composer Studio")
+   endif()
 
   # Get the root directory
-  
+ 
   # on MacOS CodeComposerStudio stories its executable deeper in the directory
 #  if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
-#	get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
-#	get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../../../../.. ABSOLUTE)	
- # else()	
-#	get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
-#	get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../.. ABSOLUTE)
+# get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
+# get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../../../../.. ABSOLUTE)
+ # else()
+# get_filename_component(CodeComposerStudio_EXEPATH ${CodeComposerStudio_EXECUTABLE} DIRECTORY)
+# get_filename_component(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_EXEPATH}/../.. ABSOLUTE)
  # endif()
   # We want ROOT_DIR to be in the cache and also be of type PATH
 #  set(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_ROOT_DIR} CACHE PATH "Base Directory for Code Composer Studio")
-  
+ 
 
 
   # It should have left an install log with the version
@@ -82,9 +103,9 @@ set(CodeComposerStudio_ROOT_DIR ${CodeComposerStudio_BASE} CACHE PATH "Base Dire
   else()
     set(uniflash_name "uniflash.sh")
   endif()
-  
+ 
 
-  
+ 
   find_program(CodeComposerStudio_UniFlash_EXECUTABLE
     ${uniflash_name}
     PATHS ${CodeComposerStudio_ROOT_DIR}/ccs/ccs_base/scripting/examples/uniflash/cmdLine
