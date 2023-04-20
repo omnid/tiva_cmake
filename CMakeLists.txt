@@ -42,5 +42,5 @@ else()
   message(STATUS "cmakeme not found, you won't be able to build binary packages with cpack")
 endif()
 
-enable_testing()
+include(CTest)
 add_test(NAME null_test COMMAND echo "TODO: No unit tests exist for tiva_cmake")
