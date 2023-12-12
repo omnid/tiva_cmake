@@ -79,7 +79,7 @@ if(NOT ArmNoneEabiGCC_FOUND)
   get_filename_component(ArmNoneEabiGCC_ROOT_DIR ${ArmNoneEabiGCC_BIN_DIR}/.. ABSOLUTE)
 
   # compute the version, if have found the package
-  if(NOT "${ArmNoneEabiGCC_C_COMPILER}" STREQUAL "ArmNoneEabiGCC_EXECUTABLE-NOTFOUND")
+  if(NOT "${ArmNoneEabiGCC_C_COMPILER}" STREQUAL "ArmNoneEabiGCC_C_COMPILER-NOTFOUND")
     get_filename_component(ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_ROOT_DIR} NAME)
     string(REGEX REPLACE "arm-none-eabi-gcc." "" ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_VERSION})
     string(REGEX REPLACE "gcc-arm-none-eabi." "" ArmNoneEabiGCC_VERSION ${ArmNoneEabiGCC_VERSION})

@@ -49,7 +49,7 @@ function(startup_libraries compiler_id toolchain buildtype processor)
 endfunction()
 
 if((NOT TiCgtArm_FOUND) AND (NOT ArmNoneEabiGCC_FOUND))
-  message(FATAL_ERROR "Could not find a suitable C compiler, eithe ti-cgt or arm-none-eabi-gcc")
+  message(FATAL_ERROR "Could not find a suitable C compiler, either ti-cgt or arm-none-eabi-gcc")
 endif()
 
 # Build debug and release versions of the tivaware library for each compiler
