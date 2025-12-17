@@ -17,8 +17,8 @@ add_library(startup
   OBJECT
   ${CMAKE_SYSTEM_PROCESSOR}_isr.c
   reset.c
-  $<$<C_COMPILER_ID:GNU>:startup.c>
   stubs.c
+  $<$<C_COMPILER_ID:GNU>:startup.c>
   )
 
 # For gcc we need to ensure that the whole startup archive (i.e., all object files in startup) get linked in even

@@ -24,4 +24,4 @@ string(APPEND CMAKE_CXX_FLAGS_INIT ${MCU_FLAGS})
 unset(MCU_FLAGS)
 
 # We also need to add --specs=nosys.specs to configure how the newlib standard C library handles syscalls
-string(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "--specs=nosys.specs ") 
+string(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "--specs=nano.specs -Wl,--gc-sections")
