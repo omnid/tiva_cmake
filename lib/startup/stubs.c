@@ -11,7 +11,7 @@
 #undef errno
 extern int errno;
 
-void _exit(int)
+void _exit(int placeholder)
 {
     // just abort everything
     __builtin_trap();
@@ -33,25 +33,25 @@ _sbrk (int incr)
    return (void *) prev_heap_end;
 }
 
-int _write(int, char*, int)
+int _write(int placeholder1, char* placeholder2, int placeholder3)
 {
     errno = ENOSYS;
     return -1;
 }
 
-int _close(int)
+int _close(int placeholder)
 {
     errno = ENOSYS;
     return -1;
 }
 
-int _read(int, char*, int)
+int _read(int placeholder1, char* placeholder2, int placeholder3)
 {
     errno = ENOSYS;
     return -1;
 }
 
-int _lseek(int, int, int)
+int _lseek(int placeholder1, int placeholder2, int placeholder3)
 {
     errno = ENOSYS;
     return -1;

@@ -37,7 +37,7 @@ The following cache variables may also be set:
 # on CMAKE_SYSTEM_PROCESSOR or (if set in the cache) the OpenOCD_BOARD variable
 # This is the configuration filename to search for when we try to find openocd configurations
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "TM4C123GH6PM")
-  set(OpenOCD_BOARD "ek-tm4c123gxl.cfg" CACHE STRING "The openocd configuration to use")
+  set(OpenOCD_BOARD "ti_ek-tm4c123gxl.cfg" CACHE STRING "The openocd configuration to use")
 endif()
 
 find_program(OpenOCD_EXECUTABLE openocd
