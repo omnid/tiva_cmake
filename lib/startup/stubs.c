@@ -11,8 +11,9 @@
 #undef errno
 extern int errno;
 
-void _exit(int placeholder)
+void _exit(int rc)
 {
+    (void)rc;
     // just abort everything
     __builtin_trap();
 }
@@ -21,11 +22,13 @@ void *
 _sbrk (int incr)
 {
    extern char   end; // Set by linker.
-   static char * heap_end;
-   char *        prev_heap_end;
+   static char * heap_end = NULL;
+   char *        prev_heap_end = NULL;
 
    if (heap_end == 0)
+   {
      heap_end = & end;
+   }
 
    prev_heap_end = heap_end;
    heap_end += incr;
@@ -33,26 +36,36 @@ _sbrk (int incr)
    return (void *) prev_heap_end;
 }
 
-int _write(int placeholder1, char* placeholder2, int placeholder3)
+int _write(int file, char *ptr, int len)
 {
+    (void)file;
+    (void)ptr;
+    (void)len;
     errno = ENOSYS;
     return -1;
 }
 
-int _close(int placeholder)
+int _close(int file)
 {
+    (void)file;
     errno = ENOSYS;
     return -1;
 }
 
-int _read(int placeholder1, char* placeholder2, int placeholder3)
+int _read(int file, char *ptr, int len)
 {
+    (void)file;
+    (void)ptr;
+    (void)len;
     errno = ENOSYS;
     return -1;
 }
 
-int _lseek(int placeholder1, int placeholder2, int placeholder3)
+int _lseek(int file, int ptr, int dir)
 {
+    (void)file;
+    (void)ptr;
+    (void)dir;
     errno = ENOSYS;
     return -1;
 }
