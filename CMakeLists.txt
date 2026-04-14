@@ -29,5 +29,6 @@ install(PROGRAMS
   DESTINATION bin
   )
 
+
 include(CTest)
 add_test(NAME null_test COMMAND echo "TODO: No unit tests exist for tiva_cmake")

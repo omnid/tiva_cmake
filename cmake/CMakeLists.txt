@@ -1,10 +1,10 @@
-# Used to install the cmake files for tiva_cmake
-cmake_minimum_required(VERSION 3.12)
-project(TivaCMakeFiles LANGUAGES NONE)
+cmake_minimum_required(VERSION 3.28)
+project(TivaCMakeFiles
+  VERSION 1.0.0
+  DESCRIPTION "CMake Files used for compiling and loading code to Tiva microcontrollers"
+  LANGUAGES NONE)
 
 
-install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/TivaCMake
-  DESTINATION share)
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/TivaCMake TYPE DATA)
 
-install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/TivaToolchain
-  DESTINATION share)
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/TivaToolchain TYPE DATA)
