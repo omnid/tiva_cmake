@@ -75,10 +75,3 @@ else()
   message(NOTICE "arm-none-eabi-gcc compiler not found, not building gcc libraries")
 endif()
 
-# Install the CMake Files to the local directory
-ExternalProject_Add(
-  tiva-cmake
-  SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../cmake
-    CMAKE_ARGS
-   -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install
-    )

@@ -6,6 +6,16 @@ project(tiva_cmake
   HOMEPAGE_URL "https://github.com/omnid/tiva_cmake"
   LANGUAGES NONE)
 
+include(ExternalProject)
+
+# Install the CMake Files to the local directory
+# All other cross-compilation depends on these cmake files
+ExternalProject_Add(
+  tiva-cmake
+  SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/cmake
+    CMAKE_ARGS
+    -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX})
+
 add_subdirectory(lib)
 
 # Building lib installs a bunch of external projects to a single directory
