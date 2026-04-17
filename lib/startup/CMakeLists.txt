@@ -61,7 +61,7 @@ install(EXPORT TivaStartupTargets_${CMAKE_BUILD_TYPE}
 # The TivaStartupConfig file imports the targets based on the value of STARTUPLIB_DEBUG and what
 # compiler is being used
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/TivaStartupConfig.cmake"
-  DESTINATION ${INSTALL_ROOT}/cmake)
+  DESTINATION ${INSTALL_ROOT}/)
 
 install(FILES
   "${CMAKE_CURRENT_LIST_DIR}/${CMAKE_SYSTEM_PROCESSOR}.cmd"
