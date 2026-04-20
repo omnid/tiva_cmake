@@ -14,9 +14,24 @@ include(ExternalProject)
 ExternalProject_Add(
   tiva_toolchain
   SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/toolchain
+  INSTALL_DIR ${CMAKE_BINARY_DIR}/deps
   CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
 
+#ExternalProject_Get_Property(tiva_toolchain 
+
+#ExternalProject_Add(GNU_Debug_startup
+#  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/startup
+#  CMAKE_ARGS
+#  -DCMAKE_PREFIX_PAT
+#  -DCMAKE_TOOLCHAIN_FILE=
+#  -DCMAKE_BUILD_TYPE=Debug
+#  -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
+
+#    startup_libraries(TI ti-cgt-arm-toolchain.cmake Debug ${proc})
+
+
+  
 #1 add_subdirectory(lib)
 
 # Building lib installs a bunch of external projects to a single directory
