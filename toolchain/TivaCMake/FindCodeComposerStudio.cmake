@@ -27,7 +27,7 @@ The following cache variables may also be set:
   The executable that runs Code Composer Studio
 
 ``CodeComposerStudio_ROOT_DIR``
-  The root directory of Code Composer Studio. 
+  The root directory of Code Composer Studio.
 
 ``CodeComposerStudio_UniFlash_EXECUTABLE``
   The executable that runs the UniFlash tool, used for flashing microcontrollers
@@ -44,6 +44,7 @@ if(NOT CodeComposerStudio_FOUND)
     HINTS ${CodeComposerStudio_ROOTS}
     PATH_SUFFIXES ccs/eclipse
     NO_DEFAULT_PATH
+    QUIET
     )
 
   # Get the root directory
@@ -69,8 +70,9 @@ if(NOT CodeComposerStudio_FOUND)
   find_program(CodeComposerStudio_UniFlash_EXECUTABLE
     ${uniflash_name}
     PATHS ${CodeComposerStudio_ROOT_DIR}/ccs/ccs_base/scripting/examples/uniflash/cmdLine
-    NO_DEFAULT_PATH)
-  
+    NO_DEFAULT_PATH
+    QUIET)
+
   include(FindPackageHandleStandardArgs)
   find_package_handle_standard_args(CodeComposerStudio
     FOUND_VAR CodeComposerStudio_FOUND

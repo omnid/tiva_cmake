@@ -6,6 +6,11 @@ project(tiva_cmake
   HOMEPAGE_URL "https://github.com/omnid/tiva_cmake"
   LANGUAGES NONE)
 
+# Determine whether to build this for the GNU and TI compilers
+option(BUILD_GNU "Build GNU (arm-none-eabi-gcc) support" ON)
+option(BUILD_TI "Build TI (ti-cgt-arm) support" OFF)
+
+
 include(ExternalProject)
 
 # Install the CMakeFiles for the toolchain as a local dependency
@@ -18,15 +23,14 @@ ExternalProject_Add(
   CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
 
-#ExternalProject_Get_Property(tiva_toolchain 
-
 #ExternalProject_Add(GNU_Debug_startup
 #  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/startup
+#  PREFIX prefix
 #  CMAKE_ARGS
-#  -DCMAKE_PREFIX_PAT
-#  -DCMAKE_TOOLCHAIN_FILE=
+#  -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+#  -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
 #  -DCMAKE_BUILD_TYPE=Debug
-#  -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
+#  -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/startup/cmake/arm-none-eabi-gcc.cmake)
 
 #    startup_libraries(TI ti-cgt-arm-toolchain.cmake Debug ${proc})
 

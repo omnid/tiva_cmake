@@ -37,8 +37,6 @@ The following cache variables may also be set:
 # A guide for writing find modules: https://cmake.org/cmake/help/v3.17/manual/cmake-developer.7.html
 
 if(NOT ArmNoneEabiGCC_FOUND)
-  
-  find_package(CodeComposerStudio)
 
   # Glob each search directory since the name contains the version of the compiler
   # Reverse the results so that the directory with the highest versions are first
@@ -54,12 +52,17 @@ if(NOT ArmNoneEabiGCC_FOUND)
   file(GLOB ArmNoneEabiGCC_HINTS4 /opt/gcc-arm-none-eabi*)
   list(REVERSE ArmNoneEabiGCC_HINTS4)
 
-  file(GLOB ArmNoneEabiGCC_HINT_CCS ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/gcc-arm-none-eabi* ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/arm-none-eabi-gcc*)
+  # Code composer studio comes with gcc
+  find_package(CodeComposerStudio QUIET)
+  if(NOT CodeComposerStudio_FOUND)
+    file(GLOB ArmNoneEabiGCC_HINT_CCS ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/gcc-arm-none-eabi* ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/arm-none-eabi-gcc*)
+  endif()
+
   list(REVERSE ArmNoneEabiGCC_HINT_CCS)
-  
+
   find_program(ArmNoneEabiGCC_C_COMPILER
     NAMES arm-none-eabi-gcc
-    HINTS ${ArmNoneEabiGCC_HINTS1} ${ArmNoneEabiGCC_HINTS2} ${ArmNoneEabiGCC_HINTS3} ${ArmNoneEabiGCC_HINTS4} 
+    HINTS ${ArmNoneEabiGCC_HINTS1} ${ArmNoneEabiGCC_HINTS2} ${ArmNoneEabiGCC_HINTS3} ${ArmNoneEabiGCC_HINTS4}
     DOC "The GNU C compiler for arm with the none-eabi (i.e., no operating system)"
     PATH_SUFFIXES bin
     )
@@ -90,7 +93,7 @@ if(NOT ArmNoneEabiGCC_FOUND)
     HINTS ${ArmNoneEabiGCC_BIN_DIR}
     DOC "The GNU C++ compiler for arm with the none-eabi (i.e., no operating system)"
     )
-  
+
   include(FindPackageHandleStandardArgs)
   find_package_handle_standard_args(ArmNoneEabiGCC
     FOUND_VAR ArmNoneEabiGCC_FOUND
@@ -99,4 +102,4 @@ if(NOT ArmNoneEabiGCC_FOUND)
     ArmNoneEabiGCC_CXX_COMPILER
     VERSION_VAR ArmNoneEabiGCC_VERSION
     )
-endif()  
+endif()
