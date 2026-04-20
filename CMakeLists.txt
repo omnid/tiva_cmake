@@ -8,15 +8,13 @@ project(tiva_cmake
 
 include(ExternalProject)
 
-set(DEPENDENCY_INSTALL_DIR ${CMAKE_BINARY_DIR}/deps_install)
-
 # Install the CMakeFiles for the toolchain as a local dependency
 # The rest of the build depends on having these files
 # All other cross-compilation depends on these cmake files
 ExternalProject_Add(
   tiva_toolchain
+  PREFIX prefix
   SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/toolchain
-  INSTALL_DIR ${DEPENDENCY_INSTALL_DIR}
   CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
 
@@ -47,15 +45,6 @@ ExternalProject_Add(
 #1  PATTERN build EXCLUDE
 #1  )
 
-#1 configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/tiva-toolchain.in tiva-toolchain)
-#1 configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/ti-cgt-arm-toolchain.in ti-cgt-arm-toolchain)
-#1 configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/arm-none-eabi-gcc-toolchain.in arm-none-eabi-gcc-toolchain)
-#1 install(PROGRAMS
-#1   ${CMAKE_CURRENT_BINARY_DIR}/tiva-toolchain
-#1   ${CMAKE_CURRENT_BINARY_DIR}/arm-none-eabi-gcc-toolchain
-#1   ${CMAKE_CURRENT_BINARY_DIR}/ti-cgt-arm-toolchain
-#1   DESTINATION bin
-#1   )
 
 
 #1 include(CTest)

@@ -1,2 +1,2 @@
-#!/usr/bin/env bash
+#!/bin/sh
 echo "@CMAKE_INSTALL_PREFIX@/share/TivaToolchain/arm-none-eabi-gcc-toolchain.cmake"
