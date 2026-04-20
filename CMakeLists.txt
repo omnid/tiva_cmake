@@ -8,37 +8,38 @@ project(tiva_cmake
 
 include(ExternalProject)
 
-# Install the CMake Files to the local directory
+# Install the CMakeFiles for the toolchain as a local dependency
+# The rest of the build depends on having these files
 # All other cross-compilation depends on these cmake files
 ExternalProject_Add(
-  tiva-cmake
-  SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/cmake
-    CMAKE_ARGS
-    -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX})
+  tiva_toolchain
+  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/toolchain
+  CMAKE_ARGS
+    -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
 
-add_subdirectory(lib)
+#1 add_subdirectory(lib)
 
 # Building lib installs a bunch of external projects to a single directory
 # In the prefix ${CMAKE_BINARY_DIR}/install
 # We now want to install that into this project's install prefix
-install(DIRECTORY ${CMAKE_BINARY_DIR}/install/share
-  DESTINATION ".")
+#1 install(DIRECTORY ${CMAKE_BINARY_DIR}/install/share
+#1  DESTINATION ".")
 
-install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src
-  DESTINATION share/TivaCMake
-  PATTERN build EXCLUDE
-  )
+#1 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src
+#1  DESTINATION share/TivaCMake
+#1  PATTERN build EXCLUDE
+#1  )
 
-configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/tiva-toolchain.in tiva-toolchain)
-configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/ti-cgt-arm-toolchain.in ti-cgt-arm-toolchain)
-configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/arm-none-eabi-gcc-toolchain.in arm-none-eabi-gcc-toolchain)
-install(PROGRAMS
-  ${CMAKE_CURRENT_BINARY_DIR}/tiva-toolchain
-  ${CMAKE_CURRENT_BINARY_DIR}/arm-none-eabi-gcc-toolchain
-  ${CMAKE_CURRENT_BINARY_DIR}/ti-cgt-arm-toolchain
-  DESTINATION bin
-  )
+#1 configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/tiva-toolchain.in tiva-toolchain)
+#1 configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/ti-cgt-arm-toolchain.in ti-cgt-arm-toolchain)
+#1 configure_file(${CMAKE_CURRENT_LIST_DIR}/scripts/arm-none-eabi-gcc-toolchain.in arm-none-eabi-gcc-toolchain)
+#1 install(PROGRAMS
+#1   ${CMAKE_CURRENT_BINARY_DIR}/tiva-toolchain
+#1   ${CMAKE_CURRENT_BINARY_DIR}/arm-none-eabi-gcc-toolchain
+#1   ${CMAKE_CURRENT_BINARY_DIR}/ti-cgt-arm-toolchain
+#1   DESTINATION bin
+#1   )
 
 
-include(CTest)
-add_test(NAME null_test COMMAND echo "TODO: No unit tests exist for tiva_cmake")
+#1 include(CTest)
+#1 add_test(NAME null_test COMMAND echo "TODO: No unit tests exist for tiva_cmake")
