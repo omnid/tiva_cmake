@@ -13,7 +13,7 @@ set(CMAKE_SYSTEM_NAME arm-none-eabi)
 # By default assume a TM4C123GH6PM microcontroller
 set(CMAKE_SYSTEM_PROCESSOR TM4C123GH6PM CACHE STRING "The microcontroller model")
 
-# Don't try to link when testing
+# Don't try to run when testing
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/../TivaCMake)
