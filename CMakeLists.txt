@@ -8,13 +8,15 @@ project(tiva_cmake
 
 include(ExternalProject)
 
+set(DEPENDENCY_INSTALL_DIR ${CMAKE_BINARY_DIR}/deps_install)
+
 # Install the CMakeFiles for the toolchain as a local dependency
 # The rest of the build depends on having these files
 # All other cross-compilation depends on these cmake files
 ExternalProject_Add(
   tiva_toolchain
   SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/toolchain
-  INSTALL_DIR ${CMAKE_BINARY_DIR}/deps
+  INSTALL_DIR ${DEPENDENCY_INSTALL_DIR}
   CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
 
