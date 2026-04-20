@@ -13,7 +13,7 @@ set(CMAKE_SYSTEM_NAME arm-none-eabi)
 # By default assume a TM4C123GH6PM microcontroller
 set(CMAKE_SYSTEM_PROCESSOR TM4C123GH6PM CACHE STRING "The microcontroller model")
 
-# Don't try to run when testing
+# Don't try to link when testing
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/../TivaCMake)
@@ -21,7 +21,7 @@ find_package(ArmNoneEabiGCC REQUIRED)
 
 # The user can override these settings to choose a different compiler
 set(CMAKE_C_COMPILER ${ArmNoneEabiGCC_C_COMPILER} CACHE STRING "The C compiler")
-set(CMAKE_CXX_COMPILER ${ArmNoneEabiGCC_CXX_COMPILER} CACHE STRING "The C++ compiler") 
+set(CMAKE_CXX_COMPILER ${ArmNoneEabiGCC_CXX_COMPILER} CACHE STRING "The C++ compiler")
 
 # Setup search paths for external software that we need that are within the compiler directory
 set(CMAKE_FIND_ROOT_PATH "${ArmNoneEabiGCC_ROOT_DIR}")

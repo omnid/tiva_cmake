@@ -63,7 +63,7 @@ if(NOT TiCgtArm_FOUND)
 
   file(GLOB TiCgtArm_HINTS5 /opt/ccstudio/ccs/tools/compiler/ti-cgt-arm*)
   list(REVERSE TiCgtArm_HINTS5)
-  
+
   file(GLOB TiCgtArm_HINT_CCS ${CodeComposerStudio_ROOT_DIR}/ccs*/tools/compiler/ti-cgt-arm*)
   list(REVERSE TiCgtArm_HINT_CCS)
 
@@ -105,5 +105,4 @@ if(NOT TiCgtArm_FOUND)
     TiCgtArm_EXECUTABLE
     VERSION_VAR TiCgtArm_VERSION
     )
-        
 endif()
