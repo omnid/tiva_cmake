@@ -31,11 +31,10 @@ them to persist when the toolchain is reloaded by try compile.
 #]========================================================================]
 # A guide for writing find modules: https://cmake.org/cmake/help/v3.17/manual/cmake-developer.7.html
 
-if(TivaToolchain_FOUND)
-  return()
+# These variables are preserved for try_compile
+# when the TivaCMake/Platform/arm-none-eabi.cmake file is called
+if(NOT TivaToolchain_FOUND)
+  set(TivaToolchain_GNU ${TivaToolchain_DIR}/arm-none-eabi-gcc-toolchain.cmake)
+  set(TivaToolchain_TI ${TivaToolchain_DIR}/ti-cgt-arm-toolchain.cmake)
 endif()
 
-# These variables need to be set at file scope so they are preserved
-# When the TivaCMake/Platform/arm-none-eabi.cmake file is called
-set(TivaToolchain_GNU ${TivaToolchain_DIR}/arm-none-eabi-gcc-toolchain.cmake)
-set(TivaToolchain_TI ${TivaToolchain_DIR}/ti-cgt-arm-toolchain.cmake)
