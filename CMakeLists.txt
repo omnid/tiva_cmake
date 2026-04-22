@@ -22,7 +22,8 @@ ExternalProject_Add(
   CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
 
-#----------- Startup Libraries ----------------------------------------#
+#------------  Helper functions for building startup and tivaware libraries ----------------#
+
 # Build tivaware libraries (tivaware and the startup code) with different compiler combinations
 #   compiler_id - ID of the compiler, (GCC or TI)
 #   build_type - the CMakeBuildtype to use (Debug or Release)
@@ -38,17 +39,34 @@ function(startup_libraries compiler_id build_type)
 endfunction()
 
 
+# Build tivaware libraries (tivaware and the startup code) with different compiler combinations
+#   compiler_id - ID of the compiler, (GCC or TI)
+#   build_type - the CMakeBuildtype to use (Debug or Release)
+function(tivaware_libraries compiler_id build_type)
+  ExternalProject_Add(${compiler_id}_${build_type}_tivaware
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tivaware
+    PREFIX prefix
+    CMAKE_ARGS
+    -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+    -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+    -DCMAKE_BUILD_TYPE=${build_type}
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/${compiler_id}-toolchain.cmake
+    )
+endfunction()
+
+#-------------------- Build the startup and tivaware libraries ------------------------------#
+
 # Create all the supported varieties of startup library
 if(BUILD_GNU)
   startup_libraries(GNU Debug)
   startup_libraries(GNU Release)
+  tivaware_libraries(GNU Debug)
+  tivaware_libraries(GNU Release)
 elseif(BUILD_TI)
 endif()
 #    startup_libraries(TI ti-cgt-arm-toolchain.cmake Debug ${proc})
 
-#--------------- Tivaware Libraries ----------------------------------#
 
-#1 add_subdirectory(lib)
 
 # Building lib installs a bunch of external projects to a single directory
 # In the prefix ${CMAKE_BINARY_DIR}/install
