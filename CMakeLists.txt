@@ -34,7 +34,7 @@ function(startup_libraries compiler_id build_type)
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
     -DCMAKE_BUILD_TYPE=${build_type}
-    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/startup/cmake/${compiler_id}-toolchain.cmake)
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/${compiler_id}-toolchain.cmake)
 endfunction()
 
 
@@ -46,7 +46,7 @@ elseif(BUILD_TI)
 endif()
 #    startup_libraries(TI ti-cgt-arm-toolchain.cmake Debug ${proc})
 
-
+#--------------- Tivaware Libraries ----------------------------------#
 
 #1 add_subdirectory(lib)
 
