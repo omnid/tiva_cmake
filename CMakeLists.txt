@@ -1,4 +1,3 @@
-# Ensure that dependencies are up to date and then build the src directory
 cmake_minimum_required(VERSION 3.12)
 project(tiva_cmake
   VERSION 0.2.0
@@ -18,6 +17,7 @@ include(ExternalProject)
 ExternalProject_Add(
   tiva_toolchain
   PREFIX prefix
+  INSTALL_DIR install
   SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/toolchain
   CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
@@ -31,6 +31,7 @@ function(startup_libraries compiler_id build_type)
   ExternalProject_Add(${compiler_id}_${build_type}_startup
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/startup
     PREFIX prefix
+    INSTALL_DIR install
     CMAKE_ARGS
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
@@ -46,6 +47,7 @@ function(tivaware_libraries compiler_id build_type)
   ExternalProject_Add(${compiler_id}_${build_type}_tivaware
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tivaware
     PREFIX prefix
+    INSTALL_DIR install
     CMAKE_ARGS
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
@@ -64,22 +66,11 @@ if(BUILD_GNU)
   tivaware_libraries(GNU Release)
 elseif(BUILD_TI)
 endif()
-#    startup_libraries(TI ti-cgt-arm-toolchain.cmake Debug ${proc})
 
+#---------------------- Installation -----------------------#
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/install/
+  DESTINATION .
+  USE_SOURCE_PERMISSIONS)
 
-
-# Building lib installs a bunch of external projects to a single directory
-# In the prefix ${CMAKE_BINARY_DIR}/install
-# We now want to install that into this project's install prefix
-#1 install(DIRECTORY ${CMAKE_BINARY_DIR}/install/share
-#1  DESTINATION ".")
-
-#1 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/src
-#1  DESTINATION share/TivaCMake
-#1  PATTERN build EXCLUDE
-#1  )
-
-
-
-#1 include(CTest)
-#1 add_test(NAME null_test COMMAND echo "TODO: No unit tests exist for tiva_cmake")
+include(CTest)
+add_test(NAME null_test COMMAND echo "TODO: No unit tests exist for tiva_cmake")
