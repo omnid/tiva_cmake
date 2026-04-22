@@ -13,9 +13,8 @@ option(BUILD_TI "Build TI (ti-cgt-arm) support" OFF)
 
 include(ExternalProject)
 
-# Install the CMakeFiles for the toolchain as a local dependency
-# The rest of the build depends on having these files
-# All other cross-compilation depends on these cmake files
+#----------- Install the CMake Files for the Toolchain ----------------#
+#     All other cross-compilation depends on these cmake files
 ExternalProject_Add(
   tiva_toolchain
   PREFIX prefix
@@ -23,19 +22,32 @@ ExternalProject_Add(
   CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
 
-#ExternalProject_Add(GNU_Debug_startup
-#  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/startup
-#  PREFIX prefix
-#  CMAKE_ARGS
-#  -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-#  -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
-#  -DCMAKE_BUILD_TYPE=Debug
-#  -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/startup/cmake/arm-none-eabi-gcc.cmake)
+#----------- Startup Libraries ----------------------------------------#
+# Build tivaware libraries (tivaware and the startup code) with different compiler combinations
+#   compiler_id - ID of the compiler, (GCC or TI)
+#   build_type - the CMakeBuildtype to use (Debug or Release)
+function(startup_libraries compiler_id build_type)
+  ExternalProject_Add(${compiler_id}_${build_type}_startup
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/startup
+    PREFIX prefix
+    CMAKE_ARGS
+    -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+    -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+    -DCMAKE_BUILD_TYPE=${build_type}
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/startup/cmake/${compiler_id}-toolchain.cmake)
+endfunction()
 
+
+# Create all the supported varieties of startup library
+if(BUILD_GNU)
+  startup_libraries(GNU Debug)
+  startup_libraries(GNU Release)
+elseif(BUILD_TI)
+endif()
 #    startup_libraries(TI ti-cgt-arm-toolchain.cmake Debug ${proc})
 
 
-  
+
 #1 add_subdirectory(lib)
 
 # Building lib installs a bunch of external projects to a single directory
