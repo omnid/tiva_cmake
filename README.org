@@ -25,6 +25,7 @@ to the flash memory using the in-circuit debugger (ICD) on TI's LaunchPad develo
 :PROPERTIES:
 :CUSTOM_ID: installation
 :END:
+
 ** Dependencies
 1. [[https://cmake.org/download][CMake]]  (Version 3.28 or later).
 2. There are a few options for obtaining the cross compiler. The toolchain supports =GNU= and =TI= compilers:

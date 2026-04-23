@@ -7,6 +7,7 @@
 // https://sourceware.org/git/?p=newlib-cygwin.git;a=tree;f=libgloss/libnosys;h=2987d66fd512d69228afd8d481b083d210c9a313;hb=HEAD
 
 #include <errno.h>
+#include <stddef.h>
 #include <sys/types.h>
 #undef errno
 extern int errno;

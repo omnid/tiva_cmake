@@ -64,7 +64,13 @@ if(BUILD_GNU)
   startup_libraries(GNU Release)
   tivaware_libraries(GNU Debug)
   tivaware_libraries(GNU Release)
-elseif(BUILD_TI)
+endif()
+
+if(BUILD_TI)
+  startup_libraries(TI Debug)
+  startup_libraries(TI Release)
+  tivaware_libraries(TI Debug)
+  tivaware_libraries(TI Release)
 endif()
 
 #---------------------- Installation -----------------------#
