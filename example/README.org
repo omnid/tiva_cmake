@@ -1,0 +1,24 @@
+#+TITLE: Example CMake Project
+
+* Overview
+This is a minimal working example to flash an led on the Tiva.
+
+
+* Usage
+Build with:
+#+BEGIN_SRC bash
+cmake --toolchain GNU-toolchain.cmake -B build
+cmake --build build
+
+# With the mcu plugged in
+cmake --build build --target led_test.write
+#+END_SRC
+
+* How it works
+1. The =CMakeLists.txt= file is standard, except it does a =find_package(TivaCMake)=
+   - Finding the package sets up overrides for =add_executable= and =add_library= that enable =tiva_cmake= functionality
+2. The executable links against =TivaCMake::driverlib= to use the driverlib code.
+3. A "stub" toolchain file =GNU-toolchain.cmake= is included with the code. This =toolchain= file
+   delegates to the installed =toolchain= file that does all the actual work.  Without this file,
+   users would need to know and specify the full path to the underlying toolchain file.
+
