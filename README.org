@@ -16,104 +16,40 @@
 :PROPERTIES:
 :CUSTOM_ID: introduction
 :END:
-A CMake toolchain focused on Texas Instruments (TI) Tiva-C microcontrollers (although likely modifiable to other arm processors).  
-It enables the use of ~arm-none-eabi-gcc~ or TI's Code Generation Tools (~ti-cgt~) and provides a method to write your
-code to flash memory using the in-circuit debugger (ICD) on TI's LaunchPad development boards. 
-For convenience, it also comes bundled with ~TivaWare~ ~driverlib~.
-
-You can use ~tiva_cmake~ as a [[#template-mode-quickstart-no-installation][template]] or [[#Installation][install]] it and use it as a dependency. 
-
-* Template Mode (Quickstart, No Installation)
-:PROPERTIES:
-:CUSTOM_ID: template-mode-quickstart-no-installation
-:END:
-0. The example assumes that you have an ~EK-TM4C123GXL~ plugged into a USB port and the [[#development-tools][Development Tools]] installed (git, make, cmake (>= 3.12), arm compiler).
-1. Clone this repository:
-   #+BEGIN_SRC
-   git clone https://github.com/omnid/tiva_cmake my_project
-   cd my_project
-   #+END_SRC
-2. Generate and build the libraries (only need to run once)
-   #+BEGIN_SRC 
-   cmake -G"Unix Makefiles" -B lib/build lib/
-   cmake --build lib/build
-   #+END_SRC 
-3. Compile the template project and load it onto the microcontroller
-   #+BEGIN_SRC 
-   cmake -G"Unix Makefiles" -B src/build src/
-   cmake --build src/build --target led_example.write
-   #+END_SRC
-
-When successful, you should see LED on the ~EK-TM4C123GXL~ cycle between blue and white.
-
-
-The project source code resides in ~src/~, which is the sole location you should need to edit files in.  
-- You can run ~cmake~ as you normally would from within ~src~ once the ~lib/~ has been built.
-  - ~cmake --build src/build --target led_example.write~ is equivalent to calling ~make led_example.write~ from within the ~src/build~ directory (when Unix Makefiles are used).
-- ~src/PreLoad.cmake~ sets the default toolchain file. 
-  - You can also specify a toolchain file by setting ~CMAKE_TOOLCHAIN_FILE~ when you first run ~cmake~:
-    ~cmake -B src/build src/ -DCMAKE_TOOLCHAIN_FILE=<file>~
-  - The default toolchain file is ~tiva-toolchain.cmake~, which picks ~gcc~ and falls back to ~ti-cgt~ if it cannot find ~gcc~.
-  - The toolchain for ~gcc~ is ~arm-none-eabi-gcc-toolchain.cmake~
-  - The toolchain for ~ti-cgt~ is ~ti-cgt-arm-toolchain.cmake~
-  - To change toolchain files you must delete the contents of the build directory and re-generate the build system
-- Only Makefile generators are supported.  On non-Windows platforms, you can omit the ~-G"Unix Makefiles"~ because that is the default on those platforms.
-- See [[#startup-library][Startup Library]] for information about how to implement interrupt service routines.
-- To change the microcontroller model add ~-DCMAKE_SYSTEM_PROCESSOR=TM4Cxxxxx~ or set it in ~src/PreLoad.cmake~. (See [[#microcontroller-support][Microcontroller Support]]).
-- See [[#cmake-settings][CMake Settings]] for details and other options.   
+A CMake toolchain focused on Texas Instruments (TI) Tiva-C microcontrollers (although likely modifiable to other arm processors).
+Enables using ~arm-none-eabi-gcc~ or TI's Code Generation Tools (~ti-cgt~) and also provides methods to write the binary
+to the flash memory using the in-circuit debugger (ICD) on TI's LaunchPad development boards via ~openocd~ or TI's ~UniFlash~ utility.
 
 
 * Installation
 :PROPERTIES:
 :CUSTOM_ID: installation
 :END:
-** Ubuntu/Debian
-1. Download and install the [[https://github.com/omnid/tiva_cmake/releases/download/v0.1.0/tiva_cmake-0.1.0-any.deb][latest package]], which will also bring in the dependencies
-   #+BEGIN_SRC bash
-   curl -o tiva_cmake.deb https://github.com/omnid/tiva_cmake/releases/download/v0.1.0/tiva_cmake-0.1.0-any.deb
-   sudo apt install ./tiva_cmake.deb
-   #+END_SRC 
-2. You will need at least CMake 3.12.  Ubuntu 18.04 has an older version so download cmake separately.
-2. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[#development-tools][Development Tools]] 
+** Dependencies
+1. [[https://cmake.org/download][CMake]]  (Version 3.28 or later).
+2. There are a few options for obtaining the cross compiler. The toolchain supports =GNU= and =TI= compilers:
+   1. GCC on Ubuntu: =sudo apt install  gcc-arm-none-eabi libnewlib-arm-none-eabi gdb-multiarch=
+   2. GCC on ArchLinux: =sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib arm-none-eabi-gdb=
+   3. GCC on Windows/Mac: [[https://developer.arm.com/Tools%20and%20Software/GNU%20Toolchain][Arm GNU Toolchain]]
+   4. TI Code Generation Tools: [[https://www.ti.com/tool/ARM-CGT]]
+      - Install to =/opt= or =/home/$(whoami)=
+      - On ArchLinux can be installed from the AUR as =ti-cgt-arm=.
+   5. Alternatively, [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything that is needed.
+      - This is a large download but might be easiest on Windows/Mac.
+4. Flash Tools:
+   1. [[https://openocd.org][OpenOCD]] on Ubuntu: =sudo apt install openocd= and ArchLinux: =sudo pacman -S openocd=
+   2. [[https://www.ti.com/tool/UNIFLASH]]
+   3. Uniflash is also distributed with Code Composer Studio.
 
-** Arch Linux
-1. Download and install the [[https://github.com/omnid/tiva_cmake/releases/download/v0.1.0/tiva_cmake-0.1.0-1-any.pkg.tar.xz][latest package]], which will also bring in the dependencies
-   #+BEGIN_SRC bash
-   curl -o tiva_cmake.pkg.tar.xz https://github.com/omnid/tiva_cmake/releases/download/v0.1.0/tiva_cmake-0.1.0-1-any.pkg.tar.xz
-   sudo pacman -U tiva_cmake
-   #+END_SRC 
-2. Optional: install the ~arm-none-eabi-gdb~ package to use a debugger. 
-3. Optional: install ~ti-cgt-arm~ (AUR) to get the TI compilers. 
-4. Optional: If you want to use TI's compiler in addition to ~gcc~, Install [[#development-tools][Development Tools]]
+** Building
+#+BEGIN_SRC bash
+git clone git@github.com:omnid/tiva_cmake
+cd tiva_cmake
+cmake -build .
+cmake --build build
+sudo cmake --build build --target install
+#+END_SRC
 
-** Binary (All platforms)
-1. Install [[#development-tools][Development Tools]] 
-2. Download the [[https://github.com/omnid/tiva_cmake/releases/download/v0.1.0/tiva_cmake-0.1.0-any.zip][zipfile]] or the [[https://github.com/omnid/tiva_cmake/releases/download/v0.1.0/tiva_cmake-0.1.0-any.tar.gz][tarball]]. 
-3. Extract the contents.  The top level directory of is ~tiva_cmake-x.y.z-any~
-3. Copy the contents of ~tiva_cmake-x.y.z-any~ to somewhere it can be found by ~CMake~
-   - Linux: ~/usr/local/~ or ~/usr/~ (e.g., ~sudo cp -r tiva_cmake-x.y.z-any/* /usr/local~)
-   - Windows this could be ~C:\Program Files~ 
-   - macOS this could be ~/usr/local/share~ 
-4. Alternatively you can set ~CMAKE_PREFIX_PATH~ to the ~tiva_cmake-x.y.z-any~ when running cmake
-
-** From Source
-1. Install [[#development-tools][Development Tools]]
-2. 
-   #+BEGIN_SRC bash
-   git clone git@github.com:omnid/tiva_cmake
-   cd tiva_cmake
-   cmake -B build .
-   cmake --build build
-   sudo cmake --build build --target install
-   #+END_SRC
-   - See [[https://github.com/omnid/omnid_docs/blob/master/Installation.md][For more options]]
-3. To create packages run ~make package~ in the build directory. 
-   To run this command you need a few dependencies
-   - ~dpkg~ to build Debian packages
-   - ~rpm~ to build RedHat packages
-   - ~makepkg~ and [[https://github.com:omind/cmakeme][cmakeme]] to make ArchLinux packages 
-   - [[https://github.com/omnid/cmakeme][cmakeme]] for making packages to be supported
-4. See [[https://github.com/omnid/omnid_docs/blob/master/Installation.md][Installation.md]] for more detailed instructions.
 ** Udev Rules
 1. On Linux, you will need to set permissions on the Tiva to access it
 2. For convenience, a sample udev rules file is included (~20-tiva-uart.rules~).  To use these rules
@@ -123,7 +59,7 @@ The project source code resides in ~src/~, which is the sole location you should
    sudo udevadm trigger
    #+END_SRC
    - This rules file is just an example, and it gives permission to all USB-serial ports to every user on the system.
-* How To Use 
+* How To Use
 :PROPERTIES:
 :CUSTOM_ID: usage
 :END:
