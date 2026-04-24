@@ -13,7 +13,8 @@ Result Variables
   The root directory of the arm-none-eabi-gcc compiler
 
 ``CMAKE_MODULE_PATH``
-  This is updated so that TivaCMake modules can be discovered   
+This is updated so that TivaCMake modules can be discovered
+
 Cache Variables
 ^^^^^^^^^^^^^^^
 
@@ -26,7 +27,7 @@ Components
 ^^^^^^^^^^
 ``None``
   Do not load any components.  This is useful for detecting if tiva_cmake exists from a host system,
-  since actually loading the file is only useful when cross-compiling. 
+  since actually loading the file is only useful when cross-compiling.
 
 #]========================================================================]
 
@@ -42,10 +43,10 @@ if(NOT TivaCMake_FOUND)
 
   # Brings in the TivaCMake::startup and TivaWare::driverlib libraries
   # Enables cmake targets for writing code to the microcontroller and debugging
-  # If we are not cross-compiling 
+  # If we are not cross-compiling
   find_package(TivaStartup)
   find_package(TivaWare)
-  
+
   find_package(OpenOCD QUIET)
   find_package(CodeComposerStudio QUIET)
   find_package(ArmNoneEabiGdb QUIET)
@@ -66,7 +67,7 @@ if(NOT TivaCMake_FOUND)
       VERBATIM
       )
   endfunction()
-  
+
   # adds a target that will write to the tiva using openocd.
   # ext is the name of the extension to add to the target (so ${target}.${ext} is how to invoke this step)
   function(add_openocd_write target_name ext)
@@ -83,11 +84,11 @@ if(NOT TivaCMake_FOUND)
   function(add_openocd_gdb target_name)
     # that variable is set in FindArmNoneEabiGcc and FIndTiCgt
     add_custom_target(${target_name}.gdb
-      COMMAND ${ArmNoneEabiGdb_EXECUTABLE} 
+      COMMAND ${ArmNoneEabiGdb_EXECUTABLE}
       -ex "dir $cdir:$cwd:${TiCgtArm_SOURCE_DIRS}"
-      -ex "target extended-remote | ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c \"gdb_port pipe; log_output ${CMAKE_BINARY_DIR}/openocd.log\"" 
-      -ex "monitor reset halt" 
-      -ex "load" 
+      -ex "target extended-remote | ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c \"gdb_port pipe; log_output ${CMAKE_BINARY_DIR}/openocd.log\""
+      -ex "monitor reset halt"
+      -ex "load"
       "$<TARGET_FILE:${target_name}>"
       DEPENDS ${target_name}
       COMMENT "Using openocd and arm-none-eabi-gdb to debug ${target_name} on the microcontroller."
@@ -101,7 +102,7 @@ if(NOT TivaCMake_FOUND)
     add_custom_target(${target_name}.attach
       COMMAND ${ArmNoneEabiGdb_EXECUTABLE} "$<TARGET_FILE:${target_name}>"
       -ex "dir $cdir:$cwd:${TiCgtArm_SOURCE_DIRS}"
-      -ex "target extended-remote | ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c \"gdb_port pipe; log_output ${CMAKE_BINARY_DIR}/openocd.log\"" 
+      -ex "target extended-remote | ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c \"gdb_port pipe; log_output ${CMAKE_BINARY_DIR}/openocd.log\""
       -ex "monitor halt"
       DEPENDS ${target_name}
       COMMENT "Using openocd and arm-none-eabi-gdb to debug ${target_name} while it is already running."
@@ -109,7 +110,6 @@ if(NOT TivaCMake_FOUND)
       )
   endfunction()
 
-  
   # combine all the extra custom build steps
   function(tiva_cmake_add target)
     add_uniflash(${target} uni)
