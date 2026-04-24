@@ -9,7 +9,7 @@ project(tiva_cmake
 option(BUILD_GNU "Build GNU (arm-none-eabi-gcc) support" ON)
 option(BUILD_TI "Build TI (ti-cgt-arm) support" OFF)
 
-
+include(CTest)
 include(ExternalProject)
 
 #----------- Install the CMake Files for the Toolchain ----------------#
@@ -67,16 +67,38 @@ if(BUILD_GNU)
   tivaware_libraries(GNU Debug)
   tivaware_libraries(GNU Release)
 
-  # Build the GNU example
-  ExternalProject_Add(GNU_example
-    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/example
-    PREFIX prefix
-    INSTALL_DIR install
-    INSTALL_COMMAND ""
-    DEPENDS GNU_Debug_startup
-    CMAKE_ARGS
-    -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-    -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/GNU-toolchain.cmake)
+  if(BUILD_TESTING)
+    # Build the GNU example, a successful build is the test here
+    ExternalProject_Add(GNU_example
+      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/example
+      PREFIX prefix
+      INSTALL_DIR install
+      INSTALL_COMMAND ""
+      DEPENDS GNU_Debug_tivaware
+      CMAKE_ARGS
+      -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+      -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/GNU-toolchain.cmake)
+
+    # Build the startup code test
+    ExternalProject_Add(GNU_startup_test
+      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test
+      PREFIX prefix
+      INSTALL_DIR install
+      BINARY_DIR test
+      INSTALL_COMMAND ""
+      DEPENDS GNU_Debug_startup
+      CMAKE_ARGS
+      -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+      -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/GNU-toolchain.cmake
+    )
+
+    add_test(NAME qemu_startup_test
+      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/test/qemu_gdb_test.sh
+      qemu-system-arm
+      gdb-multiarch
+      ${CMAKE_BINARY_DIR}/test/startup_test
+      ${CMAKE_CURRENT_SOURCE_DIR}/test/startup_test.gdb)
+  endif()
 endif()
 
 if(BUILD_TI)
@@ -91,6 +113,3 @@ endif()
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/install/
   DESTINATION .
   USE_SOURCE_PERMISSIONS)
-
-include(CTest)
-add_test(NAME null_test COMMAND echo "TODO: No unit tests exist for tiva_cmake")
