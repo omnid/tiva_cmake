@@ -19,6 +19,11 @@ extern unsigned int __STACK_END;
 /// Store a test result toward the end of the stack
 volatile unsigned int *test_result = &__STACK_END - sizeof(unsigned int);
 
+void test_over(void)
+{
+    // empty function used to serve as a marker for a breakpoint
+}
+
 int main(void)
 {
     *test_result = 0;
@@ -48,10 +53,7 @@ int main(void)
         *test_result |= 0x8;
     }
 
-    for(;;)
-    {
-        // loop forever so we can inspect the memory
-        ;
-    }
+    test_over();
+
     return 0;
 }

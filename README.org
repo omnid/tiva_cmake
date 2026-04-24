@@ -64,7 +64,7 @@ sudo cmake --build build --target install
 ** New Project (Using an installed copy ~tiva_cmake~)
 1. Copy the =example/= directory and edit the =CMakeLists.txt= to suit your needs
 2. =cd example/= (or whatever directory you are using)
-3. =cmake --toolchain GNU-toolchain.cmake -B build .= (Configure to use the GNU toolchain)
+3. =cmake --toolchain cmake/GNU-toolchain.cmake -B build .= (Configure to use the GNU toolchain)
 4. =cmake --build build= (Build the code)
 5. =cmake --target led_example.write --build build= (with the device plugged in, flash the code to the microcontroller, substitute your executable name for led_example.write)
 

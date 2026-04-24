@@ -49,7 +49,7 @@ function(tivaware_libraries compiler_id build_type)
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tivaware
     PREFIX prefix
     INSTALL_DIR install
-    DEPENDS tiva_toolchain
+    DEPENDS tiva_toolchain ${compiler_id}_${build_type}_startup
     CMAKE_ARGS
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
@@ -66,6 +66,17 @@ if(BUILD_GNU)
   startup_libraries(GNU Release)
   tivaware_libraries(GNU Debug)
   tivaware_libraries(GNU Release)
+
+  # Build the GNU example
+  ExternalProject_Add(GNU_example
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/example
+    PREFIX prefix
+    INSTALL_DIR install
+    INSTALL_COMMAND ""
+    DEPENDS GNU_Debug_startup
+    CMAKE_ARGS
+    -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+    -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/GNU-toolchain.cmake)
 endif()
 
 if(BUILD_TI)
@@ -74,6 +85,7 @@ if(BUILD_TI)
   tivaware_libraries(TI Debug)
   tivaware_libraries(TI Release)
 endif()
+
 
 #---------------------- Installation -----------------------#
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/install/
