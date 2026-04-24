@@ -32,6 +32,7 @@ function(startup_libraries compiler_id build_type)
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/startup
     PREFIX prefix
     INSTALL_DIR install
+    DEPENDS tiva_toolchain
     CMAKE_ARGS
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
@@ -48,6 +49,7 @@ function(tivaware_libraries compiler_id build_type)
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tivaware
     PREFIX prefix
     INSTALL_DIR install
+    DEPENDS tiva_toolchain
     CMAKE_ARGS
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
