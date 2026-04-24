@@ -42,10 +42,9 @@ git clone git@github.com:omnid/tiva_cmake
 cd tiva_cmake
 cmake -B build .
 cmake --build build
-ctest --test-dir build
-sudo cmake --build build --target install
 #+END_SRC
-
+- Tests can be run with =ctest=, but require =qemu-system= and =gdb-multiarch= since some tests involve
+  running code in qemu and inspecting memory.
 *** CMake Options
 1. =-BUILD_TI=: set to =ON= to include support for =ti-cgt= compilers. The compilers must be installed to use (defaults to =OFF=)
 2. =-BUILD_GNU=: set to =OFF= to exclude support for =gcc= (defaults to =ON=).
