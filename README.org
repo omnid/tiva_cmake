@@ -30,17 +30,19 @@ to the flash memory using the in-circuit debugger (ICD) on TI's LaunchPad develo
       - Available as a package on ArchLinux via the AUR as =ti-cgt-arm=.
 4. TI Uniflash Flash Tool (optional)
    - Download from [[https://www.ti.com/tool/UNIFLASH]]
-4. Code Composer Studio (alternative):
+5. Code Composer Studio (alternative):
    - [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] is available for all OS's
    - If you have Code Composer Studio installed, none of the other prerequisites are necessary
    - This is a large download but might be easiest option on Windows/Mac.
-
+6. For testing =qemu-system= is required for =qemu-system-arm=
+   - Ubuntu: =sudo apt install qemu-system=
 ** Building
 #+BEGIN_SRC bash
 git clone git@github.com:omnid/tiva_cmake
 cd tiva_cmake
 cmake -B build .
 cmake --build build
+ctest --test-dir build
 sudo cmake --build build --target install
 #+END_SRC
 
