@@ -27,30 +27,38 @@ to the flash memory using the in-circuit debugger (ICD) on TI's LaunchPad develo
 :END:
 
 ** Dependencies
-1. [[https://cmake.org/download][CMake]]  (Version 3.28 or later).
-2. There are a few options for obtaining the cross compiler. The toolchain supports =GNU= and =TI= compilers:
-   1. GCC on Ubuntu: =sudo apt install  gcc-arm-none-eabi libnewlib-arm-none-eabi gdb-multiarch=
-   2. GCC on ArchLinux: =sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib arm-none-eabi-gdb=
-   3. GCC on Windows/Mac: [[https://developer.arm.com/Tools%20and%20Software/GNU%20Toolchain][Arm GNU Toolchain]]
-   4. TI Code Generation Tools: [[https://www.ti.com/tool/ARM-CGT]]
-      - Install to =/opt= or =/home/$(whoami)=
-      - On ArchLinux can be installed from the AUR as =ti-cgt-arm=.
-   5. Alternatively, [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] provides everything that is needed.
-      - This is a large download but might be easiest on Windows/Mac.
-4. Flash Tools:
-   1. [[https://openocd.org][OpenOCD]] on Ubuntu: =sudo apt install openocd= and ArchLinux: =sudo pacman -S openocd=
-   2. [[https://www.ti.com/tool/UNIFLASH]]
-   3. Uniflash is also distributed with Code Composer Studio.
+1. GNU C Compiler, newlib C library, and gdb (optional) for =arm-none-eabi=:
+   - Ubuntu: =sudo apt install  gcc-arm-none-eabi libnewlib-arm-none-eabi gdb-multiarch=
+   - ArchLinux: =sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib arm-none-eabi-gdb=
+   - Windows/Mac: [[https://developer.arm.com/Tools%20and%20Software/GNU%20Toolchain][Arm GNU Toolchain]]
+2. [[https://openocd.org][OpenOCD]] (flash tool):
+   - Ubuntu: =sudo apt install openocd=
+   - ArchLinux: =sudo pacman -S openocd=
+   - Other: [[https://github.com/openocd-org/openocd/#installing-openocd][Installing OpenOCD]]
+3. TI Code Generation Tools (optional):
+   - Download from [[https://www.ti.com/tool/ARM-CGT]]
+      - On Linux, Install to =/opt= or =/home/$(whoami)=
+      - Available as a package on ArchLinux via the AUR as =ti-cgt-arm=.
+4. TI Uniflash Flash Tool (optional)
+   - Download from [[https://www.ti.com/tool/UNIFLASH]]
+4. Code Composer Studio (alternative):
+   - [[https://www.ti.com/tool/CCSTUDIO][Code Composer Studio]] is available for all OS's
+   - If you have Code Composer Studio installed, none of the other prerequisites are necessary
+   - This is a large download but might be easiest option on Windows/Mac.
 
 ** Building
 #+BEGIN_SRC bash
 git clone git@github.com:omnid/tiva_cmake
 cd tiva_cmake
-cmake -build .
+cmake -B build .
 cmake --build build
 sudo cmake --build build --target install
 #+END_SRC
 
+*** CMake Options
+1. =-BUILD_TI=: set to =ON= to include support for =ti-cgt= compilers. The compilers must be installed to use (defaults to =OFF=)
+2. =-BUILD_GNU=: set to =OFF= to exclude support for =gcc= (defaults to =ON=).
+3. List other =cmake= options with =cmake -LAH .=
 ** Udev Rules
 1. On Linux, you will need to set permissions on the Tiva to access it
 2. For convenience, a sample udev rules file is included (~20-tiva-uart.rules~).  To use these rules
@@ -60,38 +68,23 @@ sudo cmake --build build --target install
    sudo udevadm trigger
    #+END_SRC
    - This rules file is just an example, and it gives permission to all USB-serial ports to every user on the system.
-* How To Use
+* Usage
 :PROPERTIES:
 :CUSTOM_ID: usage
 :END:
 ** New Project (Using an installed copy ~tiva_cmake~)
-- Copy the ~tiva_cmake/src~ directory to a new location
-  - Upon installation, this directory is installed to ~<prefix>/TivaCMake/src~
-  - For example, on Linux: ~cp -R /usr/share/TivaCMake/src my_project~
-- Edit ~CMakeLists.txt~ to add your source code and specify your libraries and executables.
-- Use ~cmake~ as usual
-- See [[#cmake-settings][CMake Settings]] for other options
-*** Without Preload
-- ~PreLoad.cmake~ is not officially documented by ~cmake~ however it is the only way to allow certain behaviors without requiring 
-   the user to enter additional command-line arguments
-   - Set a default toolchain
-   - Find toolchain files so the full path does not need to specify them
-- If you want to omit ~Preload.cmake~ from your project then it will
-  - Default to the host's default compiler
-  - Require you to specify the full path to any tiva toolchain file.
-- tiva_cmake installs three scripts that print the path to the respective toolchain files:
-  ~tiva-toolchain~, ~arm-none-eabi-gcc-toolchain~, and ~ti-cgt-arm-toolchain~
-- If you don't use ~PreLoad.cmake~ then users can specify a toolchain by passing the output of one of these scripts; for example:
-  ~-DCMAKE_TOOLCHAIN_FILE=$(tiva-toolchain)~
-  - The binaries are on the path if installed or located in the build directory.
+1. Copy the =example/= directory and edit the =CMakeLists.txt= to suit your needs
+2. =cd example/= (or whatever directory you are using)
+3. =cmake --toolchain GNU-toolchain.cmake -B build .= (Configure to use the GNU toolchain)
+4. =cmake --build build= (Build the code)
+5. =cmake --target led_example.write --build build= (with the device plugged in, flash the code to the microcontroller, substitute your executable name for led_example.write)
+
 ** Flashing the Firmware
 Every executable target you create (via ~add_executable(target_name ...)~ in ~cmake~ adds methods for flashing the firmware using the LaunchPad's In-Circuit Debugger.
 1. ~cmake --build build --target target_name.write~ Flash the program onto the microcontroller using one of the methods below, which are listed in order of preference
-   1. ~cmake --build build --target target_name.ocd~ Flash the program using ~openocd~ 
-   2. ~cmake --build build --target target_name.uni~ Flash the program using ~UniFlash~ 
+   1. ~cmake --build build --target target_name.ocd~ Flash the program using ~openocd~
+   2. ~cmake --build build --target target_name.uni~ Flash the program using ~UniFlash~
 The program will automatically be built prior to being flashed.
-Note: ~cmake --build build~ just calls your build tool (e.g. ~make~) in the build directory~. The ~--target~ option specifies the target.
-For example, if using ~Makefiles~ you can can use ~make target_name.write~ from the ~build~ directory to compile and flash the program
 
 ** Debugging with GDB
 - You need ~arm-none-eabi-gdb~ or ~gdb-multiarch~ and ~openocd~ (see [[#development-tools][Development Tools]]).
@@ -105,29 +98,18 @@ For example, if using ~Makefiles~ you can can use ~make target_name.write~ from 
 :PROPERTIES:
 :CUSTOM_ID: cmake-settings
 :END:
-Most ~cmake~ settings can be modifed using the ~cmake-gui~ (where the toolchain can also be selected when first configuring the project). 
-- Use ~find_package(TivaCMake)~ to bring in ~TivaCMake~ and use its functions
-- Use ~find_package(TivaCMake COMPONENTS None)~ to check for the existence of ~tiva_cmake~ without actually configuring anything.
+1. 
+
+1. Most ~cmake~ settings can be modified using the ~cmake-gui~ (where the toolchain can also be selected when first configuring the project).
+   - =TIVA_STARTUP_BUILD_TYPE=
+2. Use ~find_package(TivaCMake)~ to bring in ~TivaCMake~ and use its functions
+3.  Use ~find_package(TivaCMake COMPONENTS None)~ to check for the existence of ~tiva_cmake~ without actually configuring anything.
   This feature is useful when the host system (non-cross-compiling) wants to know if ~tiva_cmake~ exists without loading any
   cross-compiling settings
+4. Use the debugging version of the =startup= library by setting =TIVA_STARTUP_BUILD_TYPE= to =Debug=
 
 ** Selecting the toolchain
-- The default toolchain file is ~tiva-toolchain.cmake~ 
-  - It selects ~gcc~ if it is installed, otherwise it uses ~ti-cgt~
-- The toolchain file for ~gcc~ is ~tiva-gcc-toolchain.cmake~ 
-- The toolchain file for ~ti-cgt~ is ~tiva-ti-toolchain.cmake~
-
-*** Compiler Selection
-Here are some rules for how the compiler is selected when there are multiple versions involved.
-1. The toolchain file selects the compiler family, as outlined above
-2. Find compilers installed in your home directory: if found select the latest version
-3. Find compilers installed to system directories such as ~/opt~ or ~/usr/bin~: if found select the latest version
-4. Find compilers installed by Code Composer Studio: if found select the latest version
-
-You can specify a specific compiler using ~-DCMAKE_C_COMPILER=/path/to/compiler~ and ~CMAKE_CXX_COMPILER=/path/to/compiler~ when invoking ~cmake~.
-If the compiler you specify is compatible with ~gcc~ you should use ~tiva-gcc-toolchain.cmake~ and if it is compatible with ~ti-cgt~ use
-~tiva-ti-toolchain.cmake~.
-
+- The local toolchain file in the example directory is a stub to locate the system-wide =toolchain= file.
 
 ** Changing the Microcontroller
 - Setting ~CMAKE_SYSTEM_PROCESSOR=<model>~ when invoking ~cmake~ will change the targeted microcontroller from the default (~TM4C123GH6PM~).
@@ -137,14 +119,10 @@ If the compiler you specify is compatible with ~gcc~ you should use ~tiva-gcc-to
   - This is likely the name of a ~ccxml~ file in ~startup~ or one you generated yourself.
 - The ~TM4C123_REVISION~ and ~TM4C129_REVISION~ are used to set the silicon revision when using TivaWare. See ~tivaware/TivaWareConfig.cmake~ for details.
 
-** Build Types and Compiler Settings
-- CMake defaults to ~CMAKE_BUILD_TYPE = ""~ which does not set any compiler flags (other than those necessary for cross compiling)
-  - This mode is useful if you want complete control over flags
-- For convenience, The template ~CMakeLists.txt~ file defaults the build type to ~Debug~.
-- By default, the compiler uses C99 mode with enhanced warning levels
-** Executable Adding  
-By default ~TivaCMake~ overrides the built in ~add_executable~ with a macro that
-sets up the targets enabling write to flash.  You can disable this behavior by
+** Adding Executables
+1. By default ~TivaCMake~ overrides the built in ~add_executable~ with a macro that
+sets up the targets enabling write to flash.
+2. Disable overriding =add_executablebehavior by
 setting ~TivaCMake_AddExecutable~ to ~OFF~. You can then add the writes on
 a per-executable basis using ~tiva_cmake_add~ and providing the executable target name.
 
