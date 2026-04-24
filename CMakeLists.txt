@@ -92,10 +92,13 @@ if(BUILD_GNU)
       -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/GNU-toolchain.cmake
     )
 
+    find_program(QEMU_ARM qemu-system-arm REQUIRED)
+    find_program(GDB NAMES arm-none-eabi-gdb gdb-multiarch REQUIRED)
+
     add_test(NAME qemu_startup_test
       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/test/qemu_gdb_test.sh
-      qemu-system-arm
-      gdb-multiarch
+      ${QEMU_ARM}
+      ${GDB}
       ${CMAKE_BINARY_DIR}/test/startup_test
       ${CMAKE_CURRENT_SOURCE_DIR}/test/startup_test.gdb)
   endif()
