@@ -5,10 +5,6 @@ project(tiva_cmake
   HOMEPAGE_URL "https://github.com/omnid/tiva_cmake"
   LANGUAGES NONE)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-  message(FATAL_ERROR "In-source builds are not allowed.")
-endif()
-
 # Determine whether to build this for the GNU and TI compilers
 option(BUILD_GNU "Build GNU (arm-none-eabi-gcc) support" ON)
 option(BUILD_TI "Build TI (ti-cgt-arm) support" OFF)

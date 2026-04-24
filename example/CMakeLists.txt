@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(LedExample)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-  message(FATAL_ERROR "In-source builds are not allowed.")
-endif()
-
 # Make TivaCMake's features available to this file
 find_package(TivaCMake)
 
