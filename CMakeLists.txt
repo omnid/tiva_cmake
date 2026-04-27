@@ -118,6 +118,21 @@ if(BUILD_TI)
   startup_libraries(TI Release)
   tivaware_libraries(TI Debug)
   tivaware_libraries(TI Release)
+
+  if(BUILD_TESTING)
+    # Build the GNU example, a successful build is the test here
+    # Note: All example's and tests that use TivaCMake should depend
+    # on a tivaware library even if
+    ExternalProject_Add(TI_example
+      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/example
+      PREFIX prefix
+      INSTALL_DIR install
+      INSTALL_COMMAND ""
+      DEPENDS tiva_cmake
+      CMAKE_ARGS
+      -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+      -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/TI-toolchain.cmake)
+  endif()
 endif()
 
 
