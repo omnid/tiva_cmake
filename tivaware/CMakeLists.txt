@@ -46,7 +46,7 @@ install(TARGETS driverlib
   ARCHIVE DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}
   )
 
-# install the include files.  
+# install the include files.
 install(DIRECTORY inc driverlib
   DESTINATION ${INSTALL_ROOT}
   FILES_MATCHING PATTERN "*.h"

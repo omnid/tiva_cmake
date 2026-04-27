@@ -37,15 +37,11 @@ if(NOT TivaCMake_FOUND)
     return()
   endif()
 
-  # The cmake modules that come with tiva_cmake are in the current directory
-  # (Note that TivaCMake_DIR is set to be this file by find_package)
-  list(APPEND CMAKE_MODULE_PATH ${TivaCMake_DIR})
-
   # Brings in the TivaCMake::startup and TivaWare::driverlib libraries
   # Enables cmake targets for writing code to the microcontroller and debugging
   # If we are not cross-compiling
-  find_package(TivaStartup)
-  find_package(TivaWare)
+  find_package(TivaStartup REQUIRED)
+  find_package(TivaWare REQUIRED)
 
   find_package(OpenOCD QUIET)
   find_package(CodeComposerStudio QUIET)

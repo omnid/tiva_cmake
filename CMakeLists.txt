@@ -24,6 +24,12 @@ ExternalProject_Add(
 
 #------------  Helper functions for building startup and tivaware libraries ----------------#
 
+# This target can be used as a dependency of any testing code that is created by this project
+# It ensures that the testing code is run in the context of a full (as opposed to partial)
+# tiva_cmake installation (in other words, the startup and tivaware libraries are available)
+add_custom_target(tiva_cmake)
+
+
 # Build tivaware libraries (tivaware and the startup code) with different compiler combinations
 #   compiler_id - ID of the compiler, (GCC or TI)
 #   build_type - the CMakeBuildtype to use (Debug or Release)
@@ -38,6 +44,7 @@ function(startup_libraries compiler_id build_type)
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
     -DCMAKE_BUILD_TYPE=${build_type}
     -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/${compiler_id}-toolchain.cmake)
+  add_dependencies(tiva_cmake ${compiler_id}_${build_type}_startup)
 endfunction()
 
 
@@ -56,10 +63,10 @@ function(tivaware_libraries compiler_id build_type)
     -DCMAKE_BUILD_TYPE=${build_type}
     -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/${compiler_id}-toolchain.cmake
     )
+  add_dependencies(tiva_cmake ${compiler_id}_${build_type}_tivaware)
 endfunction()
 
 #-------------------- Build the startup and tivaware libraries ------------------------------#
-
 # Create all the supported varieties of startup library
 if(BUILD_GNU)
   startup_libraries(GNU Debug)
@@ -69,12 +76,14 @@ if(BUILD_GNU)
 
   if(BUILD_TESTING)
     # Build the GNU example, a successful build is the test here
+    # Note: All example's and tests that use TivaCMake should depend
+    # on a tivaware library even if
     ExternalProject_Add(GNU_example
       SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/example
       PREFIX prefix
       INSTALL_DIR install
       INSTALL_COMMAND ""
-      DEPENDS GNU_Debug_tivaware
+      DEPENDS tiva_cmake
       CMAKE_ARGS
       -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
       -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/GNU-toolchain.cmake)
@@ -86,7 +95,7 @@ if(BUILD_GNU)
       INSTALL_DIR install
       BINARY_DIR test
       INSTALL_COMMAND ""
-      DEPENDS GNU_Debug_startup
+      DEPENDS tiva_cmake
       CMAKE_ARGS
       -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
       -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/GNU-toolchain.cmake
