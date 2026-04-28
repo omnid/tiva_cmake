@@ -69,7 +69,7 @@ if(NOT TivaCMake_FOUND)
   function(add_openocd_write target_name ext)
     add_custom_target(${target_name}.${ext}
       DEPENDS ${target_name}
-      COMMAND ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c "program $<TARGET_FILE:${target_name}> verify reset exit"
+      COMMAND ${OpenOCD_EXECUTABLE} -f ${OpenOCD_CONFIG} -c "program $<TARGET_FILE:${target_name}> verify" -c "reset run" -c "exit"
       COMMENT "Using openocd to load ${target_name} onto the microcontroller."
       VERBATIM
       )
