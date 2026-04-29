@@ -45,7 +45,7 @@ function(startup_libraries compiler_id build_type)
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
     -DCMAKE_BUILD_TYPE=${build_type}
-    -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/${compiler_id}-toolchain.cmake)
+    -DCMAKE_TOOLCHAIN_FILE=cmake/${compiler_id}-toolchain.cmake)
   add_dependencies(tiva_cmake ${compiler_id}_${build_type}_startup)
 endfunction()
 
@@ -64,7 +64,7 @@ function(tivaware_libraries compiler_id build_type)
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
     -DCMAKE_BUILD_TYPE=${build_type}
-    -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/${compiler_id}-toolchain.cmake
+    -DCMAKE_TOOLCHAIN_FILE=cmake/${compiler_id}-toolchain.cmake
     )
   add_dependencies(tiva_cmake ${compiler_id}_${build_type}_tivaware)
 endfunction()
@@ -90,7 +90,7 @@ if(BUILD_GNU)
       BUILD_ALWAYS TRUE
       CMAKE_ARGS
       -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-      -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/GNU-toolchain.cmake)
+      -DCMAKE_TOOLCHAIN_FILE=cmake/GNU-toolchain.cmake)
 
     # Build the startup code test
     ExternalProject_Add(GNU_startup_test
@@ -103,7 +103,7 @@ if(BUILD_GNU)
       BUILD_ALWAYS TRUE
       CMAKE_ARGS
       -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-      -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/GNU-toolchain.cmake
+      -DCMAKE_TOOLCHAIN_FILE=cmake/GNU-toolchain.cmake
     )
 
     find_program(QEMU_ARM qemu-system-arm REQUIRED)
@@ -136,7 +136,7 @@ if(BUILD_TI)
       DEPENDS tiva_cmake
       CMAKE_ARGS
       -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-      -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/TI-toolchain.cmake)
+      -DCMAKE_TOOLCHAIN_FILE=cmake/TI-toolchain.cmake)
   endif()
 endif()
 

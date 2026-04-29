@@ -27,10 +27,6 @@ target_compile_options(startup PRIVATE
   $<$<C_COMPILER_ID:TI>:-pden -pdr -pdv --diag_suppress=270 --diag_suppress=1463>) # disable warning about link time optimization
 
 
-# Disable a warning about link time optimization when using the TI compiler
-set_source_files_properties(
-  "${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_C_COMPILER_ID}.c" PROPERTIES COMPILE_FLAGS $<$<C_COMPILER_ID:TI>:-pds=1463>)
-
 # Include the linker script
 target_link_libraries(startup PUBLIC
     $<$<C_COMPILER_ID:TI>:${CMAKE_SYSTEM_PROCESSOR}.cmd>
