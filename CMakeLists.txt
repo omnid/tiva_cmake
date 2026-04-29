@@ -16,7 +16,6 @@ include(ExternalProject)
 #     All other cross-compilation depends on these cmake files
 ExternalProject_Add(
   tiva_toolchain
-  PREFIX prefix
   INSTALL_DIR install
   SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/toolchain
   BUILD_ALWAYS TRUE
@@ -37,7 +36,6 @@ add_custom_target(tiva_cmake)
 function(startup_libraries compiler_id build_type)
   ExternalProject_Add(${compiler_id}_${build_type}_startup
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/startup
-    PREFIX prefix
     INSTALL_DIR install
     DEPENDS tiva_toolchain
     BUILD_ALWAYS TRUE
@@ -56,7 +54,6 @@ endfunction()
 function(tivaware_libraries compiler_id build_type)
   ExternalProject_Add(${compiler_id}_${build_type}_tivaware
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tivaware
-    PREFIX prefix
     INSTALL_DIR install
     DEPENDS tiva_toolchain ${compiler_id}_${build_type}_startup
     BUILD_ALWAYS TRUE
@@ -83,7 +80,6 @@ if(BUILD_GNU)
     # on a tivaware library even if
     ExternalProject_Add(GNU_example
       SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/example
-      PREFIX prefix
       INSTALL_DIR install
       INSTALL_COMMAND ""
       DEPENDS tiva_cmake
@@ -95,7 +91,6 @@ if(BUILD_GNU)
     # Build the startup code test
     ExternalProject_Add(GNU_startup_test
       SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test
-      PREFIX prefix
       INSTALL_DIR install
       BINARY_DIR test
       INSTALL_COMMAND ""
@@ -130,7 +125,6 @@ if(BUILD_TI)
     # on a tivaware library even if
     ExternalProject_Add(TI_example
       SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/example
-      PREFIX prefix
       INSTALL_DIR install
       INSTALL_COMMAND ""
       DEPENDS tiva_cmake
