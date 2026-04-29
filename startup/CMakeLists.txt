@@ -39,19 +39,36 @@ target_link_directories(startup PUBLIC
 
 # All install directories are in share since the files are not for the host platform
 # There are separate installation directories for Release and Debug builds
+# We duplicate the installation for different configurations to be compatible with multi-configuratin generators
 install(TARGETS startup
-  EXPORT TivaStartupTargets_${CMAKE_BUILD_TYPE}
-  LIBRARY DESTINATION ${INSTALL_ROOT}/${CMAKE_BUILD_TYPE}_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
-  ARCHIVE DESTINATION ${INSTALL_ROOT}/${CMAKE_BUILD_TYPE}_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
-  OBJECTS DESTINATION ${INSTALL_ROOT}/${CMAKE_BUILD_TYPE}_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
+  EXPORT TivaStartupTargets_Debug
+  CONFIGURATIONS Debug
+  LIBRARY DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
+  ARCHIVE DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
+  OBJECTS DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
+  )
+
+install(TARGETS startup
+  EXPORT TivaStartupTargets_Release
+  CONFIGURATIONS Release
+  LIBRARY DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
+  ARCHIVE DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
+  OBJECTS DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
   )
 
 
 # Export the targets directly into a TivaStartupConfig file.
 # We don't have other dependencies so we don't need to add to that config file.
-install(EXPORT TivaStartupTargets_${CMAKE_BUILD_TYPE}
+install(EXPORT TivaStartupTargets_Debug
+  CONFIGURATIONS Debug
   NAMESPACE TivaCMake::
-  DESTINATION ${INSTALL_ROOT}/${CMAKE_BUILD_TYPE}_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
+  DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
+  )
+
+install(EXPORT TivaStartupTargets_Release
+  CONFIGURATIONS Release
+  NAMESPACE TivaCMake::
+  DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
   )
 
 
