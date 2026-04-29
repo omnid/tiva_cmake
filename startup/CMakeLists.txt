@@ -21,9 +21,10 @@ add_library(startup
       startup.c
       stubs.c>
   )
-
-# For gcc we need to ensure that the whole startup archive (i.e., all object files in startup) get linked in even
-# if they are not referenced
+target_compile_features(startup PRIVATE c_std_99)
+target_compile_options(startup PRIVATE
+  $<$<C_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra -fmacro-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}/=$<TARGET_PROPERTY:NAME>:>
+  $<$<C_COMPILER_ID:TI>:-pden -pdr -pdv --diag_suppress=270 --diag_suppress=1463>) # disable warning about link time optimization
 
 
 # Disable a warning about link time optimization when using the TI compiler

@@ -19,6 +19,7 @@ ExternalProject_Add(
   PREFIX prefix
   INSTALL_DIR install
   SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/toolchain
+  BUILD_ALWAYS TRUE
   CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
 
@@ -39,6 +40,7 @@ function(startup_libraries compiler_id build_type)
     PREFIX prefix
     INSTALL_DIR install
     DEPENDS tiva_toolchain
+    BUILD_ALWAYS TRUE
     CMAKE_ARGS
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
@@ -57,6 +59,7 @@ function(tivaware_libraries compiler_id build_type)
     PREFIX prefix
     INSTALL_DIR install
     DEPENDS tiva_toolchain ${compiler_id}_${build_type}_startup
+    BUILD_ALWAYS TRUE
     CMAKE_ARGS
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
@@ -84,6 +87,7 @@ if(BUILD_GNU)
       INSTALL_DIR install
       INSTALL_COMMAND ""
       DEPENDS tiva_cmake
+      BUILD_ALWAYS TRUE
       CMAKE_ARGS
       -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
       -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/GNU-toolchain.cmake)
@@ -96,6 +100,7 @@ if(BUILD_GNU)
       BINARY_DIR test
       INSTALL_COMMAND ""
       DEPENDS tiva_cmake
+      BUILD_ALWAYS TRUE
       CMAKE_ARGS
       -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
       -DCMAKE_TOOLCHAIN_FILE=<SOURCE_DIR>/cmake/GNU-toolchain.cmake
