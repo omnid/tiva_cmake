@@ -12,6 +12,12 @@ option(BUILD_TI "Build TI (ti-cgt-arm) support" OFF)
 include(CTest)
 include(ExternalProject)
 
+
+# This target can be used as a dependency of any testing code that is created by this project
+# It ensures that the testing code is run in the context of a full (as opposed to partial)
+# tiva_cmake installation (in other words, the startup and tivaware libraries are available)
+add_custom_target(tiva_cmake)
+
 #----------- Install the CMake Files for the Toolchain ----------------#
 #     All other cross-compilation depends on these cmake files
 ExternalProject_Add(
@@ -21,13 +27,9 @@ ExternalProject_Add(
   BUILD_ALWAYS TRUE
   CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
-
+add_dependencies(tiva_cmake tiva_toolchain)
 #------------  Helper functions for building startup and tivaware libraries ----------------#
 
-# This target can be used as a dependency of any testing code that is created by this project
-# It ensures that the testing code is run in the context of a full (as opposed to partial)
-# tiva_cmake installation (in other words, the startup and tivaware libraries are available)
-add_custom_target(tiva_cmake)
 
 
 # Build tivaware libraries (tivaware and the startup code) with different compiler combinations
