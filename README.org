@@ -89,6 +89,7 @@ The program will automatically be built prior to being flashed.
 :CUSTOM_ID: cmake-settings
 :END:
 1. =TIVA_STARTUP_BUILD_TYPE=: Defaults to =Release=. Setting to =Debug= enables debugging the startup library
+8. =DRIVERLIB_BUILD_TYPE=: Defaults to =Release=. Setting to =Debug= enables debugging TivaWare driverlib.
 2. =CMAKE_SYSTEM_PROCESSOR=: Defaults to =TM4C123GH6PM= and is set by the toolchain file but can be overriden
 3. =OpenOCD_BOARD=: Controls the development board used by OpenOCD. The default is based on =CMAKE_SYSTEM_PROCESSOR=
    - Should match the name of a file in =openocd/scripts/board= directory of the =OpenOCD= project.
@@ -101,7 +102,6 @@ The program will automatically be built prior to being flashed.
    - The targets to flash the binary will not be automatically generated
    - Use =tiva_cmake_add= to enable the targets for writing to the microcontroller for a specific executable.
    allow writing the binary to the microcontroller).  These targets can be added manua
-8. =DRIVERLIB_DEBUG= (default =OFF=) - Link against a =Release= version of driverlib. Set to =ON= to link against a Debug version.
 9. =TIVA_CMAKE_USE_CUSTOM_STARTUP= (default =OFF=) - Enable the use of custom startup code (meaning you will have to manually link against startup code).
 * TivaWare Driverlib
 :PROPERTIES:

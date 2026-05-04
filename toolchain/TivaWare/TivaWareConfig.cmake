@@ -1,15 +1,17 @@
 # This file is run when find_package(TivaWare) is called
-# It is used to import targets for TivaWare and then adjust
-# some compile options based on the user's configuration
-# See [1] for information about the C #defines that are added by this file
-# It also handles which version (Debug or Release) of tivaware to add
+set(DRIVERLIB_BUILD_TYPE "Release" CACHE STRING "The CMAKE_BUILD_TYPE for the driverlib library that is linked against")
+set_property(CACHE DRIVERLIB_BUILD_TYPE PROPERTY STRINGS Debug Release)
 set(DRIVERLIB_DEBUG OFF CACHE BOOL "If ON, link against the debugging version of driverlib")
 
-if(DRIVERLIB_DEBUG)
-  include("${CMAKE_CURRENT_LIST_DIR}/../Debug_${CMAKE_C_COMPILER_ID}/TivaWareTargets_Debug.cmake")
+if(DRIVERLIB_BUILD_TYPE STREQUAL "Debug")
+  include("${CMAKE_CURRENT_LIST_DIR}/../TivaWare-${CMAKE_C_COMPILER_ID}-Debug/share/TivaWare/TivaWareTargets.cmake")
+elseif(DRIVERLIB_BUILD_TYPE STREQUAL "Release")
+  include("${CMAKE_CURRENT_LIST_DIR}/../TivaWare-${CMAKE_C_COMPILER_ID}-Release/share/TivaWare/TivaWareTargets.cmake")
 else()
-  include("${CMAKE_CURRENT_LIST_DIR}/../Release_${CMAKE_C_COMPILER_ID}/TivaWareTargets_Release.cmake")
+  message(FATAL_ERROR "Invalid value: DRIVERLIB_BUILD_TYPE=${TIVA_STARTUP_BUILD_TYPE}, expected Debug or Release")
 endif()
+
+# Select the appropriate configuration. Each configuration is stored in it's own directory
 
 # Create an interface library so we can add compile definitions to it when
 # a program links against it. This is important so we can set some compiler
