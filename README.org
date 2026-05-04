@@ -64,10 +64,20 @@ cmake --build build
 :END:
 ** New Project (Using an installed copy ~tiva_cmake~)
 1. Copy the =example/= directory and edit the =CMakeLists.txt= to suit your needs
+2. Copy the toolchain file you need to the example directory (e.g., =toolchain/TivaCMake/GNU-toolchain.cmake=)
 2. =cd example/= (or whatever directory you are using)
-3. =cmake --toolchain cmake/GNU-toolchain.cmake -B build .= (Configure to use the GNU toolchain)
+3. =cmake --toolchain GNU-toolchain.cmake -B build .= (Configure to use the GNU toolchain)
 4. =cmake --build build= (Build the code)
 5. =cmake --target led_example.write --build build= (with the device plugged in, flash the code to the microcontroller, substitute your executable name for led_example.write)
+*** Toolchain Details
+1. CMake is designed to require passing the full path to a toolchiain file
+2. The =tiva_cmake= package comes with two files: =toolchain/TivaCMake/TI-toolchain.cmake= and
+   =toolchain/TivaCMake/GNU-toolchain.cmake= that are designed to be distributed with your project.
+   - These files, when passed as the =toolchain= will find the location of the =tiva_cmake= toolchain
+     that is installed on the system (e.g., on the =${CMAKE_INSTALL_PREFIX}= path) and find the appropriate toolchain.
+   - They can also be copied directly from this repository and distributed with your code.
+3. There are also scripts: =arm-none-eabi-gcc-toolchain= and =ti-cgt-arm-toolchain= that are installed into the =bin/= directory
+   that output the full path to the toolchain files.
 
 ** Flashing the Firmware
 Every executable target you create (via ~add_executable(target_name ...)~ in ~cmake~ adds methods for flashing the firmware using the LaunchPad's In-Circuit Debugger.

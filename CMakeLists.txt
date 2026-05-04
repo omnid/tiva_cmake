@@ -23,7 +23,7 @@ add_custom_target(tiva_cmake)
 ExternalProject_Add(
   tiva_toolchain
   INSTALL_DIR install
-  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/toolchain
+ SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/toolchain
   BUILD_ALWAYS TRUE
   CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
@@ -45,7 +45,7 @@ function(startup_libraries compiler_id build_type)
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>/share/TivaStartup-${compiler_id}-${build_type}
     -DCMAKE_BUILD_TYPE=${build_type}
-    -DCMAKE_TOOLCHAIN_FILE=cmake/${compiler_id}-toolchain.cmake)
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/toolchain/TivaCMake/${compiler_id}-toolchain.cmake)
   add_dependencies(tiva_cmake ${compiler_id}_${build_type}_startup)
 endfunction()
 
@@ -63,7 +63,7 @@ function(tivaware_libraries compiler_id build_type)
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
     -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>/share/TivaWare-${compiler_id}-${build_type}
     -DCMAKE_BUILD_TYPE=${build_type}
-    -DCMAKE_TOOLCHAIN_FILE=cmake/${compiler_id}-toolchain.cmake
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/toolchain/TivaCMake/${compiler_id}-toolchain.cmake
     )
   add_dependencies(tiva_cmake ${compiler_id}_${build_type}_tivaware)
 endfunction()
@@ -88,7 +88,7 @@ if(BUILD_GNU)
       BUILD_ALWAYS TRUE
       CMAKE_ARGS
       -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-      -DCMAKE_TOOLCHAIN_FILE=cmake/GNU-toolchain.cmake)
+      -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/toolchain/TivaCMake/GNU-toolchain.cmake)
 
     # Build the startup code test
     ExternalProject_Add(GNU_startup_test
@@ -100,7 +100,7 @@ if(BUILD_GNU)
       BUILD_ALWAYS TRUE
       CMAKE_ARGS
       -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-      -DCMAKE_TOOLCHAIN_FILE=cmake/GNU-toolchain.cmake
+      -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/toolchain/TivaCMake/GNU-toolchain.cmake
     )
 
     find_program(QEMU_ARM qemu-system-arm REQUIRED)
@@ -132,7 +132,7 @@ if(BUILD_TI)
       DEPENDS tiva_cmake
       CMAKE_ARGS
       -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-      -DCMAKE_TOOLCHAIN_FILE=cmake/TI-toolchain.cmake)
+      -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/toolchain/TivaCMake/TI-toolchain.cmake)
   endif()
 endif()
 
