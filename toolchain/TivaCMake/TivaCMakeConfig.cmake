@@ -56,6 +56,12 @@ if(NOT is_none EQUAL -1)
   return()
 endif()
 
+# Exit if we are not building for arm-none-eabi.
+# This allows including TivaCMake in packages that build on multiple platforms
+# without checking
+if(NOT (CMAKE_SYSTEM_NAME STREQUAL "arm-none-eabi"))
+  return()
+endif()
 
 if(NOT TivaCMake_ALL_FOUND)
   set(TivaCMake_ALL_FOUND True)
