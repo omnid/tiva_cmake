@@ -6,10 +6,10 @@ set_property(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS FALSE)
 
 # Ensure that the toolchain file can remain found during try compile
 set(CMAKE_TRY_COMPILE_PLATFORM_VARIABLES
-  TivaToolchain_FOUND
-  TivaToolchain_DIR
-  TivaToolchain_GNU
-  TivaToolchain_TI)
+  TivaCMake_FOUND
+  TivaCMake_DIR
+  TivaCMake_Toolchain_GNU
+  TivaCMake_Toolchain_TI)
 
 
 set(CMAKE_C_LIBRARY_ARCHITECTURE arm-none-eabi)

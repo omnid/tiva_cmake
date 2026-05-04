@@ -12,8 +12,11 @@ Result Variables
   True if the system has ti-cgt-arm installed
   The root directory of the arm-none-eabi-gcc compiler
 
+``TivaCMake_ALL_FOUND``
+  True if the full package has been configured, not just the None component
+
 ``CMAKE_MODULE_PATH``
-This is updated so that TivaCMake modules can be discovered
+  This is updated so that TivaCMake modules can be discovered
 
 Cache Variables
 ^^^^^^^^^^^^^^^
@@ -21,28 +24,53 @@ Cache Variables
 The following cache variables may also be set:
 
 ``TivaCMake_DIR``
-The root directory of TivaCMake
+  The root directory of TivaCMake
+
+``TivaCMake_Toolchain_GNU``
+  Full path to the GNU compiler toolchain file
+
+``TivaCMake_Toolchain_TI``
+  Full path to the TI Compiler toolchain file
 
 Components
 ^^^^^^^^^^
 ``None``
   Do not load any components.  This is useful for detecting if tiva_cmake exists from a host system,
-  since actually loading the file is only useful when cross-compiling.
+  since actually loading the file is only useful when cross-compiling. In most normal uses
+  the None component should not be loaded
 
+``All``
+  Load all the comonents. This is the default case
+
+Notes
+^^^^^
+The TivaCMake_Toolchain_* variablesare preserved in TivaCMake/Platform/arm-none-eabi.cmake via CMAKE_TRY_COMPILE_PLATFORM_VARIABLES, enabling
+them to persist when the toolchain is reloaded by try compile.
 #]========================================================================]
 
+# A guide for writing find modules: https://cmake.org/cmake/help/v3.17/manual/cmake-developer.7.html
+
+# If not found, set the paths for the compiler toolchains
 if(NOT TivaCMake_FOUND)
-  list(FIND TivaCMake_FIND_COMPONENTS None is_none)
-  if(NOT is_none EQUAL -1)
-    return()
-  endif()
+  set(TivaCMake_Toolchain_GNU ${TivaCMake_DIR}/arm-none-eabi-gcc-toolchain.cmake)
+  set(TivaCMake_Toolchain_TI ${TivaCMake_DIR}/ti-cgt-arm-toolchain.cmake)
+endif()
+
+#  Exit if we are only finding the "None" component
+list(FIND TivaCMake_FIND_COMPONENTS None is_none)
+if(NOT is_none EQUAL -1)
+  return()
+endif()
+
+
+if(NOT TivaCMake_ALL_FOUND)
+  set(TivaCMake_ALL_FOUND True)
 
   # Brings in the TivaCMake::startup and TivaWare::driverlib libraries
   # Enables cmake targets for writing code to the microcontroller and debugging
   # If we are not cross-compiling
   find_package(TivaStartup REQUIRED)
   find_package(TivaWare REQUIRED)
-
   find_package(OpenOCD QUIET)
   find_package(CodeComposerStudio QUIET)
   find_package(ArmNoneEabiGdb QUIET)

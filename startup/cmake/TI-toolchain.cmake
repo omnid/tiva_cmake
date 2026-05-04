@@ -1,2 +1,2 @@
-find_package(TivaToolchain REQUIRED)
-include(${TivaToolchain_TI})
+find_package(TivaCMake REQUIRED COMPONENTS None)
+include(${TivaCMake_Toolchain_TI})
