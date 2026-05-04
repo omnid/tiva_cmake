@@ -1,10 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
-project(startup)
+project(TivaStartup)
 
 include(GNUInstallDirs)
-
-# root installation directory
-set(INSTALL_ROOT ${CMAKE_INSTALL_DATADIR}/TivaStartup)
 
 # The library is a series of object files.
 # We make these as OBJECT files instead of a library (ar archive)
@@ -23,7 +20,7 @@ add_library(startup
   )
 target_compile_features(startup PRIVATE c_std_99)
 target_compile_options(startup PRIVATE
-  $<$<C_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra -fmacro-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}/=$<TARGET_PROPERTY:NAME>:>
+  $<$<C_COMPILER_ID:GNU,CLANG>:-pedantic -pipe -Wall -Wextra -fmacro-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}/=$<TARGET_PROPERTY:NAME>:>
   $<$<C_COMPILER_ID:TI>:-pden -pdr -pdv --diag_suppress=270 --diag_suppress=1463>) # disable warning about link time optimization
 
 
@@ -34,53 +31,22 @@ target_link_libraries(startup PUBLIC
     )
 target_link_directories(startup PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:${INSTALL_ROOT}>)
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}>)
 
 
-# All install directories are in share since the files are not for the host platform
-# There are separate installation directories for Release and Debug builds
-# We duplicate the installation for different configurations to be compatible with multi-configuratin generators
-install(TARGETS startup
-  EXPORT TivaStartupTargets_Debug
-  CONFIGURATIONS Debug
-  LIBRARY DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
-  ARCHIVE DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
-  OBJECTS DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
-  )
-
-install(TARGETS startup
-  EXPORT TivaStartupTargets_Release
-  CONFIGURATIONS Release
-  LIBRARY DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
-  ARCHIVE DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
-  OBJECTS DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
-  )
-
+install(TARGETS startup EXPORT TivaStartupTargets
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  OBJECTS DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
 # Export the targets directly into a TivaStartupConfig file.
 # We don't have other dependencies so we don't need to add to that config file.
-install(EXPORT TivaStartupTargets_Debug
-  CONFIGURATIONS Debug
+install(EXPORT TivaStartupTargets
   NAMESPACE TivaCMake::
-  DESTINATION ${INSTALL_ROOT}/Debug_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
-  )
-
-install(EXPORT TivaStartupTargets_Release
-  CONFIGURATIONS Release
-  NAMESPACE TivaCMake::
-  DESTINATION ${INSTALL_ROOT}/Release_${CMAKE_C_COMPILER_ID}_${CMAKE_SYSTEM_PROCESSOR}
-  )
-
-
-
-# The TivaStartupConfig file imports the targets based on the value of STARTUPLIB_DEBUG and what
-# compiler is being used
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/TivaStartupConfig.cmake"
-  DESTINATION ${INSTALL_ROOT}/)
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/TivaStartup)
 
 install(FILES
-  "${CMAKE_CURRENT_LIST_DIR}/${CMAKE_SYSTEM_PROCESSOR}.cmd"
-  "${CMAKE_CURRENT_LIST_DIR}/${CMAKE_SYSTEM_PROCESSOR}.lds"
-  "${CMAKE_CURRENT_LIST_DIR}/${CMAKE_SYSTEM_PROCESSOR}.ccxml"
-  DESTINATION ${INSTALL_ROOT}
-  )
+  "${CMAKE_SYSTEM_PROCESSOR}.cmd"
+  "${CMAKE_SYSTEM_PROCESSOR}.lds"
+  "${CMAKE_SYSTEM_PROCESSOR}.ccxml"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}")

@@ -5,7 +5,8 @@ project(TivaCMakeFiles
   LANGUAGES NONE)
 
 # Install the CMakeFiles that make the toolchain work
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/TivaCMake TYPE DATA)
+install(DIRECTORY TivaCMake TYPE DATA)
+install(DIRECTORY TivaStartup TYPE DATA)
 
 # Create scripts that print the path to the toolchain files
 

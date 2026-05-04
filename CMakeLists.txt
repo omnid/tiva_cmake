@@ -43,7 +43,7 @@ function(startup_libraries compiler_id build_type)
     BUILD_ALWAYS TRUE
     CMAKE_ARGS
     -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-    -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+    -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>/share/TivaStartup-${compiler_id}-${build_type}
     -DCMAKE_BUILD_TYPE=${build_type}
     -DCMAKE_TOOLCHAIN_FILE=cmake/${compiler_id}-toolchain.cmake)
   add_dependencies(tiva_cmake ${compiler_id}_${build_type}_startup)
