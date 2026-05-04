@@ -1,6 +1,6 @@
 <package format="2">
   <name>tiva_cmake</name>
-  <version>0.2.0</version>
+  <version>1.0.0</version>
   <description>
     Use cmake to compile code for Tiva microcontrollers.
     Also provides peripheral libraries.

@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(tiva_cmake
-  VERSION 0.2.0
-  DESCRIPTION "CMake Files for working with Tiva microcontrollers"
-  HOMEPAGE_URL "https://github.com/omnid/tiva_cmake"
+  VERSION 1.0.0
   LANGUAGES NONE)
 
 # Determine whether to build this for the GNU and TI compilers
