@@ -9,19 +9,13 @@ Result Variables
 ^^^^^^^^^^^^^^^^
 
 ``TivaCMake_FOUND``
-  True if the system has ti-cgt-arm installed
-  The root directory of the arm-none-eabi-gcc compiler
+  True if TivaCMake was found
 
 ``TivaCMake_ALL_FOUND``
   True if the full package has been configured, not just the None component
 
 ``CMAKE_MODULE_PATH``
   This is updated so that TivaCMake modules can be discovered
-
-Cache Variables
-^^^^^^^^^^^^^^^
-
-The following cache variables may also be set:
 
 ``TivaCMake_DIR``
   The root directory of TivaCMake
