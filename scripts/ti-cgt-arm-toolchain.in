@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-echo "@CMAKE_INSTALL_PREFIX@/share/TivaToolchain/ti-cgt-arm-toolchain.cmake"
